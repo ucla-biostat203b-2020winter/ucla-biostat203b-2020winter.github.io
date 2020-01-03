@@ -35,7 +35,7 @@ The prerequisite for this course is _Biostat 203A: Introduction to Data Manageme
 
 ## Course Webpage
 
-[https://ucla-biostat203b-2020winter.github.io/](https://ucla-biostat203b-2020winter.github.io/)
+[ucla-biostat-203b.com](http://ucla-biostat-203b.com) or [https://ucla-biostat203b-2020winter.github.io/](https://ucla-biostat203b-2020winter.github.io/)
 
 ## Course Materials
 
