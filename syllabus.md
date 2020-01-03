@@ -35,7 +35,7 @@ The prerequisite for this course is _Biostat 203A: Introduction to Data Manageme
 
 ## Course Webpage
 
-[ucla-biostat-203b.com](http://ucla-biostat-203b.com) or [https://ucla-biostat203b-2020winter.github.io/](https://ucla-biostat203b-2020winter.github.io/)
+[http://ucla-biostat-203b.com](http://ucla-biostat-203b.com) or [https://ucla-biostat203b-2020winter.github.io/](https://ucla-biostat203b-2020winter.github.io/)
 
 ## Course Materials
 
@@ -47,7 +47,7 @@ Class attendance to both Tuesday lectures and Thursday lab is **mandatory**.
 
 ## Homework
 
-You will be required to hand in 4-6 homework assignments throughout the quarter.  
+There will be 4-6 homework assignments throughout the quarter.  
 
 ## Exam
 
