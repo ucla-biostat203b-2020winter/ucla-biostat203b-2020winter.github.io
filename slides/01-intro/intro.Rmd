@@ -1,0 +1,58 @@
+---
+title: "Course Introduction"
+author: "Dr. Hua Zhou @ UCLA"
+date: "Jan 7, 2020"
+output:
+  # ioslides_presentation: default
+  html_document:
+    toc: true
+    toc_depth: 4  
+subtitle: Biostat 203B
+bibliography: ../bib-HZ.bib
+csl: ../apa.csl
+---
+<!-- I could not get R Markdown's citations to work as the works cited at the
+  end would not continue onto multiple slides.  If you know how to fix that, 
+  please let me know. -->
+
+## Statistics and data science
+
+- Statistics, the science of _data analysis_, is the applied mathematics in the 21st century.
+
+- Data is increasing in [volume, velocity, and variety](http://www.forbes.com/sites/oreillymedia/2012/01/19/volume-velocity-variety-what-you-need-to-know-about-big-data/).
+
+## Big data in 1990s
+
+@Huber94HugeData; -@Huber96MassiveData
+
+| Data Size | Bytes          | Storage Mode               |
+|-----------|----------------|----------------------------|
+| tiny      | $10^2$         | piece of paper             |
+| small     | $10^4$         | a few pieces of paper      |
+| medium    | $10^6$ (MB)    | a floppy disk              |
+| large     | $10^8$         | hard disk                  |
+| huge      | $10^9$ (GB)    | hard disk(s)               |
+| massive   | $10^{12}$ (TB) | hard disk(s); RAID storage |
+
+## Big data in 21st centry
+
+Four V's of big data:
+<p align="center">
+  <img src="./4-Vs-of-big-data.jpg" height="450" width="700">
+</p>
+Source: [IBM](http://www.ibmbigdatahub.com/infographic/four-vs-big-data).
+
+## A typical data scientist on [Linkedin](http://linkedin.com)
+
+<p align="center">
+  <img src="./genetech.png" height="450" width="700">
+</p>
+
+## Course desciption
+
+- This course introduces some computing skills and software tools for handling potentially big public health data.
+
+- Read [syllabus](https://ucla-biostat203b-2020winter.github.io/syllabus.html) and [schedule](https://ucla-biostat203b-2020winter.github.io/schedule.html) for a tentative list of topics and course logistics.
+
+## References
+
