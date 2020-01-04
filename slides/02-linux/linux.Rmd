@@ -13,14 +13,14 @@ bibliography: ../bib-HZ.bib
 
 ## Why Linux
 
-Linux is _the_ most common platform for scientific computing.
+Linux is _the_ most common platform for scientific computing and deployment of data science tools.
 
 - Open source and community support.
 
 - Things break; when they break using Linux, it's easy to fix.
 
 - Scalability: portable devices (Android, iOS), laptops, servers, clusters, and super computers.
-    - E.g. UCLA Hoffmann2 cluster runs on Linux.
+    - E.g. UCLA Hoffmann2 cluster runs on Linux; most machines in cloud (AWS, Azure, GCP) run on Linux.  
 
 - Cost: it's free!
 
@@ -177,7 +177,7 @@ Bash provides the following standard completion for the Linux users by default. 
 
 - `groups userid` shows which group(s) a user belongs to:
     ```{bash}
-    groups hwachou
+    groups huazhou
     ```
 
 ## Manipulate files and directories
@@ -208,7 +208,7 @@ Bash provides the following standard completion for the Linux users by default. 
     find linux.Rmd
     ```
     ```{bash}
-    find /home/hwachou -name linux.Rmd
+    find /home/huazhou -name linux.Rmd
     ```
 
 - `which` locates a program (executable file):
@@ -465,7 +465,7 @@ Source: [Editor War](http://en.wikipedia.org/wiki/Editor_war) on Wikipedia.
 
 - All processes owned by a user:
     ```{bash}
-    ps -fu hwachou
+    ps -fu huazhou
     ```
 
 ## Kill processes
@@ -499,7 +499,7 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 
 - On Linux or Mac, access the teaching server by
     ```{bash, eval=FALSE}
-    ssh username@server.biostat-m280.info
+    ssh username@server.ucla-biostat-203b.com
     ```
 
 - Windows machines need the [PuTTY](http://www.putty.org) program (free).
@@ -536,7 +536,7 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 
 - Messages from your computer to server is signed with your private key (digital signatures) and can be verified by anyone who has your public key (authentication).
 
-## Steps for generate keys
+## Steps to generate keys
 
 - On Linux or Mac, to generate a key pair:
     ```{bash, eval=FALSE}
@@ -580,11 +580,11 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 - `scp` securely transfers files between machines using SSH.
     ```{bash, eval=FALSE}
     ## copy file from local to remote
-    scp [LOCALFILE] [USERNAME]@server.biostat-m280.info:/[PATHTOFOLDER]
+    scp [LOCALFILE] [USERNAME]@server.ucla-biostat-203b.com:/[PATHTOFOLDER]
     ```
     ```{bash, eval=FALSE}
     ## copy file from remote to local
-    scp [USERNAME]@server.biostat-m280.info:/[PATHTOFILE] [PATHTOLOCALFOLDER]
+    scp [USERNAME]@server.ucla-biostat-203b.com:/[PATHTOFILE] [PATHTOLOCALFOLDER]
     ```
 
 - `sftp` is FTP via SSH.
