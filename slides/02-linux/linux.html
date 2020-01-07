@@ -375,7 +375,8 @@ summary {
 <li><a href="#distributions-of-linux"><span>Distributions of Linux</span></a></li>
 <li><a href="#linux-shells">Linux shells</a><ul>
 <li><a href="#shells">Shells</a></li>
-<li><a href="#bash-completion">Bash completion</a></li>
+<li><a href="#command-history-anbd-bash-completion">Command history anbd bash completion</a></li>
+<li><a href="#man-is-mans-best-friend"><code>man</code> is man’s best friend</a></li>
 </ul></li>
 <li><a href="#navigate-file-system">Navigate file system</a><ul>
 <li><a href="#linux-directory-structure">Linux directory structure</a></li>
@@ -388,11 +389,11 @@ summary {
 </ul></li>
 <li><a href="#work-with-text-files">Work with text files</a><ul>
 <li><a href="#viewpeek-text-files">View/peek text files</a></li>
+<li><a href="#piping-and-redirection">Piping and redirection</a></li>
 <li><a href="#less-is-more-more-is-less"><code>less</code> is more; <code>more</code> is less</a></li>
 <li><a href="#grep"><code>grep</code></a></li>
 <li><a href="#sed"><code>sed</code></a></li>
 <li><a href="#awk"><code>awk</code></a></li>
-<li><a href="#piping-and-redirection">Piping and redirection</a></li>
 <li><a href="#text-editors">Text editors</a></li>
 <li><a href="#emacs">Emacs</a></li>
 <li><a href="#vi">Vi</a></li>
@@ -430,7 +431,8 @@ summary {
 <li><p>Things break; when they break using Linux, it’s easy to fix.</p></li>
 <li>Scalability: portable devices (Android, iOS), laptops, servers, clusters, and super computers.
 <ul>
-<li>E.g. UCLA Hoffmann2 cluster runs on Linux; most machines in cloud (AWS, Azure, GCP) run on Linux.</li>
+<li>E.g. UCLA Hoffmann2 cluster runs on Linux; most machines in cloud (AWS, Azure, GCP) run on Linux.<br />
+</li>
 </ul></li>
 <li><p>Cost: it’s free!</p></li>
 </ul>
@@ -444,25 +446,25 @@ summary {
 <li><p>MacOS was originally derived from Unix/Linux (Darwin kernel). It is POSIX compliant. Most shell commands we review here apply to MacOS terminal as well. Windows/DOS, unfortunately, is a totally different breed.</p></li>
 <li><p>Show distribution/version on Linux:</p>
 <pre class="bash"><code>cat /etc/*-release</code></pre>
-<pre><code>## CentOS Linux release 7.7.1908 (Core)
-## NAME=&quot;CentOS Linux&quot;
-## VERSION=&quot;7 (Core)&quot;
-## ID=&quot;centos&quot;
-## ID_LIKE=&quot;rhel fedora&quot;
-## VERSION_ID=&quot;7&quot;
-## PRETTY_NAME=&quot;CentOS Linux 7 (Core)&quot;
-## ANSI_COLOR=&quot;0;31&quot;
-## CPE_NAME=&quot;cpe:/o:centos:centos:7&quot;
-## HOME_URL=&quot;https://www.centos.org/&quot;
-## BUG_REPORT_URL=&quot;https://bugs.centos.org/&quot;
-## 
-## CENTOS_MANTISBT_PROJECT=&quot;CentOS-7&quot;
-## CENTOS_MANTISBT_PROJECT_VERSION=&quot;7&quot;
-## REDHAT_SUPPORT_PRODUCT=&quot;centos&quot;
-## REDHAT_SUPPORT_PRODUCT_VERSION=&quot;7&quot;
-## 
-## CentOS Linux release 7.7.1908 (Core)
-## CentOS Linux release 7.7.1908 (Core)</code></pre></li>
+<pre><code>CentOS Linux release 7.7.1908 (Core)
+NAME=&quot;CentOS Linux&quot;
+VERSION=&quot;7 (Core)&quot;
+ID=&quot;centos&quot;
+ID_LIKE=&quot;rhel fedora&quot;
+VERSION_ID=&quot;7&quot;
+PRETTY_NAME=&quot;CentOS Linux 7 (Core)&quot;
+ANSI_COLOR=&quot;0;31&quot;
+CPE_NAME=&quot;cpe:/o:centos:centos:7&quot;
+HOME_URL=&quot;https://www.centos.org/&quot;
+BUG_REPORT_URL=&quot;https://bugs.centos.org/&quot;
+
+CENTOS_MANTISBT_PROJECT=&quot;CentOS-7&quot;
+CENTOS_MANTISBT_PROJECT_VERSION=&quot;7&quot;
+REDHAT_SUPPORT_PRODUCT=&quot;centos&quot;
+REDHAT_SUPPORT_PRODUCT_VERSION=&quot;7&quot;
+
+CentOS Linux release 7.7.1908 (Core)
+CentOS Linux release 7.7.1908 (Core)</code></pre></li>
 </ul>
 <hr />
 <ul>
@@ -479,17 +481,18 @@ summary {
 <ul>
 <li><p>A shell translates commands to OS instructions.</p></li>
 <li><p>Most commonly used shells include <code>bash</code>, <code>csh</code>, <code>tcsh</code>, <code>zsh</code>, etc.</p></li>
-<li><p>Sometimes a script or a command does not run simply because it’s written for another shell.</p></li>
+<li><p>The default shell in MacOS changed from <code>bash</code> to <code>zsh</code> since MacOS v10.15.</p></li>
+<li><p>Sometimes a command and a script does not run simply because it’s written for another shell.</p></li>
 <li><p>We mostly use <code>bash</code> shell commands in this class.</p></li>
 <li><p>Determine the current shell:</p>
 <pre class="bash"><code>echo $SHELL</code></pre>
-<pre><code>## /bin/bash</code></pre></li>
+<pre><code>/bin/bash</code></pre></li>
 <li><p>List available shells:</p>
 <pre class="bash"><code>cat /etc/shells</code></pre>
-<pre><code>## /bin/sh
-## /bin/bash
-## /usr/bin/sh
-## /usr/bin/bash</code></pre></li>
+<pre><code>/bin/sh
+/bin/bash
+/usr/bin/sh
+/usr/bin/bash</code></pre></li>
 <li><p>Change to another shell:</p>
 <pre class="bash"><code>exec bash -l</code></pre>
 <p>The <code>-l</code> option indicates it should be a login shell.</p></li>
@@ -498,8 +501,9 @@ summary {
 <p>Then log out and log in.</p></li>
 </ul>
 </div>
-<div id="bash-completion" class="section level2">
-<h2>Bash completion</h2>
+<div id="command-history-anbd-bash-completion" class="section level2">
+<h2>Command history anbd bash completion</h2>
+<p>We can navigate to previous/next commands by the upper and lower keys, or maintain a command history stack using <code>pushd</code> and <code>popd</code> commands.</p>
 <p>Bash provides the following standard completion for the Linux users by default. Much less typing errors and time!</p>
 <ul>
 <li><p>Pathname completion.</p></li>
@@ -509,6 +513,263 @@ summary {
 <li><p>Hostname completion <code>ssh hwachou@[TAB][TAB]</code>.</p></li>
 <li><p>It can also be customized to auto-complete other stuff such as options and command’s arguments. Google <code>bash completion</code> for more information.</p></li>
 </ul>
+</div>
+<div id="man-is-mans-best-friend" class="section level2">
+<h2><code>man</code> is man’s best friend</h2>
+<p>Online help for shell commands: <code>man commandname</code>.</p>
+<pre class="bash"><code># display documentation for the ls command
+man ls</code></pre>
+<pre><code>LS(1)                            User Commands                           LS(1)
+
+
+
+NAME
+       ls - list directory contents
+
+SYNOPSIS
+       ls [OPTION]... [FILE]...
+
+DESCRIPTION
+       List  information  about  the FILEs (the current directory by default).
+       Sort entries alphabetically if none of -cftuvSUX nor --sort  is  speci‐
+       fied.
+
+       Mandatory  arguments  to  long  options are mandatory for short options
+       too.
+
+       -a, --all
+              do not ignore entries starting with .
+
+       -A, --almost-all
+              do not list implied . and ..
+
+       --author
+              with -l, print the author of each file
+
+       -b, --escape
+              print C-style escapes for nongraphic characters
+
+       --block-size=SIZE
+              scale sizes by SIZE before printing them; e.g., '--block-size=M'
+              prints sizes in units of 1,048,576 bytes; see SIZE format below
+
+       -B, --ignore-backups
+              do not list implied entries ending with ~
+
+       -c     with -lt: sort by, and show, ctime (time of last modification of
+              file status information); with -l: show ctime and sort by  name;
+              otherwise: sort by ctime, newest first
+
+       -C     list entries by columns
+
+       --color[=WHEN]
+              colorize  the  output;  WHEN can be 'never', 'auto', or 'always'
+              (the default); more info below
+
+       -d, --directory
+              list directories themselves, not their contents
+
+       -D, --dired
+              generate output designed for Emacs' dired mode
+
+       -f     do not sort, enable -aU, disable -ls --color
+
+       -F, --classify
+              append indicator (one of */=&gt;@|) to entries
+
+       --file-type
+              likewise, except do not append '*'
+
+       --format=WORD
+              across -x, commas -m, horizontal -x, long -l, single-column  -1,
+              verbose -l, vertical -C
+
+       --full-time
+              like -l --time-style=full-iso
+
+       -g     like -l, but do not list owner
+
+       --group-directories-first
+              group directories before files;
+
+              can   be  augmented  with  a  --sort  option,  but  any  use  of
+              --sort=none (-U) disables grouping
+
+       -G, --no-group
+              in a long listing, don't print group names
+
+       -h, --human-readable
+              with -l, print sizes in human readable format (e.g., 1K 234M 2G)
+
+       --si   likewise, but use powers of 1000 not 1024
+
+       -H, --dereference-command-line
+              follow symbolic links listed on the command line
+
+       --dereference-command-line-symlink-to-dir
+              follow each command line symbolic link
+
+              that points to a directory
+
+       --hide=PATTERN
+              do not list implied entries matching shell  PATTERN  (overridden
+              by -a or -A)
+
+       --indicator-style=WORD
+              append indicator with style WORD to entry names: none (default),
+              slash (-p), file-type (--file-type), classify (-F)
+
+       -i, --inode
+              print the index number of each file
+
+       -I, --ignore=PATTERN
+              do not list implied entries matching shell PATTERN
+
+       -k, --kibibytes
+              default to 1024-byte blocks for disk usage
+
+       -l     use a long listing format
+
+       -L, --dereference
+              when showing file information for a symbolic link, show informa‐
+              tion  for  the file the link references rather than for the link
+              itself
+
+       -m     fill width with a comma separated list of entries
+
+       -n, --numeric-uid-gid
+              like -l, but list numeric user and group IDs
+
+       -N, --literal
+              print raw entry names (don't treat e.g. control characters  spe‐
+              cially)
+
+       -o     like -l, but do not list group information
+
+       -p, --indicator-style=slash
+              append / indicator to directories
+
+       -q, --hide-control-chars
+              print ? instead of nongraphic characters
+
+       --show-control-chars
+              show nongraphic characters as-is (the default, unless program is
+              'ls' and output is a terminal)
+
+       -Q, --quote-name
+              enclose entry names in double quotes
+
+       --quoting-style=WORD
+              use quoting style WORD for entry names: literal, locale,  shell,
+              shell-always, c, escape
+
+       -r, --reverse
+              reverse order while sorting
+
+       -R, --recursive
+              list subdirectories recursively
+
+       -s, --size
+              print the allocated size of each file, in blocks
+
+       -S     sort by file size
+
+       --sort=WORD
+              sort  by  WORD instead of name: none (-U), size (-S), time (-t),
+              version (-v), extension (-X)
+
+       --time=WORD
+              with -l, show time as WORD instead of default modification time:
+              atime or access or use (-u) ctime or status (-c); also use spec‐
+              ified time as sort key if --sort=time
+
+       --time-style=STYLE
+              with -l, show times using style STYLE: full-iso, long-iso,  iso,
+              locale,  or  +FORMAT;  FORMAT  is interpreted like in 'date'; if
+              FORMAT  is  FORMAT1&lt;newline&gt;FORMAT2,  then  FORMAT1  applies  to
+              non-recent  files  and FORMAT2 to recent files; if STYLE is pre‐
+              fixed with 'posix-', STYLE takes effect only outside  the  POSIX
+              locale
+
+       -t     sort by modification time, newest first
+
+       -T, --tabsize=COLS
+              assume tab stops at each COLS instead of 8
+
+       -u     with  -lt:  sort by, and show, access time; with -l: show access
+              time and sort by name; otherwise: sort by access time
+
+       -U     do not sort; list entries in directory order
+
+       -v     natural sort of (version) numbers within text
+
+       -w, --width=COLS
+              assume screen width instead of current value
+
+       -x     list entries by lines instead of by columns
+
+       -X     sort alphabetically by entry extension
+
+       -1     list one file per line
+
+       SELinux options:
+
+       --lcontext
+              Display security context.   Enable -l. Lines  will  probably  be
+              too wide for most displays.
+
+       -Z, --context
+              Display  security context so it fits on most displays.  Displays
+              only mode, user, group, security context and file name.
+
+       --scontext
+              Display only security context and file name.
+
+       --help display this help and exit
+
+       --version
+              output version information and exit
+
+       SIZE is an integer and optional unit (example:  10M  is  10*1024*1024).
+       Units  are K, M, G, T, P, E, Z, Y (powers of 1024) or KB, MB, ... (pow‐
+       ers of 1000).
+
+       Using color to distinguish file types is disabled both by  default  and
+       with  --color=never.  With --color=auto, ls emits color codes only when
+       standard output is connected to a terminal.  The LS_COLORS  environment
+       variable can change the settings.  Use the dircolors command to set it.
+
+   Exit status:
+       0      if OK,
+
+       1      if minor problems (e.g., cannot access subdirectory),
+
+       2      if serious trouble (e.g., cannot access command-line argument).
+
+       GNU  coreutils  online  help:  &lt;http://www.gnu.org/software/coreutils/&gt;
+       Report ls translation bugs to &lt;http://translationproject.org/team/&gt;
+
+AUTHOR
+       Written by Richard M. Stallman and David MacKenzie.
+
+COPYRIGHT
+       Copyright © 2013 Free Software Foundation, Inc.   License  GPLv3+:  GNU
+       GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;.
+       This  is  free  software:  you  are free to change and redistribute it.
+       There is NO WARRANTY, to the extent permitted by law.
+
+SEE ALSO
+       The full documentation for ls is maintained as a  Texinfo  manual.   If
+       the  info and ls programs are properly installed at your site, the com‐
+       mand
+
+              info coreutils 'ls invocation'
+
+       should give you access to the complete manual.
+
+
+
+GNU coreutils 8.22                August 2019                            LS(1)</code></pre>
 </div>
 </div>
 <div id="navigate-file-system" class="section level1">
@@ -524,377 +785,378 @@ summary {
 <code>tree -L levels</code> display levels directories deep.</p>
 <pre class="bash"><code># display only directories in levels 1, 2 from root directory
 tree -d -L 2 /</code></pre>
-<pre><code>## /
-## ├── bin -&gt; usr/bin
-## ├── boot
-## │   ├── efi
-## │   ├── grub
-## │   └── grub2
-## ├── dev
-## │   ├── block
-## │   ├── bsg
-## │   ├── char
-## │   ├── cpu
-## │   ├── disk
-## │   ├── fd -&gt; /proc/self/fd
-## │   ├── hugepages
-## │   ├── input
-## │   ├── mapper
-## │   ├── mqueue
-## │   ├── net
-## │   ├── pts
-## │   ├── raw
-## │   ├── shm
-## │   ├── snd
-## │   └── vfio
-## ├── etc
-## │   ├── acpi
-## │   ├── alternatives
-## │   ├── audisp
-## │   ├── audit
-## │   ├── bash_completion.d
-## │   ├── binfmt.d
-## │   ├── chkconfig.d
-## │   ├── cron.d
-## │   ├── cron.daily
-## │   ├── cron.hourly
-## │   ├── cron.monthly
-## │   ├── cron.weekly
-## │   ├── cups
-## │   ├── dbus-1
-## │   ├── dconf
-## │   ├── default
-## │   ├── depmod.d
-## │   ├── dhcp
-## │   ├── dracut.conf.d
-## │   ├── egl
-## │   ├── firewalld
-## │   ├── fonts
-## │   ├── gcrypt
-## │   ├── gdbinit.d
-## │   ├── ghostscript
-## │   ├── glvnd
-## │   ├── gnupg
-## │   ├── groff
-## │   ├── grub.d
-## │   ├── gss
-## │   ├── ImageMagick
-## │   ├── init.d -&gt; rc.d/init.d
-## │   ├── iproute2
-## │   ├── java
-## │   ├── jvm
-## │   ├── jvm-commmon
-## │   ├── kernel
-## │   ├── krb5.conf.d
-## │   ├── ld.so.conf.d
-## │   ├── libnl
-## │   ├── libpaper.d
-## │   ├── logrotate.d
-## │   ├── maven
-## │   ├── modprobe.d
-## │   ├── modules-load.d
-## │   ├── my.cnf.d
-## │   ├── NetworkManager
-## │   ├── ntp
-## │   ├── openldap
-## │   ├── opt
-## │   ├── pam.d
-## │   ├── pkcs11
-## │   ├── pki
-## │   ├── plymouth
-## │   ├── pm
-## │   ├── polkit-1
-## │   ├── popt.d
-## │   ├── postfix
-## │   ├── ppp
-## │   ├── prelink.conf.d
-## │   ├── profile.d
-## │   ├── python
-## │   ├── qemu-ga
-## │   ├── rc0.d -&gt; rc.d/rc0.d
-## │   ├── rc1.d -&gt; rc.d/rc1.d
-## │   ├── rc2.d -&gt; rc.d/rc2.d
-## │   ├── rc3.d -&gt; rc.d/rc3.d
-## │   ├── rc4.d -&gt; rc.d/rc4.d
-## │   ├── rc5.d -&gt; rc.d/rc5.d
-## │   ├── rc6.d -&gt; rc.d/rc6.d
-## │   ├── rc.d
-## │   ├── rpm
-## │   ├── rstudio
-## │   ├── rsyslog.d
-## │   ├── rwtab.d
-## │   ├── sasl2
-## │   ├── security
-## │   ├── selinux
-## │   ├── shiny-server
-## │   ├── skel
-## │   ├── ssh
-## │   ├── ssl
-## │   ├── statetab.d
-## │   ├── subversion
-## │   ├── sudoers.d
-## │   ├── sysconfig
-## │   ├── sysctl.d
-## │   ├── systemd
-## │   ├── terminfo
-## │   ├── tmpfiles.d
-## │   ├── tuned
-## │   ├── udev
-## │   ├── wpa_supplicant
-## │   ├── X11
-## │   ├── xdg
-## │   ├── xinetd.d
-## │   ├── yum
-## │   └── yum.repos.d
-## ├── home
-## │   ├── amisheth26
-## │   ├── andyliugraduateschool
-## │   ├── brett.young
-## │   ├── char.flournoy
-## │   ├── elalb
-## │   ├── farboodi
-## │   ├── gdewey
-## │   ├── ghancock
-## │   ├── hanyanyuan
-## │   ├── huazhou
-## │   ├── Johnrandazzo1996
-## │   ├── joodeh
-## │   ├── juhkim111
-## │   ├── krh005
-## │   ├── lillynhan
-## │   ├── lnliuxue
-## │   ├── mfaulis17
-## │   ├── mfdong12
-## │   ├── naomixu
-## │   ├── nslly19
-## │   ├── qiqi0610
-## │   ├── raguilar2
-## │   ├── ranjana.n.w
-## │   ├── sdalmia
-## │   ├── shiny
-## │   ├── stpraser18
-## │   ├── tonylim
-## │   ├── wenlanpan
-## │   ├── willgertsch
-## │   ├── xurui1996
-## │   ├── y9lyu
-## │   ├── yilanh19
-## │   └── ynguo94
-## ├── lib -&gt; usr/lib
-## ├── lib64 -&gt; usr/lib64
-## ├── media
-## ├── mnt
-## ├── opt
-## │   └── shiny-server
-## ├── proc
-## │   ├── 1
-## │   ├── 10
-## │   ├── 11
-## │   ├── 1143
-## │   ├── 115
-## │   ├── 12
-## │   ├── 12519
-## │   ├── 13
-## │   ├── 13242
-## │   ├── 14
-## │   ├── 1422
-## │   ├── 1423
-## │   ├── 1424
-## │   ├── 14576
-## │   ├── 16
-## │   ├── 17
-## │   ├── 1708
-## │   ├── 1728
-## │   ├── 1729
-## │   ├── 1730
-## │   ├── 1736
-## │   ├── 1777
-## │   ├── 1778
-## │   ├── 18
-## │   ├── 19
-## │   ├── 2
-## │   ├── 21
-## │   ├── 21936
-## │   ├── 22
-## │   ├── 23
-## │   ├── 23219
-## │   ├── 24
-## │   ├── 26
-## │   ├── 27605
-## │   ├── 28
-## │   ├── 28854
-## │   ├── 29
-## │   ├── 29024
-## │   ├── 29271
-## │   ├── 29356
-## │   ├── 29359
-## │   ├── 29360
-## │   ├── 30
-## │   ├── 30446
-## │   ├── 30567
-## │   ├── 30694
-## │   ├── 30755
-## │   ├── 30771
-## │   ├── 30797
-## │   ├── 30798
-## │   ├── 31
-## │   ├── 32
-## │   ├── 33
-## │   ├── 34
-## │   ├── 35
-## │   ├── 36
-## │   ├── 37
-## │   ├── 38
-## │   ├── 39
-## │   ├── 4
-## │   ├── 400
-## │   ├── 401
-## │   ├── 402
-## │   ├── 403
-## │   ├── 427
-## │   ├── 428
-## │   ├── 429
-## │   ├── 430
-## │   ├── 431
-## │   ├── 432
-## │   ├── 433
-## │   ├── 434
-## │   ├── 435
-## │   ├── 436
-## │   ├── 437
-## │   ├── 438
-## │   ├── 46
-## │   ├── 47
-## │   ├── 48
-## │   ├── 49
-## │   ├── 491
-## │   ├── 5
-## │   ├── 502
-## │   ├── 528
-## │   ├── 543
-## │   ├── 550
-## │   ├── 57
-## │   ├── 59
-## │   ├── 598
-## │   ├── 6
-## │   ├── 60
-## │   ├── 602
-## │   ├── 604
-## │   ├── 605
-## │   ├── 608
-## │   ├── 61
-## │   ├── 629
-## │   ├── 63
-## │   ├── 7
-## │   ├── 76
-## │   ├── 8
-## │   ├── 836
-## │   ├── 854
-## │   ├── 863
-## │   ├── 885
-## │   ├── 9
-## │   ├── 900
-## │   ├── 925
-## │   ├── 988
-## │   ├── acpi
-## │   ├── bus
-## │   ├── driver
-## │   ├── fs
-## │   ├── irq
-## │   ├── net -&gt; self/net
-## │   ├── scsi
-## │   ├── self -&gt; 30798
-## │   ├── sys
-## │   ├── sysvipc
-## │   └── tty
-## ├── root [error opening dir]
-## ├── run
-## │   ├── blkid
-## │   ├── chrony
-## │   ├── chrony-helper
-## │   ├── console
-## │   ├── cryptsetup
-## │   ├── cups
-## │   ├── dbus
-## │   ├── faillock
-## │   ├── firewalld
-## │   ├── initramfs
-## │   ├── lock
-## │   ├── log
-## │   ├── mongodb
-## │   ├── mount
-## │   ├── netreport
-## │   ├── NetworkManager
-## │   ├── plymouth
-## │   ├── rstudio-server
-## │   ├── sepermit
-## │   ├── setrans
-## │   ├── sudo
-## │   ├── svnserve
-## │   ├── systemd
-## │   ├── texlive
-## │   ├── tmpfiles.d
-## │   ├── tuned
-## │   ├── udev
-## │   └── user
-## ├── sbin -&gt; usr/sbin
-## ├── srv
-## │   └── shiny-server
-## ├── sys
-## │   ├── block
-## │   ├── bus
-## │   ├── class
-## │   ├── dev
-## │   ├── devices
-## │   ├── firmware
-## │   ├── fs
-## │   ├── hypervisor
-## │   ├── kernel
-## │   ├── module
-## │   └── power
-## ├── tmp
-## │   ├── hsperfdata_huazhou
-## │   ├── hsperfdata_root
-## │   ├── rstudio-rsession
-## │   ├── RtmpqWmPgE
-## │   ├── RtmpSgVh5y
-## │   ├── ssh-ZmS0idK36c
-## │   └── systemd-private-689840072f87481e92a0682375b1c8c4-chronyd.service-VKtoWA
-## ├── usr
-## │   ├── bin
-## │   ├── etc
-## │   ├── games
-## │   ├── include
-## │   ├── lib
-## │   ├── lib64
-## │   ├── libexec
-## │   ├── local
-## │   ├── sbin
-## │   ├── share
-## │   ├── src
-## │   └── tmp -&gt; ../var/tmp
-## └── var
-##     ├── adm
-##     ├── cache
-##     ├── db
-##     ├── empty
-##     ├── games
-##     ├── gopher
-##     ├── kerberos
-##     ├── lib
-##     ├── local
-##     ├── lock -&gt; ../run/lock
-##     ├── log
-##     ├── mail -&gt; spool/mail
-##     ├── nis
-##     ├── opt
-##     ├── preserve
-##     ├── run -&gt; ../run
-##     ├── spool
-##     ├── tmp
-##     └── yp
-## 
-## 368 directories</code></pre></li>
+<pre><code>/
+├── bin -&gt; usr/bin
+├── boot
+│   ├── efi
+│   ├── grub
+│   └── grub2
+├── dev
+│   ├── block
+│   ├── bsg
+│   ├── char
+│   ├── cpu
+│   ├── disk
+│   ├── fd -&gt; /proc/self/fd
+│   ├── hugepages
+│   ├── input
+│   ├── mapper
+│   ├── mqueue
+│   ├── net
+│   ├── pts
+│   ├── raw
+│   ├── shm
+│   ├── snd
+│   └── vfio
+├── etc
+│   ├── acpi
+│   ├── alternatives
+│   ├── audisp
+│   ├── audit
+│   ├── bash_completion.d
+│   ├── binfmt.d
+│   ├── chkconfig.d
+│   ├── cron.d
+│   ├── cron.daily
+│   ├── cron.hourly
+│   ├── cron.monthly
+│   ├── cron.weekly
+│   ├── cups
+│   ├── dbus-1
+│   ├── dconf
+│   ├── default
+│   ├── depmod.d
+│   ├── dhcp
+│   ├── dracut.conf.d
+│   ├── egl
+│   ├── firewalld
+│   ├── fonts
+│   ├── gconf
+│   ├── gcrypt
+│   ├── gdbinit.d
+│   ├── ghostscript
+│   ├── glvnd
+│   ├── gnupg
+│   ├── groff
+│   ├── grub.d
+│   ├── gss
+│   ├── ImageMagick
+│   ├── init.d -&gt; rc.d/init.d
+│   ├── iproute2
+│   ├── java
+│   ├── jvm
+│   ├── jvm-commmon
+│   ├── kernel
+│   ├── krb5.conf.d
+│   ├── ld.so.conf.d
+│   ├── libnl
+│   ├── libpaper.d
+│   ├── logrotate.d
+│   ├── maven
+│   ├── modprobe.d
+│   ├── modules-load.d
+│   ├── my.cnf.d
+│   ├── NetworkManager
+│   ├── ntp
+│   ├── openldap
+│   ├── opt
+│   ├── pam.d
+│   ├── pkcs11
+│   ├── pki
+│   ├── plymouth
+│   ├── pm
+│   ├── polkit-1
+│   ├── popt.d
+│   ├── postfix
+│   ├── ppp
+│   ├── prelink.conf.d
+│   ├── profile.d
+│   ├── python
+│   ├── qemu-ga
+│   ├── rc0.d -&gt; rc.d/rc0.d
+│   ├── rc1.d -&gt; rc.d/rc1.d
+│   ├── rc2.d -&gt; rc.d/rc2.d
+│   ├── rc3.d -&gt; rc.d/rc3.d
+│   ├── rc4.d -&gt; rc.d/rc4.d
+│   ├── rc5.d -&gt; rc.d/rc5.d
+│   ├── rc6.d -&gt; rc.d/rc6.d
+│   ├── rc.d
+│   ├── rpm
+│   ├── rstudio
+│   ├── rsyslog.d
+│   ├── rwtab.d
+│   ├── sasl2
+│   ├── security
+│   ├── selinux
+│   ├── shiny-server
+│   ├── skel
+│   ├── ssh
+│   ├── ssl
+│   ├── statetab.d
+│   ├── subversion
+│   ├── sudoers.d
+│   ├── sysconfig
+│   ├── sysctl.d
+│   ├── systemd
+│   ├── terminfo
+│   ├── tmpfiles.d
+│   ├── tuned
+│   ├── udev
+│   ├── wpa_supplicant
+│   ├── X11
+│   ├── xdg
+│   ├── xinetd.d
+│   ├── yum
+│   └── yum.repos.d
+├── home
+│   ├── amisheth26
+│   ├── andyliugraduateschool
+│   ├── brett.young
+│   ├── char.flournoy
+│   ├── elalb
+│   ├── farboodi
+│   ├── gdewey
+│   ├── ghancock
+│   ├── hanyanyuan
+│   ├── huazhou
+│   ├── Johnrandazzo1996
+│   ├── joodeh
+│   ├── juhkim111
+│   ├── krh005
+│   ├── lillynhan
+│   ├── lnliuxue
+│   ├── mfaulis17
+│   ├── mfdong12
+│   ├── naomixu
+│   ├── nslly19
+│   ├── qiqi0610
+│   ├── raguilar2
+│   ├── ranjana.n.w
+│   ├── sdalmia
+│   ├── shiny
+│   ├── stpraser18
+│   ├── tonylim
+│   ├── wenlanpan
+│   ├── willgertsch
+│   ├── xurui1996
+│   ├── y9lyu
+│   ├── yilanh19
+│   └── ynguo94
+├── lib -&gt; usr/lib
+├── lib64 -&gt; usr/lib64
+├── media
+├── mnt
+├── opt
+│   └── shiny-server
+├── proc
+│   ├── 1
+│   ├── 10
+│   ├── 10524
+│   ├── 10921
+│   ├── 11
+│   ├── 1143
+│   ├── 115
+│   ├── 12
+│   ├── 12364
+│   ├── 12519
+│   ├── 12959
+│   ├── 13
+│   ├── 13395
+│   ├── 14
+│   ├── 14044
+│   ├── 1422
+│   ├── 1423
+│   ├── 14232
+│   ├── 1424
+│   ├── 14276
+│   ├── 14277
+│   ├── 16
+│   ├── 17
+│   ├── 1708
+│   ├── 1728
+│   ├── 1729
+│   ├── 1730
+│   ├── 1736
+│   ├── 1777
+│   ├── 1778
+│   ├── 18
+│   ├── 19
+│   ├── 2
+│   ├── 21
+│   ├── 21873
+│   ├── 22
+│   ├── 23
+│   ├── 23219
+│   ├── 24
+│   ├── 25051
+│   ├── 26
+│   ├── 26321
+│   ├── 28
+│   ├── 28854
+│   ├── 29
+│   ├── 30
+│   ├── 31
+│   ├── 32
+│   ├── 33
+│   ├── 34
+│   ├── 35
+│   ├── 36
+│   ├── 37
+│   ├── 38
+│   ├── 39
+│   ├── 4
+│   ├── 400
+│   ├── 401
+│   ├── 402
+│   ├── 403
+│   ├── 427
+│   ├── 428
+│   ├── 429
+│   ├── 430
+│   ├── 431
+│   ├── 432
+│   ├── 433
+│   ├── 434
+│   ├── 435
+│   ├── 436
+│   ├── 437
+│   ├── 438
+│   ├── 46
+│   ├── 47
+│   ├── 48
+│   ├── 49
+│   ├── 491
+│   ├── 5
+│   ├── 502
+│   ├── 528
+│   ├── 550
+│   ├── 57
+│   ├── 59
+│   ├── 6
+│   ├── 60
+│   ├── 602
+│   ├── 604
+│   ├── 605
+│   ├── 608
+│   ├── 61
+│   ├── 629
+│   ├── 63
+│   ├── 6955
+│   ├── 7
+│   ├── 76
+│   ├── 8
+│   ├── 836
+│   ├── 854
+│   ├── 863
+│   ├── 885
+│   ├── 9
+│   ├── 900
+│   ├── 9082
+│   ├── 925
+│   ├── 988
+│   ├── 9919
+│   ├── 9922
+│   ├── 9923
+│   ├── acpi
+│   ├── bus
+│   ├── driver
+│   ├── fs
+│   ├── irq
+│   ├── net -&gt; self/net
+│   ├── scsi
+│   ├── self -&gt; 14277
+│   ├── sys
+│   ├── sysvipc
+│   └── tty
+├── root [error opening dir]
+├── run
+│   ├── blkid
+│   ├── chrony
+│   ├── chrony-helper
+│   ├── console
+│   ├── cryptsetup
+│   ├── cups
+│   ├── dbus
+│   ├── faillock
+│   ├── firewalld
+│   ├── initramfs
+│   ├── lock
+│   ├── log
+│   ├── mongodb
+│   ├── mount
+│   ├── netreport
+│   ├── NetworkManager
+│   ├── plymouth
+│   ├── rstudio-server
+│   ├── screen
+│   ├── sepermit
+│   ├── setrans
+│   ├── sudo
+│   ├── svnserve
+│   ├── systemd
+│   ├── texlive
+│   ├── tmpfiles.d
+│   ├── tuned
+│   ├── udev
+│   └── user
+├── sbin -&gt; usr/sbin
+├── srv
+│   └── shiny-server
+├── sys
+│   ├── block
+│   ├── bus
+│   ├── class
+│   ├── dev
+│   ├── devices
+│   ├── firmware
+│   ├── fs
+│   ├── hypervisor
+│   ├── kernel
+│   ├── module
+│   └── power
+├── tmp
+│   ├── hsperfdata_huazhou
+│   ├── hsperfdata_root
+│   ├── rstudio-rsession
+│   ├── Rtmp47po37
+│   ├── RtmpNj9AkJ
+│   ├── ssh-PMMYLOsYR3
+│   └── systemd-private-689840072f87481e92a0682375b1c8c4-chronyd.service-VKtoWA
+├── usr
+│   ├── bin
+│   ├── etc
+│   ├── games
+│   ├── include
+│   ├── lib
+│   ├── lib64
+│   ├── libexec
+│   ├── local
+│   ├── sbin
+│   ├── share
+│   ├── src
+│   └── tmp -&gt; ../var/tmp
+└── var
+    ├── adm
+    ├── cache
+    ├── db
+    ├── empty
+    ├── games
+    ├── gopher
+    ├── kerberos
+    ├── lib
+    ├── local
+    ├── lock -&gt; ../run/lock
+    ├── log
+    ├── mail -&gt; spool/mail
+    ├── nis
+    ├── opt
+    ├── preserve
+    ├── run -&gt; ../run
+    ├── spool
+    ├── tmp
+    └── yp
+
+369 directories</code></pre></li>
 </ul>
 </div>
 <div id="move-around-the-file-system" class="section level2">
@@ -902,63 +1164,63 @@ tree -d -L 2 /</code></pre>
 <ul>
 <li><p><code>pwd</code> prints absolute path to the current working directory:</p>
 <pre class="bash"><code>pwd</code></pre>
-<pre><code>## /home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux</code></pre></li>
+<pre><code>/home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux</code></pre></li>
 <li><p><code>ls</code> lists contents of a directory:</p>
 <pre class="bash"><code>ls</code></pre>
-<pre><code>## autoSim.R
-## Emacs_Reference_Card.pdf
-## IDRE_Winter_2019_Workshops.pdf
-## key_authentication_1.png
-## key_authentication_2.png
-## linux_directory_structure.png
-## linux_filepermission_oct.png
-## linux_filepermission.png
-## linux.html
-## linux.Rmd
-## meanEst.R
-## Richard_Stallman_2013.png
-## runSim.R
-## screenshot_top.png
-## Vi_Cheat_Sheet.pdf</code></pre></li>
+<pre><code>autoSim.R
+Emacs_Reference_Card.pdf
+IDRE_Winter_2019_Workshops.pdf
+key_authentication_1.png
+key_authentication_2.png
+linux_directory_structure.png
+linux_filepermission_oct.png
+linux_filepermission.png
+linux.html
+linux.Rmd
+meanEst.R
+Richard_Stallman_2013.png
+runSim.R
+screenshot_top.png
+Vi_Cheat_Sheet.pdf</code></pre></li>
 <li><p><code>ls -l</code> lists detailed contents of a directory:</p>
 <pre class="bash"><code>ls -l</code></pre>
-<pre><code>## total 4292
-## -rw-r--r--. 1 huazhou huazhou     244 Jan  4 02:34 autoSim.R
-## -rw-r--r--. 1 huazhou huazhou  110345 Jan  4 02:34 Emacs_Reference_Card.pdf
-## -rw-r--r--. 1 huazhou huazhou  157353 Jan  4 02:34 IDRE_Winter_2019_Workshops.pdf
-## -rw-r--r--. 1 huazhou huazhou  321281 Jan  4 02:34 key_authentication_1.png
-## -rw-r--r--. 1 huazhou huazhou   96119 Jan  4 02:34 key_authentication_2.png
-## -rw-r--r--. 1 huazhou huazhou   11662 Jan  4 02:34 linux_directory_structure.png
-## -rw-r--r--. 1 huazhou huazhou   42472 Jan  4 02:34 linux_filepermission_oct.png
-## -rw-r--r--. 1 huazhou huazhou  102188 Jan  4 02:34 linux_filepermission.png
-## -rw-r--r--. 1 huazhou huazhou 2689573 Jan  4 02:39 linux.html
-## -rw-r--r--. 1 huazhou huazhou   20998 Jan  4 02:55 linux.Rmd
-## -rw-r--r--. 1 huazhou huazhou     381 Jan  4 02:34 meanEst.R
-## -rw-r--r--. 1 huazhou huazhou  141962 Jan  4 02:34 Richard_Stallman_2013.png
-## -rw-r--r--. 1 huazhou huazhou     498 Jan  4 02:34 runSim.R
-## -rw-r--r--. 1 huazhou huazhou  469335 Jan  4 02:34 screenshot_top.png
-## -rw-r--r--. 1 huazhou huazhou  199492 Jan  4 02:34 Vi_Cheat_Sheet.pdf</code></pre></li>
+<pre><code>total 4300
+-rw-r--r--. 1 huazhou huazhou     244 Jan  4 02:34 autoSim.R
+-rw-r--r--. 1 huazhou huazhou  110345 Jan  4 02:34 Emacs_Reference_Card.pdf
+-rw-r--r--. 1 huazhou huazhou  157353 Jan  4 02:34 IDRE_Winter_2019_Workshops.pdf
+-rw-r--r--. 1 huazhou huazhou  321281 Jan  4 02:34 key_authentication_1.png
+-rw-r--r--. 1 huazhou huazhou   96119 Jan  4 02:34 key_authentication_2.png
+-rw-r--r--. 1 huazhou huazhou   11662 Jan  4 02:34 linux_directory_structure.png
+-rw-r--r--. 1 huazhou huazhou   42472 Jan  4 02:34 linux_filepermission_oct.png
+-rw-r--r--. 1 huazhou huazhou  102188 Jan  4 02:34 linux_filepermission.png
+-rw-r--r--. 1 huazhou huazhou 2696030 Jan  7 20:13 linux.html
+-rw-r--r--. 1 huazhou huazhou   21693 Jan  7 20:23 linux.Rmd
+-rw-r--r--. 1 huazhou huazhou     381 Jan  4 02:34 meanEst.R
+-rw-r--r--. 1 huazhou huazhou  141962 Jan  4 02:34 Richard_Stallman_2013.png
+-rw-r--r--. 1 huazhou huazhou     498 Jan  4 02:34 runSim.R
+-rw-r--r--. 1 huazhou huazhou  469335 Jan  4 02:34 screenshot_top.png
+-rw-r--r--. 1 huazhou huazhou  199492 Jan  4 02:34 Vi_Cheat_Sheet.pdf</code></pre></li>
 <li><p><code>ls -al</code> lists all contents of a directory, including those start with <code>.</code> (hidden folders):</p>
 <pre class="bash"><code>ls -al</code></pre>
-<pre><code>## total 4300
-## drwxr-xr-x. 2 huazhou huazhou    4096 Jan  4 02:39 .
-## drwxr-xr-x. 4 huazhou huazhou      71 Jan  4 02:34 ..
-## -rw-r--r--. 1 huazhou huazhou     244 Jan  4 02:34 autoSim.R
-## -rw-r--r--. 1 huazhou huazhou  110345 Jan  4 02:34 Emacs_Reference_Card.pdf
-## -rw-r--r--. 1 huazhou huazhou  157353 Jan  4 02:34 IDRE_Winter_2019_Workshops.pdf
-## -rw-r--r--. 1 huazhou huazhou  321281 Jan  4 02:34 key_authentication_1.png
-## -rw-r--r--. 1 huazhou huazhou   96119 Jan  4 02:34 key_authentication_2.png
-## -rw-r--r--. 1 huazhou huazhou   11662 Jan  4 02:34 linux_directory_structure.png
-## -rw-r--r--. 1 huazhou huazhou   42472 Jan  4 02:34 linux_filepermission_oct.png
-## -rw-r--r--. 1 huazhou huazhou  102188 Jan  4 02:34 linux_filepermission.png
-## -rw-r--r--. 1 huazhou huazhou 2689573 Jan  4 02:39 linux.html
-## -rw-r--r--. 1 huazhou huazhou   20998 Jan  4 02:55 linux.Rmd
-## -rw-r--r--. 1 huazhou huazhou     381 Jan  4 02:34 meanEst.R
-## -rw-r--r--. 1 huazhou huazhou    4090 Jan  4 02:39 .RData
-## -rw-r--r--. 1 huazhou huazhou  141962 Jan  4 02:34 Richard_Stallman_2013.png
-## -rw-r--r--. 1 huazhou huazhou     498 Jan  4 02:34 runSim.R
-## -rw-r--r--. 1 huazhou huazhou  469335 Jan  4 02:34 screenshot_top.png
-## -rw-r--r--. 1 huazhou huazhou  199492 Jan  4 02:34 Vi_Cheat_Sheet.pdf</code></pre></li>
+<pre><code>total 4308
+drwxr-xr-x. 2 huazhou huazhou    4096 Jan  7 20:13 .
+drwxr-xr-x. 4 huazhou huazhou      71 Jan  7 19:19 ..
+-rw-r--r--. 1 huazhou huazhou     244 Jan  4 02:34 autoSim.R
+-rw-r--r--. 1 huazhou huazhou  110345 Jan  4 02:34 Emacs_Reference_Card.pdf
+-rw-r--r--. 1 huazhou huazhou  157353 Jan  4 02:34 IDRE_Winter_2019_Workshops.pdf
+-rw-r--r--. 1 huazhou huazhou  321281 Jan  4 02:34 key_authentication_1.png
+-rw-r--r--. 1 huazhou huazhou   96119 Jan  4 02:34 key_authentication_2.png
+-rw-r--r--. 1 huazhou huazhou   11662 Jan  4 02:34 linux_directory_structure.png
+-rw-r--r--. 1 huazhou huazhou   42472 Jan  4 02:34 linux_filepermission_oct.png
+-rw-r--r--. 1 huazhou huazhou  102188 Jan  4 02:34 linux_filepermission.png
+-rw-r--r--. 1 huazhou huazhou 2696030 Jan  7 20:13 linux.html
+-rw-r--r--. 1 huazhou huazhou   21693 Jan  7 20:23 linux.Rmd
+-rw-r--r--. 1 huazhou huazhou     381 Jan  4 02:34 meanEst.R
+-rw-r--r--. 1 huazhou huazhou    4093 Jan  7 20:13 .RData
+-rw-r--r--. 1 huazhou huazhou  141962 Jan  4 02:34 Richard_Stallman_2013.png
+-rw-r--r--. 1 huazhou huazhou     498 Jan  4 02:34 runSim.R
+-rw-r--r--. 1 huazhou huazhou  469335 Jan  4 02:34 screenshot_top.png
+-rw-r--r--. 1 huazhou huazhou  199492 Jan  4 02:34 Vi_Cheat_Sheet.pdf</code></pre></li>
 <li><p><code>..</code> denotes the parent of current working directory.</p></li>
 <li><p><code>.</code> denotes the current working directory.</p></li>
 <li><p><code>~</code> denotes user’s home directory.</p></li>
@@ -987,7 +1249,7 @@ tree -d -L 2 /</code></pre>
 <li><p><code>chmod 751 file</code> sets permission <code>rwxr-x--x</code> to a file.</p></li>
 <li><p><code>groups userid</code> shows which group(s) a user belongs to:</p>
 <pre class="bash"><code>groups huazhou</code></pre>
-<pre><code>## huazhou : huazhou adm wheel video</code></pre></li>
+<pre><code>huazhou : huazhou adm wheel video</code></pre></li>
 </ul>
 </div>
 <div id="manipulate-files-and-directories" class="section level2">
@@ -1007,15 +1269,15 @@ tree -d -L 2 /</code></pre>
 <ul>
 <li><p><code>locate</code> locates a file by name (need <code>mlocate</code> program installed):</p>
 <pre class="bash"><code>locate linux.Rmd</code></pre>
-<pre><code>## /home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.Rmd</code></pre></li>
+<pre><code>/home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.Rmd</code></pre></li>
 <li><p><code>find</code> is similar to <code>locate</code> but has more functionalities, e.g., select files by age, size, permissions, …. , and is ubiquitous.</p>
 <pre class="bash"><code>find linux.Rmd</code></pre>
-<pre><code>## linux.Rmd</code></pre>
+<pre><code>linux.Rmd</code></pre>
 <pre class="bash"><code>find /home/huazhou -name linux.Rmd</code></pre>
-<pre><code>## /home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.Rmd</code></pre></li>
+<pre><code>/home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.Rmd</code></pre></li>
 <li><p><code>which</code> locates a program (executable file):</p>
 <pre class="bash"><code>which R</code></pre>
-<pre><code>## /usr/bin/R</code></pre></li>
+<pre><code>/usr/bin/R</code></pre></li>
 </ul>
 </div>
 <div id="wildcard-characters" class="section level2">
@@ -1069,13 +1331,13 @@ tree -d -L 2 /</code></pre>
 <ul>
 <li><pre class="bash"><code># all png files in current folder
 ls -l *.png</code></pre>
-<pre><code>## -rw-r--r--. 1 huazhou huazhou 321281 Jan  4 02:34 key_authentication_1.png
-## -rw-r--r--. 1 huazhou huazhou  96119 Jan  4 02:34 key_authentication_2.png
-## -rw-r--r--. 1 huazhou huazhou  11662 Jan  4 02:34 linux_directory_structure.png
-## -rw-r--r--. 1 huazhou huazhou  42472 Jan  4 02:34 linux_filepermission_oct.png
-## -rw-r--r--. 1 huazhou huazhou 102188 Jan  4 02:34 linux_filepermission.png
-## -rw-r--r--. 1 huazhou huazhou 141962 Jan  4 02:34 Richard_Stallman_2013.png
-## -rw-r--r--. 1 huazhou huazhou 469335 Jan  4 02:34 screenshot_top.png</code></pre></li>
+<pre><code>-rw-r--r--. 1 huazhou huazhou 321281 Jan  4 02:34 key_authentication_1.png
+-rw-r--r--. 1 huazhou huazhou  96119 Jan  4 02:34 key_authentication_2.png
+-rw-r--r--. 1 huazhou huazhou  11662 Jan  4 02:34 linux_directory_structure.png
+-rw-r--r--. 1 huazhou huazhou  42472 Jan  4 02:34 linux_filepermission_oct.png
+-rw-r--r--. 1 huazhou huazhou 102188 Jan  4 02:34 linux_filepermission.png
+-rw-r--r--. 1 huazhou huazhou 141962 Jan  4 02:34 Richard_Stallman_2013.png
+-rw-r--r--. 1 huazhou huazhou 469335 Jan  4 02:34 screenshot_top.png</code></pre></li>
 </ul>
 </div>
 <div id="regular-expression" class="section level2">
@@ -1094,104 +1356,115 @@ ls -l *.png</code></pre>
 <ul>
 <li><p><code>cat</code> prints the contents of a file:</p>
 <pre class="bash"><code>cat runSim.R</code></pre>
-<pre><code>## ## parsing command arguments
-## for (arg in commandArgs(TRUE)) {
-##   eval(parse(text=arg))
-## }
-## 
-## ## check if a given integer is prime
-## isPrime = function(n) {
-##   if (n &lt;= 3) {
-##     return (TRUE)
-##   }
-##   if (any((n %% 2:floor(sqrt(n))) == 0)) {
-##     return (FALSE)
-##   }
-##   return (TRUE)
-## }
-## 
-## ## estimate mean only using observation with prime indices
-## estMeanPrimes = function (x) {
-##   n = length(x)
-##   ind = sapply(1:n, isPrime)
-##   return (mean(x[ind]))
-## }
-## 
-## # simulate data
-## x = rnorm(n)
-## 
-## # estimate mean
-## estMeanPrimes(x)</code></pre></li>
+<pre><code>## parsing command arguments
+for (arg in commandArgs(TRUE)) {
+  eval(parse(text=arg))
+}
+
+## check if a given integer is prime
+isPrime = function(n) {
+  if (n &lt;= 3) {
+    return (TRUE)
+  }
+  if (any((n %% 2:floor(sqrt(n))) == 0)) {
+    return (FALSE)
+  }
+  return (TRUE)
+}
+
+## estimate mean only using observation with prime indices
+estMeanPrimes = function (x) {
+  n = length(x)
+  ind = sapply(1:n, isPrime)
+  return (mean(x[ind]))
+}
+
+# simulate data
+x = rnorm(n)
+
+# estimate mean
+estMeanPrimes(x)</code></pre></li>
 </ul>
 <hr />
 <ul>
 <li><p><code>head</code> prints the first 10 lines of a file:</p>
 <pre class="bash"><code>head runSim.R</code></pre>
-<pre><code>## ## parsing command arguments
-## for (arg in commandArgs(TRUE)) {
-##   eval(parse(text=arg))
-## }
-## 
-## ## check if a given integer is prime
-## isPrime = function(n) {
-##   if (n &lt;= 3) {
-##     return (TRUE)
-##   }</code></pre>
+<pre><code>## parsing command arguments
+for (arg in commandArgs(TRUE)) {
+  eval(parse(text=arg))
+}
+
+## check if a given integer is prime
+isPrime = function(n) {
+  if (n &lt;= 3) {
+    return (TRUE)
+  }</code></pre>
 <p><code>head -l</code> prints the first <span class="math inline">\(l\)</span> lines of a file:</p>
 <pre class="bash"><code>head -15 runSim.R</code></pre>
-<pre><code>## ## parsing command arguments
-## for (arg in commandArgs(TRUE)) {
-##   eval(parse(text=arg))
-## }
-## 
-## ## check if a given integer is prime
-## isPrime = function(n) {
-##   if (n &lt;= 3) {
-##     return (TRUE)
-##   }
-##   if (any((n %% 2:floor(sqrt(n))) == 0)) {
-##     return (FALSE)
-##   }
-##   return (TRUE)
-## }</code></pre></li>
+<pre><code>## parsing command arguments
+for (arg in commandArgs(TRUE)) {
+  eval(parse(text=arg))
+}
+
+## check if a given integer is prime
+isPrime = function(n) {
+  if (n &lt;= 3) {
+    return (TRUE)
+  }
+  if (any((n %% 2:floor(sqrt(n))) == 0)) {
+    return (FALSE)
+  }
+  return (TRUE)
+}</code></pre></li>
 <li><p><code>tail</code> prints the last 10 lines of a file:</p>
 <pre class="bash"><code>tail runSim.R</code></pre>
-<pre><code>##   n = length(x)
-##   ind = sapply(1:n, isPrime)
-##   return (mean(x[ind]))
-## }
-## 
-## # simulate data
-## x = rnorm(n)
-## 
-## # estimate mean
-## estMeanPrimes(x)</code></pre>
+<pre><code>  n = length(x)
+  ind = sapply(1:n, isPrime)
+  return (mean(x[ind]))
+}
+
+# simulate data
+x = rnorm(n)
+
+# estimate mean
+estMeanPrimes(x)</code></pre>
 <p><code>tail -l</code> prints the last <span class="math inline">\(l\)</span> lines of a file:</p>
 <pre class="bash"><code>tail -15 runSim.R</code></pre>
-<pre><code>##   return (TRUE)
-## }
-## 
-## ## estimate mean only using observation with prime indices
-## estMeanPrimes = function (x) {
-##   n = length(x)
-##   ind = sapply(1:n, isPrime)
-##   return (mean(x[ind]))
-## }
-## 
-## # simulate data
-## x = rnorm(n)
-## 
-## # estimate mean
-## estMeanPrimes(x)</code></pre></li>
+<pre><code>  return (TRUE)
+}
+
+## estimate mean only using observation with prime indices
+estMeanPrimes = function (x) {
+  n = length(x)
+  ind = sapply(1:n, isPrime)
+  return (mean(x[ind]))
+}
+
+# simulate data
+x = rnorm(n)
+
+# estimate mean
+estMeanPrimes(x)</code></pre></li>
 </ul>
 <hr />
 <ul>
 <li>Questions:
 <ul>
-<li>How to see the 2nd line of the file and nothing else?<br />
+<li>How to see the 11th line of the file and nothing else?<br />
 </li>
-<li>What about the penultimate (2nd to last) line?</li>
+<li>What about the 11th to the last line?</li>
 </ul></li>
+</ul>
+</div>
+<div id="piping-and-redirection" class="section level2">
+<h2>Piping and redirection</h2>
+<ul>
+<li><p><code>|</code> sends output from one command as input of another command.</p></li>
+<li><p><code>&gt;</code> directs output from one command to a file.</p></li>
+<li><p><code>&gt;&gt;</code> appends output from one command to a file.</p></li>
+<li><p><code>&lt;</code> reads input from a file.</p></li>
+<li><p>Combinations of shell commands (<code>grep</code>, <code>sed</code>, <code>awk</code>, …), piping and redirection, and regular expressions allow us pre-process and reformat huge text files efficiently.</p></li>
+<li><p>See HW1.</p></li>
 </ul>
 </div>
 <div id="less-is-more-more-is-less" class="section level2">
@@ -1209,47 +1482,47 @@ ls -l *.png</code></pre>
 <li><p>Show lines that contain string <code>CentOS</code>:</p>
 <pre class="bash"><code># quotes not necessary if not a regular expression
 grep 'CentOS' linux.Rmd</code></pre>
-<pre><code>## - RHEL/CentOS is popular on servers.
-## - The teaching server for this class runs CentOS 7.
-## - Show lines that contain string `CentOS`:
-##     grep 'CentOS' linux.Rmd
-##     grep 'CentOS' *.Rmd
-##     grep -n 'CentOS' linux.Rmd
-## - Replace `CentOS` by `RHEL` in a text file:
-##     sed 's/CentOS/RHEL/' linux.Rmd | grep RHEL</code></pre></li>
+<pre><code>- RHEL/CentOS is popular on servers.
+- The teaching server for this class runs CentOS 7.
+- Show lines that contain string `CentOS`:
+    grep 'CentOS' linux.Rmd
+    grep 'CentOS' *.Rmd
+    grep -n 'CentOS' linux.Rmd
+- Replace `CentOS` by `RHEL` in a text file:
+    sed 's/CentOS/RHEL/' linux.Rmd | grep RHEL</code></pre></li>
 <li><p>Search multiple text files:</p>
 <pre class="bash"><code>grep 'CentOS' *.Rmd</code></pre>
-<pre><code>## - RHEL/CentOS is popular on servers.
-## - The teaching server for this class runs CentOS 7.
-## - Show lines that contain string `CentOS`:
-##     grep 'CentOS' linux.Rmd
-##     grep 'CentOS' *.Rmd
-##     grep -n 'CentOS' linux.Rmd
-## - Replace `CentOS` by `RHEL` in a text file:
-##     sed 's/CentOS/RHEL/' linux.Rmd | grep RHEL</code></pre></li>
+<pre><code>- RHEL/CentOS is popular on servers.
+- The teaching server for this class runs CentOS 7.
+- Show lines that contain string `CentOS`:
+    grep 'CentOS' linux.Rmd
+    grep 'CentOS' *.Rmd
+    grep -n 'CentOS' linux.Rmd
+- Replace `CentOS` by `RHEL` in a text file:
+    sed 's/CentOS/RHEL/' linux.Rmd | grep RHEL</code></pre></li>
 <li><p>Show matching line numbers:</p>
 <pre class="bash"><code>grep -n 'CentOS' linux.Rmd</code></pre>
-<pre><code>## 31:- RHEL/CentOS is popular on servers.
-## 33:- The teaching server for this class runs CentOS 7.
-## 294:- Show lines that contain string `CentOS`:
-## 297:    grep 'CentOS' linux.Rmd
-## 302:    grep 'CentOS' *.Rmd
-## 307:    grep -n 'CentOS' linux.Rmd
-## 324:- Replace `CentOS` by `RHEL` in a text file:
-## 326:    sed 's/CentOS/RHEL/' linux.Rmd | grep RHEL</code></pre></li>
+<pre><code>34:- RHEL/CentOS is popular on servers.
+36:- The teaching server for this class runs CentOS 7.
+323:- Show lines that contain string `CentOS`:
+326:    grep 'CentOS' linux.Rmd
+331:    grep 'CentOS' *.Rmd
+336:    grep -n 'CentOS' linux.Rmd
+353:- Replace `CentOS` by `RHEL` in a text file:
+355:    sed 's/CentOS/RHEL/' linux.Rmd | grep RHEL</code></pre></li>
 <li><p>Find all files in current directory with <code>.png</code> extension:</p>
 <pre class="bash"><code>ls | grep '.png$'</code></pre>
-<pre><code>## key_authentication_1.png
-## key_authentication_2.png
-## linux_directory_structure.png
-## linux_filepermission_oct.png
-## linux_filepermission.png
-## Richard_Stallman_2013.png
-## screenshot_top.png</code></pre></li>
+<pre><code>key_authentication_1.png
+key_authentication_2.png
+linux_directory_structure.png
+linux_filepermission_oct.png
+linux_filepermission.png
+Richard_Stallman_2013.png
+screenshot_top.png</code></pre></li>
 <li><p>Find all directories in the current directory:</p>
 <pre class="bash"><code>ls -al | grep '^d'</code></pre>
-<pre><code>## drwxr-xr-x. 2 huazhou huazhou    4096 Jan  4 02:39 .
-## drwxr-xr-x. 4 huazhou huazhou      71 Jan  4 02:34 ..</code></pre></li>
+<pre><code>drwxr-xr-x. 2 huazhou huazhou    4096 Jan  7 20:13 .
+drwxr-xr-x. 4 huazhou huazhou      71 Jan  7 19:19 ..</code></pre></li>
 </ul>
 </div>
 <div id="sed" class="section level2">
@@ -1258,14 +1531,14 @@ grep 'CentOS' linux.Rmd</code></pre>
 <li><p><code>sed</code> is a stream editor.</p></li>
 <li><p>Replace <code>CentOS</code> by <code>RHEL</code> in a text file:</p>
 <pre class="bash"><code>sed 's/CentOS/RHEL/' linux.Rmd | grep RHEL</code></pre>
-<pre><code>## - RHEL/RHEL is popular on servers.
-## - The teaching server for this class runs RHEL 7.
-## - Show lines that contain string `RHEL`:
-##     grep 'RHEL' linux.Rmd
-##     grep 'RHEL' *.Rmd
-##     grep -n 'RHEL' linux.Rmd
-## - Replace `RHEL` by `RHEL` in a text file:
-##     sed 's/RHEL/RHEL/' linux.Rmd | grep RHEL</code></pre></li>
+<pre><code>- RHEL/RHEL is popular on servers.
+- The teaching server for this class runs RHEL 7.
+- Show lines that contain string `RHEL`:
+    grep 'RHEL' linux.Rmd
+    grep 'RHEL' *.Rmd
+    grep -n 'RHEL' linux.Rmd
+- Replace `RHEL` by `RHEL` in a text file:
+    sed 's/RHEL/RHEL/' linux.Rmd | grep RHEL</code></pre></li>
 </ul>
 </div>
 <div id="awk" class="section level2">
@@ -1274,203 +1547,192 @@ grep 'CentOS' linux.Rmd</code></pre>
 <li><p><code>awk</code> is a filter and report writer.</p></li>
 <li><p>First let’s display first lines of the file <code>/etc/passwd</code>:</p>
 <pre class="bash"><code>head /etc/passwd</code></pre>
-<pre><code>## root:x:0:0:root:/root:/bin/bash
-## bin:x:1:1:bin:/bin:/sbin/nologin
-## daemon:x:2:2:daemon:/sbin:/sbin/nologin
-## adm:x:3:4:adm:/var/adm:/sbin/nologin
-## lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
-## sync:x:5:0:sync:/sbin:/bin/sync
-## shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
-## halt:x:7:0:halt:/sbin:/sbin/halt
-## mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
-## operator:x:11:0:operator:/root:/sbin/nologin</code></pre>
+<pre><code>root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+operator:x:11:0:operator:/root:/sbin/nologin</code></pre>
 <p>Each line contains fields (1) user name, (2) password, (3) user ID, (4) group ID, (5) user ID info, (6) home directory, and (7) command shell, spearated by <code>:</code>.</p></li>
 <li><p>Print sorted list of login names:</p>
 <pre class="bash"><code>awk -F: '{ print $1 }' /etc/passwd | sort | head -10</code></pre>
-<pre><code>## adm
-## amisheth26
-## andyliugraduateschool
-## bin
-## brett.young
-## char.flournoy
-## chrony
-## daemon
-## dbus
-## elalb</code></pre></li>
+<pre><code>adm
+amisheth26
+andyliugraduateschool
+bin
+brett.young
+char.flournoy
+chrony
+daemon
+dbus
+elalb</code></pre></li>
 <li><p>Print number of lines in a file, as <code>NR</code> stands for Number of Rows:</p>
 <pre class="bash"><code>awk 'END { print NR }' /etc/passwd</code></pre>
-<pre><code>## 57</code></pre>
+<pre><code>57</code></pre>
 <p>or</p>
 <pre class="bash"><code>wc -l /etc/passwd</code></pre>
-<pre><code>## 57 /etc/passwd</code></pre>
+<pre><code>57 /etc/passwd</code></pre>
 <p>or (not displaying file name)</p>
 <pre class="bash"><code>wc -l &lt; /etc/passwd</code></pre>
-<pre><code>## 57</code></pre></li>
+<pre><code>57</code></pre></li>
 <li><p>Print login names with UID in range <code>1000-1035</code>:</p>
 <pre class="bash"><code>awk -F: '{if ($3 &gt;= 1000 &amp;&amp; $3 &lt;= 1035) print}' /etc/passwd</code></pre>
-<pre><code>## huazhou:x:1000:1001::/home/huazhou:/bin/bash
-## juhkim111:x:1001:1003::/home/juhkim111:/bin/bash
-## raguilar2:x:1002:1004::/home/raguilar2:/bin/bash
-## elalb:x:1003:1005::/home/elalb:/bin/bash
-## sdalmia:x:1004:1006::/home/sdalmia:/bin/bash
-## gdewey:x:1005:1007::/home/gdewey:/bin/bash
-## mfdong12:x:1006:1008::/home/mfdong12:/bin/bash
-## farboodi:x:1007:1009::/home/farboodi:/bin/bash
-## mfaulis17:x:1008:1010::/home/mfaulis17:/bin/bash
-## char.flournoy:x:1009:1011::/home/char.flournoy:/bin/bash
-## willgertsch:x:1010:1012::/home/willgertsch:/bin/bash
-## ynguo94:x:1011:1013::/home/ynguo94:/bin/bash
-## ghancock:x:1012:1014::/home/ghancock:/bin/bash
-## krh005:x:1013:1015::/home/krh005:/bin/bash
-## yilanh19:x:1014:1016::/home/yilanh19:/bin/bash
-## nslly19:x:1015:1017::/home/nslly19:/bin/bash
-## tonylim:x:1016:1018::/home/tonylim:/bin/bash
-## andyliugraduateschool:x:1017:1019::/home/andyliugraduateschool:/bin/bash
-## lnliuxue:x:1018:1020::/home/lnliuxue:/bin/bash
-## y9lyu:x:1019:1021::/home/y9lyu:/bin/bash
-## lillynhan:x:1020:1022::/home/lillynhan:/bin/bash
-## joodeh:x:1021:1023::/home/joodeh:/bin/bash
-## wenlanpan:x:1022:1024::/home/wenlanpan:/bin/bash
-## stpraser18:x:1023:1025::/home/stpraser18:/bin/bash
-## qiqi0610:x:1024:1026::/home/qiqi0610:/bin/bash
-## Johnrandazzo1996:x:1025:1027::/home/Johnrandazzo1996:/bin/bash
-## amisheth26:x:1026:1028::/home/amisheth26:/bin/bash
-## ranjana.n.w:x:1027:1029::/home/ranjana.n.w:/bin/bash
-## naomixu:x:1028:1030::/home/naomixu:/bin/bash
-## xurui1996:x:1029:1031::/home/xurui1996:/bin/bash
-## brett.young:x:1030:1032::/home/brett.young:/bin/bash
-## hanyanyuan:x:1031:1033::/home/hanyanyuan:/bin/bash</code></pre></li>
+<pre><code>huazhou:x:1000:1001::/home/huazhou:/bin/bash
+juhkim111:x:1001:1003::/home/juhkim111:/bin/bash
+raguilar2:x:1002:1004::/home/raguilar2:/bin/bash
+elalb:x:1003:1005::/home/elalb:/bin/bash
+sdalmia:x:1004:1006::/home/sdalmia:/bin/bash
+gdewey:x:1005:1007::/home/gdewey:/bin/bash
+mfdong12:x:1006:1008::/home/mfdong12:/bin/bash
+farboodi:x:1007:1009::/home/farboodi:/bin/bash
+mfaulis17:x:1008:1010::/home/mfaulis17:/bin/bash
+char.flournoy:x:1009:1011::/home/char.flournoy:/bin/bash
+willgertsch:x:1010:1012::/home/willgertsch:/bin/bash
+ynguo94:x:1011:1013::/home/ynguo94:/bin/bash
+ghancock:x:1012:1014::/home/ghancock:/bin/bash
+krh005:x:1013:1015::/home/krh005:/bin/bash
+yilanh19:x:1014:1016::/home/yilanh19:/bin/bash
+nslly19:x:1015:1017::/home/nslly19:/bin/bash
+tonylim:x:1016:1018::/home/tonylim:/bin/bash
+andyliugraduateschool:x:1017:1019::/home/andyliugraduateschool:/bin/bash
+lnliuxue:x:1018:1020::/home/lnliuxue:/bin/bash
+y9lyu:x:1019:1021::/home/y9lyu:/bin/bash
+lillynhan:x:1020:1022::/home/lillynhan:/bin/bash
+joodeh:x:1021:1023::/home/joodeh:/bin/bash
+wenlanpan:x:1022:1024::/home/wenlanpan:/bin/bash
+stpraser18:x:1023:1025::/home/stpraser18:/bin/bash
+qiqi0610:x:1024:1026::/home/qiqi0610:/bin/bash
+Johnrandazzo1996:x:1025:1027::/home/Johnrandazzo1996:/bin/bash
+amisheth26:x:1026:1028::/home/amisheth26:/bin/bash
+ranjana.n.w:x:1027:1029::/home/ranjana.n.w:/bin/bash
+naomixu:x:1028:1030::/home/naomixu:/bin/bash
+xurui1996:x:1029:1031::/home/xurui1996:/bin/bash
+brett.young:x:1030:1032::/home/brett.young:/bin/bash
+hanyanyuan:x:1031:1033::/home/hanyanyuan:/bin/bash</code></pre></li>
 <li><p>Print login names and log-in shells in comma-seperated format:</p>
 <pre class="bash"><code>awk -F: '{OFS = &quot;,&quot;} {print $1, $7}' /etc/passwd</code></pre>
-<pre><code>## root,/bin/bash
-## bin,/sbin/nologin
-## daemon,/sbin/nologin
-## adm,/sbin/nologin
-## lp,/sbin/nologin
-## sync,/bin/sync
-## shutdown,/sbin/shutdown
-## halt,/sbin/halt
-## mail,/sbin/nologin
-## operator,/sbin/nologin
-## games,/sbin/nologin
-## ftp,/sbin/nologin
-## nobody,/sbin/nologin
-## systemd-network,/sbin/nologin
-## dbus,/sbin/nologin
-## polkitd,/sbin/nologin
-## ntp,/sbin/nologin
-## sshd,/sbin/nologin
-## postfix,/sbin/nologin
-## chrony,/sbin/nologin
-## huazhou,/bin/bash
-## tss,/sbin/nologin
-## rstudio-server,/bin/bash
-## shiny,/bin/sh
-## mongod,/bin/false
-## saslauth,/sbin/nologin
-## juhkim111,/bin/bash
-## raguilar2,/bin/bash
-## elalb,/bin/bash
-## sdalmia,/bin/bash
-## gdewey,/bin/bash
-## mfdong12,/bin/bash
-## farboodi,/bin/bash
-## mfaulis17,/bin/bash
-## char.flournoy,/bin/bash
-## willgertsch,/bin/bash
-## ynguo94,/bin/bash
-## ghancock,/bin/bash
-## krh005,/bin/bash
-## yilanh19,/bin/bash
-## nslly19,/bin/bash
-## tonylim,/bin/bash
-## andyliugraduateschool,/bin/bash
-## lnliuxue,/bin/bash
-## y9lyu,/bin/bash
-## lillynhan,/bin/bash
-## joodeh,/bin/bash
-## wenlanpan,/bin/bash
-## stpraser18,/bin/bash
-## qiqi0610,/bin/bash
-## Johnrandazzo1996,/bin/bash
-## amisheth26,/bin/bash
-## ranjana.n.w,/bin/bash
-## naomixu,/bin/bash
-## xurui1996,/bin/bash
-## brett.young,/bin/bash
-## hanyanyuan,/bin/bash</code></pre></li>
+<pre><code>root,/bin/bash
+bin,/sbin/nologin
+daemon,/sbin/nologin
+adm,/sbin/nologin
+lp,/sbin/nologin
+sync,/bin/sync
+shutdown,/sbin/shutdown
+halt,/sbin/halt
+mail,/sbin/nologin
+operator,/sbin/nologin
+games,/sbin/nologin
+ftp,/sbin/nologin
+nobody,/sbin/nologin
+systemd-network,/sbin/nologin
+dbus,/sbin/nologin
+polkitd,/sbin/nologin
+ntp,/sbin/nologin
+sshd,/sbin/nologin
+postfix,/sbin/nologin
+chrony,/sbin/nologin
+huazhou,/bin/bash
+tss,/sbin/nologin
+rstudio-server,/bin/bash
+shiny,/bin/sh
+mongod,/bin/false
+saslauth,/sbin/nologin
+juhkim111,/bin/bash
+raguilar2,/bin/bash
+elalb,/bin/bash
+sdalmia,/bin/bash
+gdewey,/bin/bash
+mfdong12,/bin/bash
+farboodi,/bin/bash
+mfaulis17,/bin/bash
+char.flournoy,/bin/bash
+willgertsch,/bin/bash
+ynguo94,/bin/bash
+ghancock,/bin/bash
+krh005,/bin/bash
+yilanh19,/bin/bash
+nslly19,/bin/bash
+tonylim,/bin/bash
+andyliugraduateschool,/bin/bash
+lnliuxue,/bin/bash
+y9lyu,/bin/bash
+lillynhan,/bin/bash
+joodeh,/bin/bash
+wenlanpan,/bin/bash
+stpraser18,/bin/bash
+qiqi0610,/bin/bash
+Johnrandazzo1996,/bin/bash
+amisheth26,/bin/bash
+ranjana.n.w,/bin/bash
+naomixu,/bin/bash
+xurui1996,/bin/bash
+brett.young,/bin/bash
+hanyanyuan,/bin/bash</code></pre></li>
 <li><p>Print login names and indicate those with UID&gt;1000 as <code>vip</code>:</p>
 <pre class="bash"><code>awk -F: -v status=&quot;&quot; '{OFS = &quot;,&quot;} 
 {if ($3 &gt;= 1000) status=&quot;vip&quot;; else status=&quot;regular&quot;} 
 {print $1, status}' /etc/passwd</code></pre>
-<pre><code>## root,regular
-## bin,regular
-## daemon,regular
-## adm,regular
-## lp,regular
-## sync,regular
-## shutdown,regular
-## halt,regular
-## mail,regular
-## operator,regular
-## games,regular
-## ftp,regular
-## nobody,regular
-## systemd-network,regular
-## dbus,regular
-## polkitd,regular
-## ntp,regular
-## sshd,regular
-## postfix,regular
-## chrony,regular
-## huazhou,vip
-## tss,regular
-## rstudio-server,regular
-## shiny,regular
-## mongod,regular
-## saslauth,regular
-## juhkim111,vip
-## raguilar2,vip
-## elalb,vip
-## sdalmia,vip
-## gdewey,vip
-## mfdong12,vip
-## farboodi,vip
-## mfaulis17,vip
-## char.flournoy,vip
-## willgertsch,vip
-## ynguo94,vip
-## ghancock,vip
-## krh005,vip
-## yilanh19,vip
-## nslly19,vip
-## tonylim,vip
-## andyliugraduateschool,vip
-## lnliuxue,vip
-## y9lyu,vip
-## lillynhan,vip
-## joodeh,vip
-## wenlanpan,vip
-## stpraser18,vip
-## qiqi0610,vip
-## Johnrandazzo1996,vip
-## amisheth26,vip
-## ranjana.n.w,vip
-## naomixu,vip
-## xurui1996,vip
-## brett.young,vip
-## hanyanyuan,vip</code></pre></li>
-</ul>
-</div>
-<div id="piping-and-redirection" class="section level2">
-<h2>Piping and redirection</h2>
-<ul>
-<li><p><code>|</code> sends output from one command as input of another command.</p></li>
-<li><p><code>&gt;</code> directs output from one command to a file.</p></li>
-<li><p><code>&gt;&gt;</code> appends output from one command to a file.</p></li>
-<li><p><code>&lt;</code> reads input from a file.</p></li>
-<li><p>Combinations of shell commands (<code>grep</code>, <code>sed</code>, <code>awk</code>, …), piping and redirection, and regular expressions allow us pre-process and reformat huge text files efficiently.</p></li>
-<li><p>See HW1.</p></li>
+<pre><code>root,regular
+bin,regular
+daemon,regular
+adm,regular
+lp,regular
+sync,regular
+shutdown,regular
+halt,regular
+mail,regular
+operator,regular
+games,regular
+ftp,regular
+nobody,regular
+systemd-network,regular
+dbus,regular
+polkitd,regular
+ntp,regular
+sshd,regular
+postfix,regular
+chrony,regular
+huazhou,vip
+tss,regular
+rstudio-server,regular
+shiny,regular
+mongod,regular
+saslauth,regular
+juhkim111,vip
+raguilar2,vip
+elalb,vip
+sdalmia,vip
+gdewey,vip
+mfdong12,vip
+farboodi,vip
+mfaulis17,vip
+char.flournoy,vip
+willgertsch,vip
+ynguo94,vip
+ghancock,vip
+krh005,vip
+yilanh19,vip
+nslly19,vip
+tonylim,vip
+andyliugraduateschool,vip
+lnliuxue,vip
+y9lyu,vip
+lillynhan,vip
+joodeh,vip
+wenlanpan,vip
+stpraser18,vip
+qiqi0610,vip
+Johnrandazzo1996,vip
+amisheth26,vip
+ranjana.n.w,vip
+naomixu,vip
+xurui1996,vip
+brett.young,vip
+hanyanyuan,vip</code></pre></li>
 </ul>
 </div>
 <div id="text-editors" class="section level2">
@@ -1542,147 +1804,146 @@ grep 'CentOS' linux.Rmd</code></pre>
 <li><p>OS runs processes on behalf of user.</p></li>
 <li><p>Each process has Process ID (PID), Username (UID), Parent process ID (PPID), Time and data process started (STIME), time running (TIME), etc.</p>
 <pre class="bash"><code>ps</code></pre>
-<pre><code>##   PID TTY          TIME CMD
-## 29271 ?        00:00:04 rsession
-## 29359 ?        00:00:00 sshd
-## 30771 ?        00:00:00 R
-## 30867 ?        00:00:00 sh
-## 30868 ?        00:00:00 ps</code></pre></li>
+<pre><code>  PID TTY          TIME CMD
+ 9082 ?        00:00:14 rsession
+ 9922 ?        00:00:00 sshd
+14232 ?        00:00:00 R
+14346 ?        00:00:00 sh
+14347 ?        00:00:00 ps</code></pre></li>
 <li><p>All current running processes:</p>
 <pre class="bash"><code>ps -eaf</code></pre>
-<pre><code>## UID        PID  PPID  C STIME TTY          TIME CMD
-## root         1     0  0 Jan03 ?        00:00:02 /usr/lib/systemd/systemd --switched-root --system --deserialize 22
-## root         2     0  0 Jan03 ?        00:00:00 [kthreadd]
-## root         4     2  0 Jan03 ?        00:00:00 [kworker/0:0H]
-## root         5     2  0 Jan03 ?        00:00:02 [kworker/u8:0]
-## root         6     2  0 Jan03 ?        00:00:00 [ksoftirqd/0]
-## root         7     2  0 Jan03 ?        00:00:00 [migration/0]
-## root         8     2  0 Jan03 ?        00:00:00 [rcu_bh]
-## root         9     2  0 Jan03 ?        00:00:03 [rcu_sched]
-## root        10     2  0 Jan03 ?        00:00:00 [lru-add-drain]
-## root        11     2  0 Jan03 ?        00:00:00 [watchdog/0]
-## root        12     2  0 Jan03 ?        00:00:00 [watchdog/1]
-## root        13     2  0 Jan03 ?        00:00:00 [migration/1]
-## root        14     2  0 Jan03 ?        00:00:00 [ksoftirqd/1]
-## root        16     2  0 Jan03 ?        00:00:00 [kworker/1:0H]
-## root        17     2  0 Jan03 ?        00:00:00 [watchdog/2]
-## root        18     2  0 Jan03 ?        00:00:00 [migration/2]
-## root        19     2  0 Jan03 ?        00:00:00 [ksoftirqd/2]
-## root        21     2  0 Jan03 ?        00:00:00 [kworker/2:0H]
-## root        22     2  0 Jan03 ?        00:00:00 [watchdog/3]
-## root        23     2  0 Jan03 ?        00:00:00 [migration/3]
-## root        24     2  0 Jan03 ?        00:00:00 [ksoftirqd/3]
-## root        26     2  0 Jan03 ?        00:00:00 [kworker/3:0H]
-## root        28     2  0 Jan03 ?        00:00:00 [kdevtmpfs]
-## root        29     2  0 Jan03 ?        00:00:00 [netns]
-## root        30     2  0 Jan03 ?        00:00:00 [khungtaskd]
-## root        31     2  0 Jan03 ?        00:00:00 [writeback]
-## root        32     2  0 Jan03 ?        00:00:00 [kintegrityd]
-## root        33     2  0 Jan03 ?        00:00:00 [bioset]
-## root        34     2  0 Jan03 ?        00:00:00 [bioset]
-## root        35     2  0 Jan03 ?        00:00:00 [bioset]
-## root        36     2  0 Jan03 ?        00:00:00 [kblockd]
-## root        37     2  0 Jan03 ?        00:00:00 [md]
-## root        38     2  0 Jan03 ?        00:00:00 [edac-poller]
-## root        39     2  0 Jan03 ?        00:00:00 [watchdogd]
-## root        46     2  0 Jan03 ?        00:00:00 [kswapd0]
-## root        47     2  0 Jan03 ?        00:00:00 [ksmd]
-## root        48     2  0 Jan03 ?        00:00:00 [khugepaged]
-## root        49     2  0 Jan03 ?        00:00:00 [crypto]
-## root        57     2  0 Jan03 ?        00:00:00 [kthrotld]
-## root        59     2  0 Jan03 ?        00:00:00 [kmpath_rdacd]
-## root        60     2  0 Jan03 ?        00:00:00 [kaluad]
-## root        61     2  0 Jan03 ?        00:00:00 [kpsmoused]
-## root        63     2  0 Jan03 ?        00:00:00 [ipv6_addrconf]
-## root        76     2  0 Jan03 ?        00:00:00 [deferwq]
-## root       115     2  0 Jan03 ?        00:00:00 [kauditd]
-## root       400     2  0 Jan03 ?        00:00:00 [virtscsi-scan]
-## root       401     2  0 Jan03 ?        00:00:00 [scsi_eh_0]
-## root       402     2  0 Jan03 ?        00:00:00 [scsi_tmf_0]
-## root       403     2  0 Jan03 ?        00:00:01 [kworker/u8:2]
-## root       427     2  0 Jan03 ?        00:00:00 [bioset]
-## root       428     2  0 Jan03 ?        00:00:00 [xfsalloc]
-## root       429     2  0 Jan03 ?        00:00:00 [xfs_mru_cache]
-## root       430     2  0 Jan03 ?        00:00:00 [xfs-buf/sda1]
-## root       431     2  0 Jan03 ?        00:00:00 [xfs-data/sda1]
-## root       432     2  0 Jan03 ?        00:00:00 [xfs-conv/sda1]
-## root       433     2  0 Jan03 ?        00:00:00 [xfs-cil/sda1]
-## root       434     2  0 Jan03 ?        00:00:00 [xfs-reclaim/sda]
-## root       435     2  0 Jan03 ?        00:00:00 [xfs-log/sda1]
-## root       436     2  0 Jan03 ?        00:00:00 [xfs-eofblocks/s]
-## root       437     2  0 Jan03 ?        00:00:05 [xfsaild/sda1]
-## root       438     2  0 Jan03 ?        00:00:01 [kworker/0:1H]
-## root       491     2  0 Jan03 ?        00:00:00 [kworker/3:1H]
-## root       502     1  0 Jan03 ?        00:00:04 /usr/lib/systemd/systemd-journald
-## root       528     1  0 Jan03 ?        00:00:00 /usr/lib/systemd/systemd-udevd
-## root       543     2  0 Jan03 ?        00:00:00 [kworker/3:2]
-## root       550     1  0 Jan03 ?        00:00:01 /sbin/auditd
-## root       598     2  0 Jan03 ?        00:00:00 [kworker/2:2]
-## root       602     1  0 Jan03 ?        00:00:00 /usr/lib/systemd/systemd-logind
-## root       604     2  0 Jan03 ?        00:00:00 [hwrng]
-## polkitd    605     1  0 Jan03 ?        00:00:00 /usr/lib/polkit-1/polkitd --no-debug
-## dbus       608     1  0 Jan03 ?        00:00:00 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation
-## chrony     629     1  0 Jan03 ?        00:00:00 /usr/sbin/chronyd
-## root       836     1  0 Jan03 ?        00:00:00 /usr/sbin/crond -n
-## root       854     1  0 Jan03 ?        00:00:00 /usr/sbin/acpid
-## root       863     1  0 Jan03 ?        00:00:00 /usr/bin/python2 -Es /usr/sbin/firewalld --nofork --nopid
-## root       885     1  0 Jan03 ttyS0    00:00:00 /sbin/agetty --keep-baud 115200,38400,9600 ttyS0 vt220
-## root       900     1  0 Jan03 tty1     00:00:00 /sbin/agetty --noclear tty1 linux
-## root       925     2  0 Jan03 ?        00:00:00 [nfit]
-## root       988     1  0 Jan03 ?        00:00:00 /usr/sbin/NetworkManager --no-daemon
-## root      1143   988  0 Jan03 ?        00:00:00 /sbin/dhclient -d -q -sf /usr/libexec/nm-dhcp-helper -pf /var/run/dhclient-eth0.pid -lf /var/lib/NetworkManager/dhclient-18fa3a36-80a2-442f-bc21-276a1bb368be-eth0.lease -cf /var/lib/NetworkManager/dhclient-eth0.conf eth0
-## root      1422     1  0 Jan03 ?        00:00:02 /usr/bin/python2 -Es /usr/sbin/tuned -l -P
-## root      1423     1  0 Jan03 ?        00:00:03 /usr/bin/google_osconfig_agent
-## root      1424     1  0 Jan03 ?        00:00:03 /usr/sbin/rsyslogd -n
-## root      1708     1  0 Jan03 ?        00:00:00 /usr/libexec/postfix/master -w
-## root      1728     1  0 Jan03 ?        00:00:01 /usr/bin/python /usr/bin/google_network_daemon
-## root      1729     1  0 Jan03 ?        00:00:00 /usr/bin/python /usr/bin/google_clock_skew_daemon
-## root      1730     1  0 Jan03 ?        00:00:02 /usr/bin/python /usr/bin/google_accounts_daemon
-## postfix   1736  1708  0 Jan03 ?        00:00:00 qmgr -l -t unix -u
-## root      1777     2  0 Jan03 ?        00:00:00 [kworker/1:1H]
-## root      1778     2  0 Jan03 ?        00:00:00 [kworker/2:1H]
-## rstudio+ 12519     1  0 Jan03 ?        00:00:06 /usr/lib/rstudio-server/bin/rserver
-## root     13242     2  0 Jan03 ?        00:00:00 [kworker/0:2]
-## root     14576     2  0 Jan03 ?        00:00:00 [kworker/3:1]
-## root     21936     2  0 Jan03 ?        00:00:00 [kworker/2:1]
-## root     23219     1  0 Jan03 ?        00:00:00 /usr/sbin/sshd -D
-## postfix  27605  1708  0 01:44 ?        00:00:00 pickup -l -t unix -u
-## root     28854     1  0 Jan03 ?        00:00:00 /opt/shiny-server/ext/node/bin/shiny-server /opt/shiny-server/lib/main.js
-## root     29024     2  0 02:28 ?        00:00:00 [kworker/0:0]
-## huazhou  29271 12519  0 02:34 ?        00:00:04 /usr/lib/rstudio-server/bin/rsession -u huazhou --launcher-token 7FD9875F
-## root     29356 23219  0 02:35 ?        00:00:00 sshd: huazhou [priv]
-## huazhou  29359 29356  0 02:35 ?        00:00:00 sshd: huazhou@pts/0
-## huazhou  29360 29359  0 02:35 pts/0    00:00:00 -bash
-## root     30446     2  0 02:42 ?        00:00:00 [kworker/1:0]
-## root     30567     2  0 02:47 ?        00:00:00 [kworker/1:2]
-## root     30694     2  0 02:52 ?        00:00:00 [kworker/1:1]
-## root     30755 23219  0 02:55 ?        00:00:00 sshd: [accepted]
-## huazhou  30771 29271 42 02:56 ?        00:00:00 /usr/lib64/R/bin/exec/R --slave --no-save --no-restore -e rmarkdown::render('/home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.Rmd',~+~~+~encoding~+~=~+~'UTF-8');
-## huazhou  30869 30771  0 02:56 ?        00:00:00 sh -c 'bash'  -c 'ps -eaf' 2&gt;&amp;1
-## huazhou  30870 30869  0 02:56 ?        00:00:00 ps -eaf</code></pre></li>
+<pre><code>UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 Jan03 ?        00:00:12 /usr/lib/systemd/systemd --switched-root --system --deserialize 22
+root         2     0  0 Jan03 ?        00:00:00 [kthreadd]
+root         4     2  0 Jan03 ?        00:00:00 [kworker/0:0H]
+root         5     2  0 Jan03 ?        00:00:03 [kworker/u8:0]
+root         6     2  0 Jan03 ?        00:00:00 [ksoftirqd/0]
+root         7     2  0 Jan03 ?        00:00:00 [migration/0]
+root         8     2  0 Jan03 ?        00:00:00 [rcu_bh]
+root         9     2  0 Jan03 ?        00:00:20 [rcu_sched]
+root        10     2  0 Jan03 ?        00:00:00 [lru-add-drain]
+root        11     2  0 Jan03 ?        00:00:01 [watchdog/0]
+root        12     2  0 Jan03 ?        00:00:01 [watchdog/1]
+root        13     2  0 Jan03 ?        00:00:00 [migration/1]
+root        14     2  0 Jan03 ?        00:00:00 [ksoftirqd/1]
+root        16     2  0 Jan03 ?        00:00:00 [kworker/1:0H]
+root        17     2  0 Jan03 ?        00:00:01 [watchdog/2]
+root        18     2  0 Jan03 ?        00:00:00 [migration/2]
+root        19     2  0 Jan03 ?        00:00:00 [ksoftirqd/2]
+root        21     2  0 Jan03 ?        00:00:00 [kworker/2:0H]
+root        22     2  0 Jan03 ?        00:00:00 [watchdog/3]
+root        23     2  0 Jan03 ?        00:00:00 [migration/3]
+root        24     2  0 Jan03 ?        00:00:00 [ksoftirqd/3]
+root        26     2  0 Jan03 ?        00:00:00 [kworker/3:0H]
+root        28     2  0 Jan03 ?        00:00:00 [kdevtmpfs]
+root        29     2  0 Jan03 ?        00:00:00 [netns]
+root        30     2  0 Jan03 ?        00:00:00 [khungtaskd]
+root        31     2  0 Jan03 ?        00:00:00 [writeback]
+root        32     2  0 Jan03 ?        00:00:00 [kintegrityd]
+root        33     2  0 Jan03 ?        00:00:00 [bioset]
+root        34     2  0 Jan03 ?        00:00:00 [bioset]
+root        35     2  0 Jan03 ?        00:00:00 [bioset]
+root        36     2  0 Jan03 ?        00:00:00 [kblockd]
+root        37     2  0 Jan03 ?        00:00:00 [md]
+root        38     2  0 Jan03 ?        00:00:00 [edac-poller]
+root        39     2  0 Jan03 ?        00:00:00 [watchdogd]
+root        46     2  0 Jan03 ?        00:00:00 [kswapd0]
+root        47     2  0 Jan03 ?        00:00:00 [ksmd]
+root        48     2  0 Jan03 ?        00:00:01 [khugepaged]
+root        49     2  0 Jan03 ?        00:00:00 [crypto]
+root        57     2  0 Jan03 ?        00:00:00 [kthrotld]
+root        59     2  0 Jan03 ?        00:00:00 [kmpath_rdacd]
+root        60     2  0 Jan03 ?        00:00:00 [kaluad]
+root        61     2  0 Jan03 ?        00:00:00 [kpsmoused]
+root        63     2  0 Jan03 ?        00:00:00 [ipv6_addrconf]
+root        76     2  0 Jan03 ?        00:00:00 [deferwq]
+root       115     2  0 Jan03 ?        00:00:16 [kauditd]
+root       400     2  0 Jan03 ?        00:00:00 [virtscsi-scan]
+root       401     2  0 Jan03 ?        00:00:00 [scsi_eh_0]
+root       402     2  0 Jan03 ?        00:00:00 [scsi_tmf_0]
+root       403     2  0 Jan03 ?        00:00:02 [kworker/u8:2]
+root       427     2  0 Jan03 ?        00:00:00 [bioset]
+root       428     2  0 Jan03 ?        00:00:00 [xfsalloc]
+root       429     2  0 Jan03 ?        00:00:00 [xfs_mru_cache]
+root       430     2  0 Jan03 ?        00:00:00 [xfs-buf/sda1]
+root       431     2  0 Jan03 ?        00:00:00 [xfs-data/sda1]
+root       432     2  0 Jan03 ?        00:00:00 [xfs-conv/sda1]
+root       433     2  0 Jan03 ?        00:00:00 [xfs-cil/sda1]
+root       434     2  0 Jan03 ?        00:00:00 [xfs-reclaim/sda]
+root       435     2  0 Jan03 ?        00:00:00 [xfs-log/sda1]
+root       436     2  0 Jan03 ?        00:00:00 [xfs-eofblocks/s]
+root       437     2  0 Jan03 ?        00:01:29 [xfsaild/sda1]
+root       438     2  0 Jan03 ?        00:00:02 [kworker/0:1H]
+root       491     2  0 Jan03 ?        00:00:00 [kworker/3:1H]
+root       502     1  0 Jan03 ?        00:01:40 /usr/lib/systemd/systemd-journald
+root       528     1  0 Jan03 ?        00:00:00 /usr/lib/systemd/systemd-udevd
+root       550     1  0 Jan03 ?        00:00:26 /sbin/auditd
+root       602     1  0 Jan03 ?        00:00:01 /usr/lib/systemd/systemd-logind
+root       604     2  0 Jan03 ?        00:00:00 [hwrng]
+polkitd    605     1  0 Jan03 ?        00:00:00 /usr/lib/polkit-1/polkitd --no-debug
+dbus       608     1  0 Jan03 ?        00:00:01 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation
+chrony     629     1  0 Jan03 ?        00:00:00 /usr/sbin/chronyd
+root       836     1  0 Jan03 ?        00:00:00 /usr/sbin/crond -n
+root       854     1  0 Jan03 ?        00:00:00 /usr/sbin/acpid
+root       863     1  0 Jan03 ?        00:00:00 /usr/bin/python2 -Es /usr/sbin/firewalld --nofork --nopid
+root       885     1  0 Jan03 ttyS0    00:00:00 /sbin/agetty --keep-baud 115200,38400,9600 ttyS0 vt220
+root       900     1  0 Jan03 tty1     00:00:00 /sbin/agetty --noclear tty1 linux
+root       925     2  0 Jan03 ?        00:00:00 [nfit]
+root       988     1  0 Jan03 ?        00:00:05 /usr/sbin/NetworkManager --no-daemon
+root      1143   988  0 Jan03 ?        00:00:00 /sbin/dhclient -d -q -sf /usr/libexec/nm-dhcp-helper -pf /var/run/dhclient-eth0.pid -lf /var/lib/NetworkManager/dhclient-18fa3a36-80a2-442f-bc21-276a1bb368be-eth0.lease -cf /var/lib/NetworkManager/dhclient-eth0.conf eth0
+root      1422     1  0 Jan03 ?        00:00:35 /usr/bin/python2 -Es /usr/sbin/tuned -l -P
+root      1423     1  0 Jan03 ?        00:00:43 /usr/bin/google_osconfig_agent
+root      1424     1  0 Jan03 ?        00:01:00 /usr/sbin/rsyslogd -n
+root      1708     1  0 Jan03 ?        00:00:01 /usr/libexec/postfix/master -w
+root      1728     1  0 Jan03 ?        00:00:14 /usr/bin/python /usr/bin/google_network_daemon
+root      1729     1  0 Jan03 ?        00:00:06 /usr/bin/python /usr/bin/google_clock_skew_daemon
+root      1730     1  0 Jan03 ?        00:00:29 /usr/bin/python /usr/bin/google_accounts_daemon
+postfix   1736  1708  0 Jan03 ?        00:00:00 qmgr -l -t unix -u
+root      1777     2  0 Jan03 ?        00:00:00 [kworker/1:1H]
+root      1778     2  0 Jan03 ?        00:00:00 [kworker/2:1H]
+root      6955     2  0 18:03 ?        00:00:00 [kworker/0:1]
+huazhou   9082 12519  0 19:14 ?        00:00:14 /usr/lib/rstudio-server/bin/rsession -u huazhou --launcher-token 7FD9875F
+root      9919 23219  0 19:26 ?        00:00:00 sshd: huazhou [priv]
+huazhou   9922  9919  0 19:26 ?        00:00:00 sshd: huazhou@pts/0
+huazhou   9923  9922  0 19:26 pts/0    00:00:00 -bash
+root     10524     2  0 Jan05 ?        00:00:02 [kworker/3:1]
+postfix  10921  1708  0 19:47 ?        00:00:00 pickup -l -t unix -u
+root     12364     2  0 20:03 ?        00:00:00 [kworker/1:1]
+rstudio+ 12519     1  0 Jan03 ?        00:01:33 /usr/lib/rstudio-server/bin/rserver
+root     12959     2  0 20:08 ?        00:00:00 [kworker/1:2]
+root     13395     2  0 20:11 ?        00:00:00 [kworker/2:1]
+root     14044     2  0 20:19 ?        00:00:00 [kworker/1:0]
+huazhou  14232  9082 43 20:23 ?        00:00:00 /usr/lib64/R/bin/exec/R --slave --no-save --no-restore -e rmarkdown::render('/home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.Rmd',~+~~+~encoding~+~=~+~'UTF-8');
+huazhou  14348 14232  0 20:23 ?        00:00:00 sh -c 'bash'  -c 'ps -eaf' 2&gt;&amp;1
+huazhou  14349 14348  0 20:23 ?        00:00:00 ps -eaf
+root     21873     2  0 06:08 ?        00:00:00 [kworker/3:0]
+root     23219     1  0 Jan03 ?        00:00:23 /usr/sbin/sshd -D
+root     25051     2  0 Jan06 ?        00:00:02 [kworker/2:2]
+root     26321     2  0 Jan06 ?        00:00:02 [kworker/0:2]
+root     28854     1  0 Jan03 ?        00:00:00 /opt/shiny-server/ext/node/bin/shiny-server /opt/shiny-server/lib/main.js</code></pre></li>
 <li><p>All Python processes:</p>
 <pre class="bash"><code>ps -eaf | grep python</code></pre>
-<pre><code>## root       863     1  0 Jan03 ?        00:00:00 /usr/bin/python2 -Es /usr/sbin/firewalld --nofork --nopid
-## root      1422     1  0 Jan03 ?        00:00:02 /usr/bin/python2 -Es /usr/sbin/tuned -l -P
-## root      1728     1  0 Jan03 ?        00:00:01 /usr/bin/python /usr/bin/google_network_daemon
-## root      1729     1  0 Jan03 ?        00:00:00 /usr/bin/python /usr/bin/google_clock_skew_daemon
-## root      1730     1  0 Jan03 ?        00:00:02 /usr/bin/python /usr/bin/google_accounts_daemon
-## huazhou  30871 30771  0 02:56 ?        00:00:00 sh -c 'bash'  -c 'ps -eaf | grep python' 2&gt;&amp;1
-## huazhou  30872 30871  0 02:56 ?        00:00:00 bash -c ps -eaf | grep python
-## huazhou  30874 30872  0 02:56 ?        00:00:00 grep python</code></pre></li>
+<pre><code>root       863     1  0 Jan03 ?        00:00:00 /usr/bin/python2 -Es /usr/sbin/firewalld --nofork --nopid
+root      1422     1  0 Jan03 ?        00:00:35 /usr/bin/python2 -Es /usr/sbin/tuned -l -P
+root      1728     1  0 Jan03 ?        00:00:14 /usr/bin/python /usr/bin/google_network_daemon
+root      1729     1  0 Jan03 ?        00:00:06 /usr/bin/python /usr/bin/google_clock_skew_daemon
+root      1730     1  0 Jan03 ?        00:00:29 /usr/bin/python /usr/bin/google_accounts_daemon
+huazhou  14350 14232  0 20:23 ?        00:00:00 sh -c 'bash'  -c 'ps -eaf | grep python' 2&gt;&amp;1
+huazhou  14351 14350  0 20:23 ?        00:00:00 bash -c ps -eaf | grep python
+huazhou  14353 14351  0 20:23 ?        00:00:00 grep python</code></pre></li>
 <li><p>Process with PID=1:</p>
 <pre class="bash"><code>ps -fp 1</code></pre>
-<pre><code>## UID        PID  PPID  C STIME TTY          TIME CMD
-## root         1     0  0 Jan03 ?        00:00:02 /usr/lib/systemd/systemd --switched-root --system --deserialize 22</code></pre></li>
+<pre><code>UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 Jan03 ?        00:00:12 /usr/lib/systemd/systemd --switched-root --system --deserialize 22</code></pre></li>
 <li><p>All processes owned by a user:</p>
 <pre class="bash"><code>ps -fu huazhou</code></pre>
-<pre><code>## UID        PID  PPID  C STIME TTY          TIME CMD
-## huazhou  29271 12519  0 02:34 ?        00:00:04 /usr/lib/rstudio-server/bin/rsession -u huazhou --launcher-token 7FD9875F
-## huazhou  29359 29356  0 02:35 ?        00:00:00 sshd: huazhou@pts/0
-## huazhou  29360 29359  0 02:35 pts/0    00:00:00 -bash
-## huazhou  30771 29271 43 02:56 ?        00:00:00 /usr/lib64/R/bin/exec/R --slave --no-save --no-restore -e rmarkdown::render('/home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.Rmd',~+~~+~encoding~+~=~+~'UTF-8');
-## huazhou  30877 30771  0 02:56 ?        00:00:00 sh -c 'bash'  -c 'ps -fu huazhou' 2&gt;&amp;1
-## huazhou  30878 30877  0 02:56 ?        00:00:00 ps -fu huazhou</code></pre></li>
+<pre><code>UID        PID  PPID  C STIME TTY          TIME CMD
+huazhou   9082 12519  0 19:14 ?        00:00:14 /usr/lib/rstudio-server/bin/rsession -u huazhou --launcher-token 7FD9875F
+huazhou   9922  9919  0 19:26 ?        00:00:00 sshd: huazhou@pts/0
+huazhou   9923  9922  0 19:26 pts/0    00:00:00 -bash
+huazhou  14232  9082 44 20:23 ?        00:00:00 /usr/lib64/R/bin/exec/R --slave --no-save --no-restore -e rmarkdown::render('/home/huazhou/ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.Rmd',~+~~+~encoding~+~=~+~'UTF-8');
+huazhou  14356 14232  0 20:23 ?        00:00:00 sh -c 'bash'  -c 'ps -fu huazhou' 2&gt;&amp;1
+huazhou  14357 14356  0 20:23 ?        00:00:00 ps -fu huazhou</code></pre></li>
 </ul>
 </div>
 <div id="kill-processes" class="section level2">
@@ -1713,7 +1974,7 @@ grep 'CentOS' linux.Rmd</code></pre>
 <ul>
 <li><p>On Linux or Mac, access the teaching server by</p>
 <pre class="bash"><code>ssh username@server.ucla-biostat-203b.com</code></pre></li>
-<li><p>Windows machines need the <a href="http://www.putty.org">PuTTY</a> program (free).</p></li>
+<li><p>For Windows users, there are 2 ways: (1) <a href="http://www.putty.org">PuTTY</a> program (free) and (2) use WSL for Windows to install a full fledged Linux system within Windows (Thursday lab).</p></li>
 </ul>
 </div>
 <div id="use-keys-over-password" class="section level2">
@@ -1810,25 +2071,25 @@ scp [USERNAME]@server.ucla-biostat-203b.com:/[PATHTOFILE] [PATHTOLOCALFOLDER]</c
 <li><p>Demo script <a href="http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/meanEst.R"><code>meanEst.R</code></a> implements an (terrible) estimator of mean <span class="math display">\[
 {\widehat \mu}_n = \frac{\sum_{i=1}^n x_i 1_{x_i \text{ is prime}}}{\sum_{i=1}^n 1_{x_i \text{ is prime}}}.
 \]</span></p>
-<pre><code>## ## check if a given integer is prime
-## isPrime = function(n) {
-##   if (n &lt;= 3) {
-##     return (TRUE)
-##   }
-##   if (any((n %% 2:floor(sqrt(n))) == 0)) {
-##     return (FALSE)
-##   }
-##   return (TRUE)
-## }
-## 
-## ## estimate mean only using observation with prime indices
-## estMeanPrimes = function (x) {
-##   n = length(x)
-##   ind = sapply(1:n, isPrime)
-##   return (mean(x[ind]))
-## }
-## 
-## print(estMeanPrimes(rnorm(100000)))</code></pre></li>
+<pre><code>## check if a given integer is prime
+isPrime = function(n) {
+  if (n &lt;= 3) {
+    return (TRUE)
+  }
+  if (any((n %% 2:floor(sqrt(n))) == 0)) {
+    return (FALSE)
+  }
+  return (TRUE)
+}
+
+## estimate mean only using observation with prime indices
+estMeanPrimes = function (x) {
+  n = length(x)
+  ind = sapply(1:n, isPrime)
+  return (mean(x[ind]))
+}
+
+print(estMeanPrimes(rnorm(100000)))</code></pre></li>
 </ul>
 <hr />
 <ul>
@@ -1867,52 +2128,52 @@ commandArgs(TRUE)</code></pre></li>
 <li><p>Understand the magic formula <code>parse</code> and <code>eval</code>:</p>
 <pre class="r"><code>rm(list=ls())
 print(x)</code></pre>
-<pre><code>## Error in print(x): object 'x' not found</code></pre>
+<pre><code>Error in print(x): object 'x' not found</code></pre>
 <pre class="r"><code>parse(text=&quot;x=3&quot;)</code></pre>
-<pre><code>## expression(x = 3)</code></pre>
+<pre><code>expression(x = 3)</code></pre>
 <pre class="r"><code>eval(parse(text=&quot;x=3&quot;))
 print(x)</code></pre>
-<pre><code>## [1] 3</code></pre></li>
+<pre><code>[1] 3</code></pre></li>
 </ul>
 <hr />
 <ul>
 <li><a href="http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/runSim.R"><code>runSim.R</code></a> has components: (1) method implementation, (2) data generator with unspecified parameter <code>n</code>, (3) estimation based on generated data, and (4) <strong>command argument parser</strong>.</li>
 </ul>
-<pre><code>## ## parsing command arguments
-## for (arg in commandArgs(TRUE)) {
-##   eval(parse(text=arg))
-## }
-## 
-## ## check if a given integer is prime
-## isPrime = function(n) {
-##   if (n &lt;= 3) {
-##     return (TRUE)
-##   }
-##   if (any((n %% 2:floor(sqrt(n))) == 0)) {
-##     return (FALSE)
-##   }
-##   return (TRUE)
-## }
-## 
-## ## estimate mean only using observation with prime indices
-## estMeanPrimes = function (x) {
-##   n = length(x)
-##   ind = sapply(1:n, isPrime)
-##   return (mean(x[ind]))
-## }
-## 
-## # simulate data
-## x = rnorm(n)
-## 
-## # estimate mean
-## estMeanPrimes(x)</code></pre>
+<pre><code>## parsing command arguments
+for (arg in commandArgs(TRUE)) {
+  eval(parse(text=arg))
+}
+
+## check if a given integer is prime
+isPrime = function(n) {
+  if (n &lt;= 3) {
+    return (TRUE)
+  }
+  if (any((n %% 2:floor(sqrt(n))) == 0)) {
+    return (FALSE)
+  }
+  return (TRUE)
+}
+
+## estimate mean only using observation with prime indices
+estMeanPrimes = function (x) {
+  n = length(x)
+  ind = sapply(1:n, isPrime)
+  return (mean(x[ind]))
+}
+
+# simulate data
+x = rnorm(n)
+
+# estimate mean
+estMeanPrimes(x)</code></pre>
 <hr />
 <ul>
 <li><p>Call <code>runSim.R</code> with sample size <code>n=100</code>:</p>
 <pre class="bash"><code>R CMD BATCH '--args n=100' runSim.R</code></pre>
 <p>or</p>
 <pre class="bash"><code>Rscript runSim.R n=100</code></pre>
-<pre><code>## [1] -0.1917708</code></pre></li>
+<pre><code>[1] 0.07633674</code></pre></li>
 </ul>
 </div>
 <div id="run-long-jobs" class="section level2">
@@ -1923,7 +2184,7 @@ print(x)</code></pre>
 <li><p><code>nohup</code> is POSIX standard thus available on Linux and MacOS.</p></li>
 <li><p>Run <code>runSim.R</code> in background and writes output to <code>nohup.out</code>:</p>
 <pre class="bash"><code>nohup Rscript runSim.R n=100 &amp;</code></pre>
-<pre><code>## [1] 0.1282272</code></pre></li>
+<pre><code>[1] -0.05839052</code></pre></li>
 </ul>
 </div>
 <div id="screen" class="section level2">
@@ -1965,30 +2226,31 @@ print(x)</code></pre>
 <hr />
 <ul>
 <li><pre class="bash"><code>cat autoSim.R</code></pre>
-<pre><code>## # autoSim.R
-## 
-## nVals &lt;- seq(100, 1000, by=100)
-## for (n in nVals) {
-##   oFile &lt;- paste(&quot;n&quot;, n, &quot;.txt&quot;, sep=&quot;&quot;)
-##   sysCall &lt;- paste(&quot;nohup Rscript runSim.R n=&quot;, n, &quot; &gt; &quot;, oFile, sep=&quot;&quot;)
-##   system(sysCall)
-##   print(paste(&quot;sysCall=&quot;, sysCall, sep=&quot;&quot;))
-## }</code></pre></li>
+<pre><code># autoSim.R
+
+nVals &lt;- seq(100, 1000, by=100)
+for (n in nVals) {
+  oFile &lt;- paste(&quot;n&quot;, n, &quot;.txt&quot;, sep=&quot;&quot;)
+  sysCall &lt;- paste(&quot;nohup Rscript runSim.R n=&quot;, n, &quot; &gt; &quot;, oFile, sep=&quot;&quot;)
+  system(sysCall)
+  print(paste(&quot;sysCall=&quot;, sysCall, sep=&quot;&quot;))
+}</code></pre></li>
 </ul>
 <hr />
 <ul>
 <li><pre class="bash"><code>Rscript autoSim.R</code></pre>
-<pre><code>## [1] &quot;sysCall=nohup Rscript runSim.R n=100 &gt; n100.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=200 &gt; n200.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=300 &gt; n300.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=400 &gt; n400.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=500 &gt; n500.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=600 &gt; n600.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=700 &gt; n700.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=800 &gt; n800.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=900 &gt; n900.txt&quot;
-## [1] &quot;sysCall=nohup Rscript runSim.R n=1000 &gt; n1000.txt&quot;</code></pre></li>
-<li>Now we just need to write a script to collect results from the output files.</li>
+<pre><code>[1] &quot;sysCall=nohup Rscript runSim.R n=100 &gt; n100.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=200 &gt; n200.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=300 &gt; n300.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=400 &gt; n400.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=500 &gt; n500.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=600 &gt; n600.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=700 &gt; n700.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=800 &gt; n800.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=900 &gt; n900.txt&quot;
+[1] &quot;sysCall=nohup Rscript runSim.R n=1000 &gt; n1000.txt&quot;</code></pre></li>
+<li><p>Now we just need to write a script to collect results from the output files.</p></li>
+<li><p>Later on we learn how to coordinate large scale computation on UCLA Hoffmann2 cluster, using Linux and R scripting.</p></li>
 </ul>
 </div>
 </div>
