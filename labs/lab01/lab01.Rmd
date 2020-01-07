@@ -1,0 +1,28 @@
+---
+title: "Lab 1"
+author: "Juhyun Kim and Hua Zhou"
+date: "1/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## TODOs
+
+- SSH client on MacOS and Windows.
+
+- Connect to teaching server. 
+
+- Set up (paraphraseless) SSH keys.
+
+- Install RStudio on laptop.
+
+- Brendon: WSL for Windows.
+
+- Register an account on GitHub, **using ucla.edu email**. Send GitHub handle to Juhyun Kim.
+
+- Setup seemless SSH connection between laptop and server, between server and GitHub, and between laptop and GitHub.
+
+- 
