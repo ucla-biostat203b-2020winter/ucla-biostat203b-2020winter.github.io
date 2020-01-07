@@ -8,7 +8,7 @@ title: Biostat 203B
 ## Lecture
 
 Tue (lecture) 3pm-5:50pm @ CHS 51-279   
-Thu (lecture/lab) 3pm-4:50pm @ CHS 51-279   
+Thu (lecture/lab) 3pm-3:50pm @ CHS 51-279   
 
 ## Instructor
 
@@ -21,7 +21,7 @@ Office hours: Thu @ 2pm-3pm
 ## Teaching Assistant
 
 Juhyun Kim <juhkim111@ucla.edu>  
-Office hours: during Thursday labs  
+Office hours: Fri 11a-12p @ ???  
 
 ## Course Description
 
