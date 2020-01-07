@@ -1,6 +1,6 @@
 ---
 title: "Lab 1"
-author: "Juhyun Kim and Hua Zhou"
+author: "Juhyun Kim, Brendon Chau, Hua Zhou"
 date: "1/9/2020"
 output: html_document
 ---
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## TODOs
 
-- SSH client on MacOS and Windows.
+- SSH client on MacOS and Windows (PuTTY).
 
 - Connect to teaching server. 
 
@@ -23,6 +23,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - Register an account on GitHub, **using ucla.edu email**. Send GitHub handle to Juhyun Kim.
 
-- Setup seemless SSH connection between laptop and server, between server and GitHub, and between laptop and GitHub.
+- Set up seemless SSH connection between laptop and server, between server and GitHub, and between laptop and GitHub.
+
+- Intitialize a project from GitHub within RStudio.
 
 - 
