@@ -21,6 +21,10 @@ csl: ../apa.csl
 
 - Data is increasing in [volume, velocity, and variety](http://www.forbes.com/sites/oreillymedia/2012/01/19/volume-velocity-variety-what-you-need-to-know-about-big-data/).
 
+- My favorite definition of a _data scientist_:
+
+> A data scientist is someone who is better at statistics than any software engineer and better at software engineering than any statistician.
+
 ## Big data in 1990s
 
 @Huber94HugeData; -@Huber96MassiveData
