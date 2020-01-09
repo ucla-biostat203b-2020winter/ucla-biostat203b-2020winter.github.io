@@ -370,38 +370,23 @@ summary {
 
 
 <ol style="list-style-type: decimal">
-<li>SSH client on MacOS and Windows (PuTTY).
+<li>SSH client on MacOS and Windows.
 <ul>
 <li>MacOS: just open the <code>Terminal</code> app.<br />
 </li>
-<li>Windows: download and install <a href="https://gitforwindows.org"><code>Git for Windows</code> aka <code>Git Bash</code></a>. This gives you a bash shell within Windows, which is also equipped with Git commands.</li>
+<li>Windows: download and install <a href="https://gitforwindows.org"><code>Git for Windows</code> aka <code>Git Bash</code></a>. Accept default settings during the installation process. This gives you a bash shell within Windows, which is also equipped with Git commands.</li>
 </ul></li>
-<li>Connect to the teaching server.
-<ul>
-<li>MacOS Terminal:<br />
-</li>
-</ul>
-<pre><code>ssh username@server.ucla-biostat-203b.com</code></pre>
-<ul>
-<li>Windows Git Bash:</li>
-</ul>
-<pre><code>ssh username@server.ucla-biostat-203b.com</code></pre>
-<p>If you cannot connect, you may not have an account. Ask TA or instructor for help.</p></li>
-<li>Change password on teaching server</li>
-</ol>
-<pre><code>passwd</code></pre>
-<ol start="4" style="list-style-type: decimal">
-<li>On teaching server, obtain a copy of the course material using git:<br />
-</li>
-</ol>
-<pre><code>git clone https://github.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io.git</code></pre>
-<ol start="5" style="list-style-type: decimal">
-<li><p>Check whether you already have SSH keys.</p></li>
+<li><p>Connect to the teaching server. On MacOS Terminal or Windows Git Bash:<br />
+<code>ssh username@server.ucla-biostat-203b.com</code> If you cannot connect, you may not have an account. Ask TA or instructor for help.</p></li>
+<li><p>Change password on teaching server <code>passwd</code></p></li>
+<li><p>On teaching server, obtain a copy of the course material using git:<br />
+<code>git clone https://github.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io.git</code></p></li>
+<li><p>Check whether you already have SSH keys at default location. On Linux/MacOS terminal or Windows Git Bash: <code>ls -al ~/.ssh</code></p></li>
 <li>If no SSH keys yet, generate a pair of SSH RSA keys
 <ul>
 <li>Method 1: generate keys on MacOS Terminal or Windows Git Bash. Follow <a href="https://ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.html#steps-to-generate-keys">instructions in lecture notes</a>.<br />
 </li>
-<li>Method 2: Use RStudio to generate keys. Tools -&gt; Global Options… -&gt; Git/SVN.</li>
+<li>Method 2: Use RStudio to generate keys. Tools -&gt; Global Options… -&gt; Git/SVN. Using either method, make sure keys are in the default location <code>~/.ssh/</code></li>
 </ul></li>
 <li><p>Brendon: WSL for Windows.</p></li>
 <li><p>Register an account on GitHub, <strong>using ucla.edu email</strong>. Send GitHub handle to Juhyun Kim.</p></li>
