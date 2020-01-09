@@ -9,22 +9,44 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## TODOs
+1. SSH client on MacOS and Windows. 
+    - MacOS: just open the `Terminal` app.  
+    - Windows: download and install [`Git for Windows` aka `Git Bash`](https://gitforwindows.org).  This gives you a bash shell within Windows, which is also equipped with Git commands.
 
-- SSH client on MacOS and Windows (PuTTY).
+2. Connect to the teaching server. 
+    - MacOS Terminal:  
+    ```
+    ssh username@server.ucla-biostat-203b.com
+    ```
+    - Windows Git Bash:
+    ```
+    ssh username@server.ucla-biostat-203b.com
+    ```
+If you cannot connect, you may not have an account. Ask TA or instructor for help.
 
-- Connect to teaching server. 
+3. Change password on teaching server
+    ```
+    passwd
+    ```
 
-- Set up (paraphraseless) SSH keys.
+4. On teaching server, obtain a copy of the course material using git:  
+    ```
+    git clone https://github.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io.git
+    ```
 
-- Install RStudio on laptop.
+5. Check whether you already have SSH keys.
+  
+6. If no SSH keys yet, generate a pair of SSH RSA keys
+    - Method 1: generate keys on MacOS Terminal or Windows Git Bash. Follow [instructions in lecture notes](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.html#steps-to-generate-keys).  
+    - Method 2: Use RStudio to generate keys. Tools -> Global Options... -> Git/SVN. 
+Using either method, make sure keys are in the default location:  
+    - MacOS: `~/.ssh`
+    - Windows: `~/.ssh`
 
-- Brendon: WSL for Windows.
+7. Brendon: WSL for Windows.
 
-- Register an account on GitHub, **using ucla.edu email**. Send GitHub handle to Juhyun Kim.
+8. Register an account on GitHub, **using ucla.edu email**. Send GitHub handle to Juhyun Kim.
 
-- Set up seemless SSH connection between laptop and server, between server and GitHub, and between laptop and GitHub.
+9. Set up seemless SSH connection between (1) laptop, (2) teaching server, and (3) GitHub.
 
-- Intitialize a project from GitHub within RStudio.
-
-- 
+10. Intitialize a project from GitHub within RStudio.
