@@ -89,7 +89,7 @@ The `-l` option indicates it should be a login shell.
     ```
 Then log out and log in.
 
-## Command history anbd bash completion
+## Command history and bash completion
 
 We can navigate to previous/next commands by the upper and lower keys, or maintain a command history stack using `pushd` and `popd` commands.
 
