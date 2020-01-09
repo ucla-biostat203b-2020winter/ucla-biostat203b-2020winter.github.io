@@ -512,12 +512,12 @@ Source: [Editor War](http://en.wikipedia.org/wiki/Editor_war) on Wikipedia.
 
 SSH (secure shell) is the dominant cryptographic network protocol for secure network connection via an insecure network.
 
-- On Linux or Mac, access the teaching server by
+- On Linux or Mac ternminal, access the teaching server by
     ```{bash, eval=FALSE}
     ssh username@server.ucla-biostat-203b.com
     ```
 
-- For Windows users, there are 2 ways: (1) [PuTTY](http://www.putty.org) program (free) and (2) use WSL for Windows to install a full fledged Linux system within Windows (Thursday lab).
+- For Windows users, there are 2 ways: (1) (recommended) [Git Bash](git bash commands), (2) (not recommended) [PuTTY](http://www.putty.org) program (free), or (3) (may be an overkill for this class)  use WSL for Windows to install a full fledged Linux system within Windows.
 
 ## Use keys over password
 
@@ -553,7 +553,7 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 
 ## Steps to generate keys
 
-- On Linux or Mac, to generate a key pair:
+- On Linux, Mac, or Windows Git Bash, to generate a key pair:
     ```{bash, eval=FALSE}
     ssh-keygen -t rsa -f ~/.ssh/[KEY_FILENAME] -C [USERNAME]
     ```   
