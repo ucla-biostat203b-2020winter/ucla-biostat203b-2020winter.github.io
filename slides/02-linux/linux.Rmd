@@ -699,7 +699,7 @@ and then issue commands in R
 
 ----
 
-- [`runSim.R`](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/runSim.R) has components: (1) method implementation, (2) data generator with unspecified parameter `n`, (3) estimation based on generated data, and (4) **command argument parser**.
+- [`runSim.R`](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/runSim.R) has components: (1) method implementation, (2) data generator with unspecified parameter `n`, (3) estimation based on generated data, and (4) **command argument parser**.
 ```{bash, echo=FALSE}
 cat runSim.R
 ```
@@ -759,13 +759,13 @@ R in conjuction with `nohup` or `screen` can be used to orchestrate a large simu
 ----
 
 - Suppose we have 
-    - [`runSim.R`](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/runSim.R) which runs a simulation based on command line argument `n`.  
+    - [`runSim.R`](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/runSim.R) which runs a simulation based on command line argument `n`.  
     - A large collection of `n` values that we want to use in our simulation study.  
     - Access to a server with 128 cores.  
     
 - Option 1: manually call `runSim.R` for each setting.
 
-- Option 2: automate calls using R and `nohup`. [autoSim.R](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/autoSim.R)
+- Option 2: automate calls using R and `nohup`. [autoSim.R](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/autoSim.R)
 
 ----
 
