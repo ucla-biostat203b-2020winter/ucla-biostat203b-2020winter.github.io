@@ -30,7 +30,7 @@ If you cannot connect, you may not have an account. Ask TA or instructor for hel
     ```
 To reproduce commands in the [Linux lecture](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.html), make sure you are in the correct folder
     ```
-    cd ~/ucla-biostat203b-2020winter.github.io.git/slides/02-linux
+    cd ~/ucla-biostat203b-2020winter.github.io/slides/02-linux
     ```
 
 5. Check whether you already have SSH keys at default location. On Linux/MacOS terminal or Windows Git Bash:
