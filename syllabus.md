@@ -21,7 +21,7 @@ Office hours: Thu @ 2pm-3pm
 ## Teaching Assistant
 
 Juhyun Kim <juhkim111@ucla.edu>  
-Office hours: Fri ~~11a-12p~~ 10a-11a @ ???  
+Office hours: Fri ~~11a-12p~~ 10a-11a @ A1-250  
 
 ## Course Description
 
