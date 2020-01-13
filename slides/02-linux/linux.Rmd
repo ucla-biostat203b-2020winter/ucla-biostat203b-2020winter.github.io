@@ -602,6 +602,8 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 
 - `sftp` is FTP via SSH.
 
+- `Globus` is GUI program for securely transferring files between machines. To use Globus you will have to go to <https://www.globus.com> and login through UCLA by selecting your existing organizational login as UCLA. Then you will need to download their Globus Connect Personal software, then set your laptop as an endpoint. Very detailed instructions can be found at <https://www.hoffman2.idre.ucla.edu/file-transfer/globus/>.
+
 - GUIs for Windows (WinSCP) or Mac (Cyberduck).
 
 - (My preferred way) Use a **version control system** (git, svn, cvs, ...) to sync project files between different machines and systems.
@@ -633,7 +635,7 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 
 - Demo script [`meanEst.R`](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/meanEst.R) implements an (terrible) estimator of mean
 $$
-  {\widehat \mu}_n = \frac{\sum_{i=1}^n x_i 1_{x_i \text{ is prime}}}{\sum_{i=1}^n 1_{x_i \text{ is prime}}}.
+  {\widehat \mu}_n = \frac{\sum_{i=1}^n x_i 1_{i \text{ is prime}}}{\sum_{i=1}^n 1_{i \text{ is prime}}}.
 $$
     ```{bash, echo=FALSE}
     cat meanEst.R
@@ -652,7 +654,7 @@ or
     Rscript meanEst.R
     ```
 
-- Typically automate batch calls using a scripting language, e.g., Python, perl, and shell script.
+- Typically automate batch calls using a scripting language, e.g., Python, Perl, and shell script.
 
 ## Pass arguments to R scripts
 
@@ -728,6 +730,8 @@ or
     nohup Rscript runSim.R n=100 &
     ```
 
+- The `&` at the end of the command instructs Linux to run this command in background, so we gain control of the terminal immediately. 
+
 ## screen
 
 - `screen` is another popular utility, but not installed by default. 
@@ -756,20 +760,17 @@ R in conjuction with `nohup` or `screen` can be used to orchestrate a large simu
 
 - Python in many ways makes a better _glue_.
 
-----
-
 - Suppose we have 
     - [`runSim.R`](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/runSim.R) which runs a simulation based on command line argument `n`.  
     - A large collection of `n` values that we want to use in our simulation study.  
     - Access to a server with 128 cores.  
+How do to parallelize the job?    
     
 - Option 1: manually call `runSim.R` for each setting.
 
-- Option 2: automate calls using R and `nohup`. [autoSim.R](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/autoSim.R)
+- Option 2: automate calls using R and `nohup`. 
 
-----
-
--
+- Let's demonstrate using the script [autoSim.R](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/autoSim.R)
     ```{bash}
     cat autoSim.R
     ```
