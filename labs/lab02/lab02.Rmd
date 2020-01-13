@@ -1,0 +1,26 @@
+---
+title: "Lab 2"
+author: "Juhyun Kim, Hua Zhou"
+date: "1/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Check whether you already have SSH keys at default location. On Linux/MacOS terminal or Windows Git Bash:
+    ```
+    ls -al ~/.ssh
+    ```
+   
+2. If no SSH keys yet, generate a pair of SSH RSA keys
+    - Method 1: generate keys on MacOS Terminal or Windows Git Bash. Follow [instructions in lecture notes](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/linux.html#steps-to-generate-keys).  
+    - Method 2: Use RStudio to generate keys. Tools -> Global Options... -> Git/SVN. 
+Using either method, make sure keys are in the default location `~/.ssh/`
+
+3. Register an account on GitHub Student Developer Pack, **using ucla.edu email**. Send GitHub handle to Juhyun Kim.
+
+4. Set up seemless SSH connection between (1) laptop, (2) teaching server, and (3) GitHub.
+
+5. Intitialize a project from GitHub within RStudio.
