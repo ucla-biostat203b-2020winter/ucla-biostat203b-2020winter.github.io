@@ -106,7 +106,7 @@ Git is a **distributed** version control system:
 
 - A **Git client** on your own machine.
 
-    - Linux: shipped with many Linux distributions, e.g., Ubuntu. If not, install using a package manager, e.g., `yum install git` on CentOS.
+    - Linux: Git client program is shipped with many Linux distributions, e.g., Ubuntu and CentOS. If not, install using a package manager, e.g., `yum install git` on CentOS.
 
     - Mac: follow instructions at <https://www.atlassian.com/git/tutorials/install-git>.
 
@@ -162,7 +162,7 @@ Name and email appear in each commit you make.
 
 - Initialize a project.
 
-    - Create a repository, e.g., `biostat-203b-2020-winter` on the server.
+    - Create a repository, e.g., `biostat-203b-2020-winter` on GitHub.
     
     - Clone the repository to your local machine:
     ```{bash, eval=FALSE}
