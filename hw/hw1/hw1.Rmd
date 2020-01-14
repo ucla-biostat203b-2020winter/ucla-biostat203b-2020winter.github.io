@@ -1,0 +1,102 @@
+---
+title: "Biostat 203B Homework 1"
+subtitle: Due Jan 24 @ 11:59PM
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Q1. Git/GitHub
+
+**No handwritten homework reports are accepted for this course.** We work with Git and GitHub. Efficient and abundant use of Git, e.g., frequent and well-documented commits, is an important criterion for grading your homework.
+
+1. Apply for the [Student Developer Pack](https://education.github.com/pack) at GitHub using your UCLA email.
+
+2. Create a **private** repository `biostat-203b-2020-winter` and add `Hua-Zhou` and `juhkim111` as your collaborators with write permission.
+
+3. Top directories of the repository should be `hw1`, `hw2`, ... Maintain two branches `master` and `develop`. The `develop` branch will be your main playground, the place where you develop solution (code) to homework problems and write up report. The `master` branch will be your presentation area. Submit your homework files (R markdown file `Rmd`, `html` file converted from R markdown, all code and data sets to reproduce results) in `master` branch.
+
+4. After each homework due date, teaching assistant and instructor will check out your master branch for grading. Tag each of your homework submissions with tag names `hw1`, `hw2`, ... Tagging time will be used as your submission time. That means if you tag your `hw1` submission after deadline, penalty points will be deducted for late submission.
+
+## Q2. Linux Shell Commands
+
+1. This exercise (and later in this course) uses the [MIMIC-III data](https://mimic.physionet.org), a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Please follow the instructions at <https://mimic.physionet.org/gettingstarted/access/> to complete the CITI `Data or Specimens Only Research` course. Show the screenshot of your completion report. 
+
+The `/home/203bdata/mimic-iii/` folder on teaching server contains data sets from MIMIC-III. See <https://mimic.physionet.org/mimictables/admissions/> for details of each table.  
+    ```{bash}
+    ls -l /home/203bdata/mimic-iii
+    ```
+Please, do **not** put these data files into Git; they are big. Also do **not** copy them into your directory. Just read from the data folder `/home/203bdata/mimic-iii` directly. 
+
+Use Bash commands to answer following questions.
+
+2. What's the output of following bash script?
+    ```{bash, eval=FALSE}
+    for datafile in /home/203bdata/mimic-iii/*.csv
+      do
+        ls $datafile
+      done
+    ```
+Display the number of lines in each `csv` file.
+
+3. Display the first few lines of `ADMISSIONS.csv`. How many rows are in this data file? How many unique patients (identified by `SUBJECT_ID`) are in this data file? What are the possible values taken by the each of the variable `INSURANCE`, `LANGUAGE`, `RELIGION`, `MARITAL_STATUS`, and `ETHNICITY`?
+
+## Q3. More fun with shell
+
+1. You and your friend just have finished reading *Pride and Prejudice* by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <https://www.gutenberg.org/files/1342/1342.txt> and save to your local folder. 
+    ```{bash, eval=FALSE}
+    curl https://www.gutenberg.org/files/1342/1342.txt > pride_and_prejudice.txt
+    ```
+Do **not** put this text file `pride_and_prejudice.txt` in Git. Using a `for` loop, how would you tabulate the number of times each of the four characters is mentioned?
+
+0. What's the difference between the following two commands?
+    ```{bash eval=FALSE}
+    echo 'hello, world' > test1.txt
+    ```
+    and
+    ```{bash eval=FALSE}
+    echo 'hello, world' >> test2.txt
+    ```
+
+0. Using your favorite text editor (e.g., `vi`), type the following and save the file as `middle.sh`:
+    ```{bash eval=FALSE}
+    #!/bin/sh
+    # Select lines from the middle of a file.
+    # Usage: bash middle.sh filename end_line num_lines
+    head -n "$2" "$1" | tail -n "$3"
+    ```
+Using `chmod` make the file executable by the owner, and run 
+    ```{bash eval=FALSE}
+    ./middle.sh pride_and_prejudice.txt 20 5
+    ```
+Explain the output. Explain the meaning of `"$1"`, `"$2"`, and `"$3"` in this shell script. Why do we need the first line of the shell script?
+
+## Q4. R Batch Run
+
+In class we discussed using R to organize simulation studies. 
+
+1. Expand the [`runSim.R`](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/runSim.R) script to include arguments `seed` (random seed), `n` (sample size), `dist` (distribution) and `rep` (number of simulation replicates). When `dist="gaussian"`, generate data from standard normal; when `dist="t1"`, generate data from t-distribution with degree of freedom 1 (same as Cauchy distribution); when `dist="t5"`, generate data from t-distribution with degree of freedom 5. Calling `runSim.R` will (1) set random seed according to argument `seed`, (2) generate data according to argument `dist`, (3) compute the primed-indexed average estimator and the classical sample average estimator for each simulation replicate, (4) report the average mean squared error (MSE)
+$$
+  \frac{\sum_{r=1}^{\text{rep}} (\widehat \mu_r - \mu_{\text{true}})^2}{\text{rep}}
+$$
+for both methods.
+
+2. Modify the [`autoSim.R`](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/autoSim.R) script to run simulations with combinations of sample sizes `nVals = seq(100, 500, by=100)` and distributions `distTypes = c("gaussian", "t1", "t5")` and write output to appropriately named files. Use `rep = 50`, and `seed = 280`. 
+
+3. Write an R script to collect simulation results from output files and print average MSEs in a table of format
+
+| $n$ | Method   | Gaussian | $t_5$ | $t_1$ |
+|-----|----------|-------|-------|----------|
+| 100 | PrimeAvg |       |       |          |
+| 100 | SampAvg  |       |       |          |
+| 200 | PrimeAvg |       |       |          |
+| 200 | SampAvg  |       |       |          |
+| 300 | PrimeAvg |       |       |          |
+| 300 | SampAvg  |       |       |          |
+| 400 | PrimeAvg |       |       |          |
+| 400 | SampAvg  |       |       |          |
+| 500 | PrimeAvg |       |       |          |
+| 500 | SampAvg  |       |       |          |
+
