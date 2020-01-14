@@ -24,3 +24,5 @@ Using either method, make sure keys are in the default location `~/.ssh/`
 4. Set up seemless SSH connection between (1) laptop, (2) teaching server, and (3) GitHub.
 
 5. Intitialize a project from GitHub within RStudio.
+
+6. QA and hints for HW1.

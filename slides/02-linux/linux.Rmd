@@ -453,6 +453,10 @@ Source: [Editor War](http://en.wikipedia.org/wiki/Editor_war) on Wikipedia.
 
 # Processes
 
+## Cancel a non-responding program
+
+- Press `Ctrl+C` to cancel a non-responding or long-running program.
+
 ## Processes
 
 - OS runs processes on behalf of user.
@@ -506,6 +510,8 @@ Source: [Editor War](http://en.wikipedia.org/wiki/Editor_war) on Wikipedia.
   <img src="./screenshot_top.png" height="400">
 </p>
 
+- Exit the `top` program by pressing the `q` key.
+
 # Secure shell (SSH)
 
 ## SSH
@@ -517,7 +523,7 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
     ssh username@server.ucla-biostat-203b.com
     ```
 
-- For Windows users, there are 2 ways: (1) (recommended) [Git Bash](git bash commands), (2) (not recommended) [PuTTY](http://www.putty.org) program (free), or (3) (may be an overkill for this class)  use WSL for Windows to install a full fledged Linux system within Windows.
+- For Windows users, there are 2 ways: (1) (highly recommended) [Git Bash](git bash commands), (2) (not recommended) [PuTTY](http://www.putty.org) program (free), or (3) (may be an overkill for this class)  use WSL for Windows to install a full fledged Linux system within Windows.
 
 ## Use keys over password
 
@@ -527,7 +533,7 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 
 - Log into multiple machines using the same key.
 
-- Seamless use of many services: Git, AWS or Google cloud service, parallel computing on multiple hosts, etc.
+- Seamless use of many services: Git, AWS or Google cloud service, parallel computing on multiple hosts, Travis CI (continuous integration) etc.
 
 - Many servers only allow key authentication and do not accept password authentication.
 
@@ -633,7 +639,7 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 
 ## Batch mode
 
-- Demo script [`meanEst.R`](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/meanEst.R) implements an (terrible) estimator of mean
+- Demo script [`meanEst.R`](https://raw.githubusercontent.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io/master/slides/02-linux/meanEst.R) implements an (terrible) estimator of mean
 $$
   {\widehat \mu}_n = \frac{\sum_{i=1}^n x_i 1_{i \text{ is prime}}}{\sum_{i=1}^n 1_{i \text{ is prime}}}.
 $$
@@ -701,7 +707,7 @@ and then issue commands in R
 
 ----
 
-- [`runSim.R`](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/runSim.R) has components: (1) method implementation, (2) data generator with unspecified parameter `n`, (3) estimation based on generated data, and (4) **command argument parser**.
+- [`runSim.R`](https://raw.githubusercontent.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io/master/slides/02-linux/runSim.R) has components: (1) **command argument parser**, (2) method implementation, (3) data generator with unspecified parameter `n`, and (4) estimation based on generated data.
 ```{bash, echo=FALSE}
 cat runSim.R
 ```
@@ -719,7 +725,7 @@ or
 
 ## Run long jobs
 
-- Many statistical computing tasks take long: simulation, MCMC, etc.
+- Many statistical computing tasks take long: simulation, MCMC, etc. When we exit Linux when the job is unfinished, the job is killed.
 
 - `nohup` command in Linux runs program(s) immune to hangups and writes output to `nohup.out` by default. Logging out will _not_ kill the process; we can log in later to check status and results.
 
@@ -729,8 +735,7 @@ or
     ```{bash}
     nohup Rscript runSim.R n=100 &
     ```
-
-- The `&` at the end of the command instructs Linux to run this command in background, so we gain control of the terminal immediately. 
+The `&` at the end of the command instructs Linux to run this command in background, so we gain control of the terminal immediately. 
 
 ## screen
 
@@ -752,7 +757,7 @@ or
 
 ## Use R to call R
 
-R in conjuction with `nohup` or `screen` can be used to orchestrate a large simulation study.
+R in conjuction with `nohup` (or `screen`) can be used to orchestrate a large simulation study.
 
 - It can be more elegant, transparent, and robust to parallelize jobs corresponding to different scenarios (e.g., different generative models) outside of the code used to do statistical computation.
 
@@ -761,21 +766,20 @@ R in conjuction with `nohup` or `screen` can be used to orchestrate a large simu
 - Python in many ways makes a better _glue_.
 
 - Suppose we have 
-    - [`runSim.R`](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/runSim.R) which runs a simulation based on command line argument `n`.  
+    - [`runSim.R`](https://raw.githubusercontent.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io/master/slides/02-linux/runSim.R) which runs a simulation based on command line argument `n`.  
     - A large collection of `n` values that we want to use in our simulation study.  
     - Access to a server with 128 cores.  
 How do to parallelize the job?    
     
 - Option 1: manually call `runSim.R` for each setting.
 
-- Option 2: automate calls using R and `nohup`. 
+- Option 2 (smarter): automate calls using R and `nohup`. 
 
-- Let's demonstrate using the script [autoSim.R](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/autoSim.R)
+- Let's demonstrate using the script [autoSim.R](https://raw.githubusercontent.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io/master/slides/02-linux/autoSim.R)
     ```{bash}
     cat autoSim.R
     ```
-
-----
+Note when we call bash command using the `system` function in R, we set optional argument `wait=FALSE` so that jobs can be run parallel.
 
 -
     ```{bash}
