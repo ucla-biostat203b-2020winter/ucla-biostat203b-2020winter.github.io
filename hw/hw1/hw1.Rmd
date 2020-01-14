@@ -24,13 +24,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 1. This exercise (and later in this course) uses the [MIMIC-III data](https://mimic.physionet.org), a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Please follow the instructions at <https://mimic.physionet.org/gettingstarted/access/> to complete the CITI `Data or Specimens Only Research` course. Show the screenshot of your completion report. 
 
-The `/home/203bdata/mimic-iii/` folder on teaching server contains data sets from MIMIC-III. See <https://mimic.physionet.org/mimictables/admissions/> for details of each table.  
+    The `/home/203bdata/mimic-iii/` folder on teaching server contains data sets from MIMIC-III. See <https://mimic.physionet.org/mimictables/admissions/> for details of each table.  
     ```{bash}
     ls -l /home/203bdata/mimic-iii
     ```
 Please, do **not** put these data files into Git; they are big. Also do **not** copy them into your directory. Just read from the data folder `/home/203bdata/mimic-iii` directly. 
 
-Use Bash commands to answer following questions.
+    Use Bash commands to answer following questions.
 
 2. What's the output of following bash script?
     ```{bash, eval=FALSE}
@@ -83,7 +83,7 @@ $$
 $$
 for both methods.
 
-2. Modify the [`autoSim.R`](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/02-linux/autoSim.R) script to run simulations with combinations of sample sizes `nVals = seq(100, 500, by=100)` and distributions `distTypes = c("gaussian", "t1", "t5")` and write output to appropriately named files. Use `rep = 50`, and `seed = 280`. 
+2. Modify the [`autoSim.R`](https://ucla-biostat203b-2020winter.github.io/slides/02-linux/autoSim.R) script to run simulations with combinations of sample sizes `nVals = seq(100, 500, by=100)` and distributions `distTypes = c("gaussian", "t1", "t5")` and write output to appropriately named files. Use `rep = 50`, and `seed = 203`. 
 
 3. Write an R script to collect simulation results from output files and print average MSEs in a table of format
 
