@@ -602,7 +602,7 @@ SSH (secure shell) is the dominant cryptographic network protocol for secure net
 
 - `sftp` is FTP via SSH.
 
-- `Globus` is GUI program for securely transferring files between machines. To use Globus you will have to go to <https://www.globus.com> and login through UCLA by selecting your existing organizational login as UCLA. Then you will need to download their Globus Connect Personal software, then set your laptop as an endpoint. Very detailed instructions can be found at <https://www.hoffman2.idre.ucla.edu/file-transfer/globus/>.
+- `Globus` is GUI program for securely transferring files between machines. To use Globus you will have to go to <https://www.globus.org/> and login through UCLA by selecting your existing organizational login as UCLA. Then you will need to download their Globus Connect Personal software, then set your laptop as an endpoint. Very detailed instructions can be found at <https://www.hoffman2.idre.ucla.edu/file-transfer/globus/>.
 
 - GUIs for Windows (WinSCP) or Mac (Cyberduck).
 
