@@ -380,11 +380,41 @@ summary {
 <div id="q2.-linux-shell-commands" class="section level2">
 <h2>Q2. Linux Shell Commands</h2>
 <ol style="list-style-type: decimal">
-<li><p>This exercise (and later in this course) uses the <a href="https://mimic.physionet.org">MIMIC-III data</a>, a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Please follow the instructions at <a href="https://mimic.physionet.org/gettingstarted/access/" class="uri">https://mimic.physionet.org/gettingstarted/access/</a> to complete the CITI <code>Data or Specimens Only Research</code> course. Show the screenshot of your completion report.</p>
-<p>The <code>/home/203bdata/mimic-iii/</code> folder on teaching server contains data sets from MIMIC-III. See <a href="https://mimic.physionet.org/mimictables/admissions/" class="uri">https://mimic.physionet.org/mimictables/admissions/</a> for details of each table.</p>
+<li><p>This exercise (and later in this course) uses the <a href="https://mimic.physionet.org">MIMIC-III data</a>, a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Please follow the instructions at <a href="https://mimic.physionet.org/gettingstarted/access/" class="uri">https://mimic.physionet.org/gettingstarted/access/</a> to complete the CITI <code>Data or Specimens Only Research</code> course. Show the screenshot of your completion report.</p></li>
+<li><p>The <code>/home/203bdata/mimic-iii/</code> folder on teaching server contains data sets from MIMIC-III. See <a href="https://mimic.physionet.org/mimictables/admissions/" class="uri">https://mimic.physionet.org/mimictables/admissions/</a> for details of each table.</p>
 <pre class="bash"><code>ls -l /home/203bdata/mimic-iii</code></pre>
-<pre><code>## total 0</code></pre>
-<p>Please, do <strong>not</strong> put these data files into Git; they are big. Also do <strong>not</strong> copy them into your directory. Just read from the data folder <code>/home/203bdata/mimic-iii</code> directly.</p>
+<pre><code>## total 11088432
+## -rw-r--r--. 1 root root   12548562 Jan 14 04:12 ADMISSIONS.csv
+## -rw-r--r--. 1 root root    6339185 Jan 14 04:13 CALLOUT.csv
+## -rw-r--r--. 1 root root     203492 Jan 14 04:13 CAREGIVERS.csv
+## -rw-r--r--. 1 root root   85204883 Jan 14 04:14 CHARTEVENTS.csv
+## -rw-r--r--. 1 root root   58150883 Jan 14 04:15 CPTEVENTS.csv
+## -rw-r--r--. 1 root root  525785298 Jan 14 04:22 DATETIMEEVENTS.csv
+## -rw-r--r--. 1 root root      13807 Jan 14 04:22 D_CPT.csv
+## -rw-r--r--. 1 root root   19137527 Jan 14 04:22 DIAGNOSES_ICD.csv
+## -rw-r--r--. 1 root root    1387562 Jan 14 04:22 D_ICD_DIAGNOSES.csv
+## -rw-r--r--. 1 root root     311466 Jan 14 04:22 D_ICD_PROCEDURES.csv
+## -rw-r--r--. 1 root root     954420 Jan 14 04:22 D_ITEMS.csv
+## -rw-r--r--. 1 root root      43118 Jan 14 04:22 D_LABITEMS.csv
+## -rw-r--r--. 1 root root   10487132 Jan 14 04:22 DRGCODES.csv
+## -rw-r--r--. 1 root root    6357077 Jan 14 04:22 ICUSTAYS.csv
+## -rw-r--r--. 1 root root 2464296511 Jan 14 04:57 INPUTEVENTS_CV.csv
+## -rw-r--r--. 1 root root  975255812 Jan 14 05:10 INPUTEVENTS_MV.csv
+## -rw-r--r--. 1 root root 1854245647 Jan 14 05:36 LABEVENTS.csv
+## -rw-r--r--. 1 root root   72507810 Jan 14 05:36 MICROBIOLOGYEVENTS.csv
+## -rw-r--r--. 1 root root 4007717810 Jan 14 16:40 NOTEEVENTS.csv
+## -rw-r--r--. 1 root root  396406750 Jan 14 16:50 OUTPUTEVENTS.csv
+## -rw-r--r--. 1 root root    2628900 Jan 14 16:50 PATIENTS.csv
+## -rw-r--r--. 1 root root      36517 Jan 14 16:53 postgres_add_indexes.sql
+## -rw-r--r--. 1 root root       4195 Jan 14 16:53 postgres_checks.sql
+## -rw-r--r--. 1 root root      20688 Jan 14 16:53 postgres_create_tables.sql
+## -rw-r--r--. 1 root root       6897 Jan 14 16:53 postgres_load_data.sql
+## -rw-r--r--. 1 root root  770336136 Jan 14 16:52 PRESCRIPTIONS.csv
+## -rw-r--r--. 1 root root   48770424 Jan 14 16:52 PROCEDUREEVENTS_MV.csv
+## -rw-r--r--. 1 root root    6798492 Jan 14 16:52 PROCEDURES_ICD.csv
+## -rw-r--r--. 1 root root    3481645 Jan 14 16:52 SERVICES.csv
+## -rw-r--r--. 1 root root   25057095 Jan 14 16:52 TRANSFERS.csv</code></pre>
+<p>Please, do <strong>not</strong> put these data files into Git; they are big. Also do <strong>not</strong> copy them into your directory. Just read from the data folder <code>/home/203bdata/mimic-iii</code> directly in following exercises.</p>
 <p>Use Bash commands to answer following questions.</p></li>
 <li><p>What’s the output of following bash script?</p>
 <pre class="bash"><code>for datafile in /home/203bdata/mimic-iii/*.csv
@@ -392,7 +422,7 @@ summary {
     ls $datafile
   done</code></pre>
 <p>Display the number of lines in each <code>csv</code> file.</p></li>
-<li><p>Display the first few lines of <code>ADMISSIONS.csv</code>. How many rows are in this data file? How many unique patients (identified by <code>SUBJECT_ID</code>) are in this data file? What are the possible values taken by the each of the variable <code>INSURANCE</code>, <code>LANGUAGE</code>, <code>RELIGION</code>, <code>MARITAL_STATUS</code>, and <code>ETHNICITY</code>?</p></li>
+<li><p>Display the first few lines of <code>ADMISSIONS.csv</code>. How many rows are in this data file? How many unique patients (identified by <code>SUBJECT_ID</code>) are in this data file? What are the possible values taken by each of the variable <code>INSURANCE</code>, <code>LANGUAGE</code>, <code>RELIGION</code>, <code>MARITAL_STATUS</code>, and <code>ETHNICITY</code>? How many (unique) patients are Hispanic? (Hint: combine Linux comamnds <code>head</code>, <code>tail</code>, <code>awk</code>, <code>uniq</code>, <code>wc</code>, <code>sort</code> and so on using pipe.)</p></li>
 </ol>
 </div>
 <div id="q3.-more-fun-with-shell" class="section level2">

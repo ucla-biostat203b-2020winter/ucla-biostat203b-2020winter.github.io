@@ -24,15 +24,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 1. This exercise (and later in this course) uses the [MIMIC-III data](https://mimic.physionet.org), a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Please follow the instructions at <https://mimic.physionet.org/gettingstarted/access/> to complete the CITI `Data or Specimens Only Research` course. Show the screenshot of your completion report. 
 
-    The `/home/203bdata/mimic-iii/` folder on teaching server contains data sets from MIMIC-III. See <https://mimic.physionet.org/mimictables/admissions/> for details of each table.  
+2. The `/home/203bdata/mimic-iii/` folder on teaching server contains data sets from MIMIC-III. See <https://mimic.physionet.org/mimictables/admissions/> for details of each table.  
     ```{bash}
     ls -l /home/203bdata/mimic-iii
     ```
-Please, do **not** put these data files into Git; they are big. Also do **not** copy them into your directory. Just read from the data folder `/home/203bdata/mimic-iii` directly. 
+Please, do **not** put these data files into Git; they are big. Also do **not** copy them into your directory. Just read from the data folder `/home/203bdata/mimic-iii` directly in following exercises. 
 
     Use Bash commands to answer following questions.
 
-2. What's the output of following bash script?
+3. What's the output of following bash script?
     ```{bash, eval=FALSE}
     for datafile in /home/203bdata/mimic-iii/*.csv
       do
@@ -41,7 +41,7 @@ Please, do **not** put these data files into Git; they are big. Also do **not** 
     ```
 Display the number of lines in each `csv` file.
 
-3. Display the first few lines of `ADMISSIONS.csv`. How many rows are in this data file? How many unique patients (identified by `SUBJECT_ID`) are in this data file? What are the possible values taken by the each of the variable `INSURANCE`, `LANGUAGE`, `RELIGION`, `MARITAL_STATUS`, and `ETHNICITY`?
+4. Display the first few lines of `ADMISSIONS.csv`. How many rows are in this data file? How many unique patients (identified by `SUBJECT_ID`) are in this data file? What are the possible values taken by each of the variable `INSURANCE`, `LANGUAGE`, `RELIGION`, `MARITAL_STATUS`, and `ETHNICITY`? How many (unique) patients are Hispanic? (Hint: combine Linux comamnds `head`, `tail`, `awk`, `uniq`, `wc`, `sort` and so on using pipe.)
 
 ## Q3. More fun with shell
 
