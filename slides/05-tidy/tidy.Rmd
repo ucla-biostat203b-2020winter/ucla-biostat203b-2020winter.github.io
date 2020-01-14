@@ -31,15 +31,13 @@ A typical data science project:
 
 ## Create tibbles
 
-- Convert a regular data frame to tibble:
+- `iris` is a dataframe available in base R:
     ```{r}
     # a regular data frame
-    head(iris)
+    iris
     ```
-    
-----
 
-- 
+- Convert a regular data frame to tibble:
     ```{r}
     as_tibble(iris)
     ```
@@ -148,7 +146,7 @@ A typical data science project:
 
 ----
 
-- Read from a local file [heights.csv](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/08-tidy/heights.csv):
+- Read from a local file [heights.csv](https://raw.githubusercontent.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io/master/slides/05-tidy/heights.csv):
     ```{r}
     (heights <- read_csv("heights.csv"))
     ```
