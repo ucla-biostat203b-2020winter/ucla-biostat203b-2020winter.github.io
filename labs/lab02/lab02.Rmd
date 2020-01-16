@@ -40,7 +40,7 @@ Using either method, make sure keys are in the default location `~/.ssh/`
 
 8. Log in to the RStudio server on teaching server <http://server.ucla-biostat-203b.com:8787>, using the username and password on the teaching server.
 
-8. Intitialize a project from GitHub within RStudio. Make sure use the Git address instead of the HTTPS address.
+8. On teaching server, initialize a project from GitHub within RStudio. Make sure use the Git address instead of the HTTPS address. You can also initialize a project using RStudio on your laptop. But HW1 is mostly about Linux and most easily done on teaching server.
 
 9. Commit the `Rproj` file.
 
