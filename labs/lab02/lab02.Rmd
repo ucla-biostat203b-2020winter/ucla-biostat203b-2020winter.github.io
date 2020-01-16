@@ -15,11 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
         - The permisison for the private key `~/.ssh/id_rsa` should be `600 (-rw-------)`. 
         - The permission of the public key `~/.ssh/id_rsa.pub` should be `644 (-rw-r--r--)`.
     - On Window Git Bash, the following permission could also work (thanks to Ranjana): 
-        - The permission for the `~/.ssh` folder can be `700 (drwxr-xr-x)`. 
+        - The permission for the `~/.ssh` folder can be `755 (drwxr-xr-x)`. 
         - The permisison for the private key `~/.ssh/id_rsa` can be `644 (-rw-r--r--)`. 
         - The permission of the public key `~/.ssh/id_rsa.pub` can be `644 (-rw-r--r--)`.
     
-2. On the teaching server, put the same pair of keys under `~/ssh`. 
+2. On the teaching server, put the same pair of keys under `~/.ssh`. 
     - The permission for the `~/.ssh` folder should be `700 (drwx------)`. 
     - The permisison for the private key `~/.ssh/id_rsa` should be `600 (-rw-------)`.
     - The permission of the public key `~/.ssh/id_rsa.pub` should be `644 (-rw-r--r--)`. 
