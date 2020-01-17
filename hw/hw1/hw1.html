@@ -428,8 +428,8 @@ summary {
 <div id="q3.-more-fun-with-shell" class="section level2">
 <h2>Q3. More fun with shell</h2>
 <ol style="list-style-type: decimal">
-<li><p>You and your friend just have finished reading <em>Pride and Prejudice</em> by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <a href="https://www.gutenberg.org/files/1342/1342.txt" class="uri">https://www.gutenberg.org/files/1342/1342.txt</a> and save to your local folder.</p>
-<pre class="bash"><code>curl https://www.gutenberg.org/files/1342/1342.txt &gt; pride_and_prejudice.txt</code></pre>
+<li><p>You and your friend just have finished reading <em>Pride and Prejudice</em> by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <a href="http://www.gutenberg.org/cache/epub/42671/pg42671.txt" class="uri">http://www.gutenberg.org/cache/epub/42671/pg42671.txt</a> and save to your local folder.</p>
+<pre class="bash"><code>curl http://www.gutenberg.org/cache/epub/42671/pg42671.txt &gt; pride_and_prejudice.txt</code></pre>
 <p>Do <strong>not</strong> put this text file <code>pride_and_prejudice.txt</code> in Git. Using a <code>for</code> loop, how would you tabulate the number of times each of the four characters is mentioned?</p></li>
 <li><p>What’s the difference between the following two commands?</p>
 <pre class="bash"><code>echo 'hello, world' &gt; test1.txt</code></pre>
