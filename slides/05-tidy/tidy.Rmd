@@ -54,9 +54,6 @@ A typical data science project:
 ## Tibbles
 
 - Tibbles extend data frames in R and form the core of tidyverse.
-    ```{r}
-    library("tidyverse")
-    ```
 
 ## Create tibbles
 
@@ -103,13 +100,7 @@ A typical data science project:
 
 - By default, tibble prints the first 10 rows and all columns that fit on screen.
     ```{r}
-    tibble(
-      a = lubridate::now() + runif(1e3) * 86400,
-      b = lubridate::today() + runif(1e3) * 30,
-      c = 1:1e3,
-      d = runif(1e3),
-      e = sample(letters, 1e3, replace = TRUE)
-    )
+    nycflights13::flights
     ```
 
 ----
@@ -119,7 +110,8 @@ A typical data science project:
     nycflights13::flights %>% 
       print(n = 10, width = Inf)
     ```
-    
+Here we see the **pipe operator** `%>%` pipes the output from previous command to the (first) agument of the next command.
+
 ----
 
 - To change the default print setting:
@@ -135,6 +127,7 @@ A typical data science project:
       x = runif(5),
       y = rnorm(5)
     )
+    df
     ```
 
 - Extract by name:

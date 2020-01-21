@@ -426,8 +426,7 @@ summary {
 <div id="tibbles" class="section level2">
 <h2>Tibbles</h2>
 <ul>
-<li><p>Tibbles extend data frames in R and form the core of tidyverse.</p>
-<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre></li>
+<li>Tibbles extend data frames in R and form the core of tidyverse.</li>
 </ul>
 </div>
 <div id="create-tibbles" class="section level2">
@@ -643,27 +642,23 @@ iris</code></pre>
 <h2>Printing of a tibble</h2>
 <ul>
 <li><p>By default, tibble prints the first 10 rows and all columns that fit on screen.</p>
-<pre class="r"><code>tibble(
-  a = lubridate::now() + runif(1e3) * 86400,
-  b = lubridate::today() + runif(1e3) * 30,
-  c = 1:1e3,
-  d = runif(1e3),
-  e = sample(letters, 1e3, replace = TRUE)
-)</code></pre>
-<pre><code>## # A tibble: 1,000 x 5
-##    a                   b              c     d e    
-##    &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;
-##  1 2020-01-20 22:50:06 2020-01-24     1 0.807 h    
-##  2 2020-01-21 15:03:22 2020-01-21     2 0.264 t    
-##  3 2020-01-21 11:59:06 2020-01-28     3 0.682 b    
-##  4 2020-01-21 05:52:09 2020-02-01     4 0.300 n    
-##  5 2020-01-20 23:11:19 2020-01-31     5 0.248 k    
-##  6 2020-01-21 04:52:06 2020-02-03     6 0.566 w    
-##  7 2020-01-21 18:34:33 2020-01-26     7 0.408 m    
-##  8 2020-01-21 09:17:11 2020-01-24     8 0.123 g    
-##  9 2020-01-21 13:54:42 2020-02-04     9 0.957 x    
-## 10 2020-01-21 14:25:02 2020-01-27    10 0.155 e    
-## # … with 990 more rows</code></pre></li>
+<pre class="r"><code>nycflights13::flights</code></pre>
+<pre><code>## # A tibble: 336,776 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      542            540         2      923            850
+##  4  2013     1     1      544            545        -1     1004           1022
+##  5  2013     1     1      554            600        -6      812            837
+##  6  2013     1     1      554            558        -4      740            728
+##  7  2013     1     1      555            600        -5      913            854
+##  8  2013     1     1      557            600        -3      709            723
+##  9  2013     1     1      557            600        -3      838            846
+## 10  2013     1     1      558            600        -2      753            745
+## # … with 336,766 more rows, and 11 more variables: arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre></li>
 </ul>
 <hr />
 <ul>
@@ -707,7 +702,8 @@ iris</code></pre>
 ##  8 2013-01-01 06:00:00
 ##  9 2013-01-01 06:00:00
 ## 10 2013-01-01 06:00:00
-## # … with 3.368e+05 more rows</code></pre></li>
+## # … with 3.368e+05 more rows</code></pre>
+<p>Here we see the <strong>pipe operator</strong> <code>%&gt;%</code> pipes the output from previous command to the (first) agument of the next command.</p></li>
 </ul>
 <hr />
 <ul>
@@ -725,23 +721,32 @@ iris</code></pre>
 <li><pre class="r"><code>df &lt;- tibble(
   x = runif(5),
   y = rnorm(5)
-)</code></pre></li>
+)
+df</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##       x      y
+##   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.436  1.72 
+## 2 0.248 -0.474
+## 3 0.284 -0.751
+## 4 0.825 -0.761
+## 5 0.703 -0.493</code></pre></li>
 <li><p>Extract by name:</p>
 <pre class="r"><code>df$x</code></pre>
-<pre><code>## [1] 0.81379084 0.32650520 0.42980111 0.70994823 0.05865749</code></pre>
+<pre><code>## [1] 0.4359584 0.2476854 0.2844592 0.8247180 0.7032764</code></pre>
 <pre class="r"><code>df[[&quot;x&quot;]]</code></pre>
-<pre><code>## [1] 0.81379084 0.32650520 0.42980111 0.70994823 0.05865749</code></pre></li>
+<pre><code>## [1] 0.4359584 0.2476854 0.2844592 0.8247180 0.7032764</code></pre></li>
 </ul>
 <hr />
 <ul>
 <li><p>Extract by position：</p>
 <pre class="r"><code>df[[1]]</code></pre>
-<pre><code>## [1] 0.81379084 0.32650520 0.42980111 0.70994823 0.05865749</code></pre></li>
+<pre><code>## [1] 0.4359584 0.2476854 0.2844592 0.8247180 0.7032764</code></pre></li>
 <li><p>Pipe:</p>
 <pre class="r"><code>df %&gt;% .$x</code></pre>
-<pre><code>## [1] 0.81379084 0.32650520 0.42980111 0.70994823 0.05865749</code></pre>
+<pre><code>## [1] 0.4359584 0.2476854 0.2844592 0.8247180 0.7032764</code></pre>
 <pre class="r"><code>df %&gt;% .[[&quot;x&quot;]]</code></pre>
-<pre><code>## [1] 0.81379084 0.32650520 0.42980111 0.70994823 0.05865749</code></pre></li>
+<pre><code>## [1] 0.4359584 0.2476854 0.2844592 0.8247180 0.7032764</code></pre></li>
 </ul>
 </div>
 </div>
