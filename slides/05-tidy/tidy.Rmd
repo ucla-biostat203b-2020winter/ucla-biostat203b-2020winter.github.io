@@ -14,11 +14,40 @@ output:
 knitr::opts_chunk$set(fig.align = 'center', cache = TRUE)
 ```
 
+## Outline
+
+We will spend next couple lectures studying some R packages for typical data science projects.
+
+* Data wrangling (import, tidy, visualization, transformation).  
+  [R for Data Science](http://r4ds.had.co.nz) by Garrett Grolemund and Hadley Wickham.
+
+* Interactive data visualization by Shiny.
+
+* Interface with databases, eg., SQL and Apache Spark.
+
+* String and text data manipulation. 
+
+* Webscraping.
+
 A typical data science project:
 
 <p align="center">
-<img src="./data-science-wrangle.png" height="275">
+<img src="./data-science.png" height="300">
 </p>
+
+## [Tidyverse](https://www.tidyverse.org)
+
+- `tidyverse` is a collection of R packages that make data wrangling easy.
+
+- Install `tidyverse` from RStudio menu `Tools -> Install Packages...` or
+    ```{r, eval = FALSE}
+    install.packages("tidyverse")
+    ```
+
+- After installation, load `tidyverse` by
+    ```{r}
+    library("tidyverse")
+    ```
 
 # Tibble | r4ds chapter 10
 
@@ -133,13 +162,13 @@ A typical data science project:
 
 - readr package implements functions that turn flat files into tibbles.
 
-    - `read_csv()`, `read_csv2()` (semicolon seperated files), `read_tsv()`,     `read_delim()`.
+    - `read_csv()`, `read_csv2()` (semicolon seperated files), `read_tsv()`,  `read_delim()`.
 
     - `read_fwf()` (fixed width files), `read_table()`.
 
     - `read_log()` (Apache style log files). 
 
-- An example file [heights.csv](http://hua-zhou.github.io/teaching/biostatm280-2019winter/slides/08-tidy/heights.csv):
+- An example file [heights.csv](https://raw.githubusercontent.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io/master/slides/05-tidy/heights.csv):
     ```{bash}
     head heights.csv
     ```
@@ -164,8 +193,8 @@ A typical data science project:
 - Read from inline csv file:
     ```{r}
     read_csv("a,b,c
-    1,2,3
-    4,5,6")
+      1,2,3
+      4,5,6")
     ```
 
 - Skip first `n` lines:
