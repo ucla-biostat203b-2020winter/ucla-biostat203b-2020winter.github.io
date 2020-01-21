@@ -26,6 +26,12 @@ A typical data science project:
 > 
 > John Tukey
 
+## Load tidyverse
+
+```{r}
+library(tidyverse)
+```
+
 ## `mpg` data
 
 - `mpg` data is available from the `ggplot2` package:
