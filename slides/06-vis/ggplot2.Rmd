@@ -348,6 +348,15 @@ normalize height:
       coord_flip()
     ```
 
+--- 
+
+- Pie chart:
+    ```{r}
+    ggplot(data = mpg, mapping = aes(x = factor(1), fill = class)) + 
+      geom_bar(width = 1) + 
+      coord_polar("y")
+    ```
+
 ----
 
 - A map:
