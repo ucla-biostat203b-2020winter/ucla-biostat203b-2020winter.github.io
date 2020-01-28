@@ -174,7 +174,7 @@ library(tidyverse)
       geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
     ```
     
-# Bar charts | r4ds chapter 3.7
+# Bar plots | r4ds chapter 3.7
 
 ## `diamonds` data 
 
@@ -183,7 +183,7 @@ library(tidyverse)
     diamonds
     ```
     
-## Bar chart
+## Bar plot
 
 - `geom_bar()` creates bar chart:
     ```{r}
@@ -247,6 +247,22 @@ library(tidyverse)
       geom_bar(mapping = aes(x = cut, fill = clarity))
     ```
 
+## `geom_bar()` vs `geom_col()`
+
+- `geom_bar()` makes the height of the bar proportional to the number of cases in each group (or if the weight aesthetic is supplied, the sum of the weights).
+    ```{r}
+    ggplot(data = diamonds) + 
+      geom_bar(mapping = aes(x = cut))
+    ```
+The height of bar is the number of diamonds in each cut category.
+    
+- `geom_col()` makes the heights of the bars to represent values in the data.
+    ```{r}
+    ggplot(data = diamonds) + 
+      geom_col(mapping = aes(x = cut, y = carat))
+    ```
+The height of bar is total carat in each cut category.
+
 # Positional arguments | r4ds chapter 3.8
 
 ----
@@ -294,9 +310,12 @@ normalize height:
 
 # Coordinate systems | r4ds chapter 3.9
 
-----
+- Recall the mpg data:
+    ```{r}
+    mpg
+    ```
 
-- A boxplot:
+- Boxplots (grouped by class):
     ```{r}
     ggplot(data = mpg, mapping = aes(x = class, y = hwy)) + 
       geom_boxplot()
@@ -409,7 +428,7 @@ ggplot(nz, aes(x = long, y = lat, group = group)) +
 
 ## Annotations 
 
-- Create labels
+- Find the most fuel efficient car in each car class:
     ```{r}
     best_in_class <- mpg %>%
       group_by(class) %>%
