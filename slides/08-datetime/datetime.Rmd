@@ -144,7 +144,7 @@ h_age
 ```
 lubridate provides the **duration** object that always uses seconds:
 ```{r}
-as.duration("h_age")
+as.duration(h_age)
 ```
 
 Constructors for duration:
@@ -186,7 +186,8 @@ years(1)
 Some planes appear to have arrived at their destination before they departed from New York City.
 ```{r}
 flights_dt %>% 
-  filter(arr_time < dep_time)
+  filter(arr_time < dep_time) %>%
+  print(width = Inf)
 ```
 These are the overnight flights. Let's fix this:
 ```{r}

@@ -435,8 +435,7 @@ same as
     ```
 
     ```{r}
-    matches <- str_extract(has_colour, colour_match)
-    head(matches)
+    (matches <- str_extract(has_colour, colour_match))
     ```
 
 
@@ -551,10 +550,10 @@ same as
 ## Character classes
 
 <p align="center">
-<img src="./regex_characterclass.png" height="75">
+<img src="./regex_characterclass.png" height="150">
 </p>
 
-- A number built-in convenience classes of characters:
+- A number of built-in convenience classes of characters:
     - `.`: Any character except new line `\n`.
     - `\s`: White space.  
     - `\S`: Not white space.  

@@ -488,6 +488,8 @@ nycflights13 package has >1 tables:
 <img src="./relational-nycflights.png" height="375">
 </p>
 
+For the MIMIC-III data, the relation structure can be explored at <https://mit-lcp.github.io/mimic-schema-spy/>.
+
 ## Keys
 
 - A **primary key** uniquely identifies an observation in its own table.
