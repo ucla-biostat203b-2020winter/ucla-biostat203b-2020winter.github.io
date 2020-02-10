@@ -10,6 +10,10 @@ output:
 subtitle: Biostat 203B
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.align = 'center', cache = TRUE)
+```
+
 Load tidyverse and other packages for this lecture:
 ```{r}
 library("tidyverse")
@@ -397,3 +401,7 @@ virus <- searchTwitter('#China + #Coronavirus', n = 1000, since = '2020-01-01', 
 virus_df <- as_tibble(twListToDF(virus))
 virus_df %>% print(width = Inf)
 ```
+
+## Example: Import data from Google sheets
+
+See HW3. 
