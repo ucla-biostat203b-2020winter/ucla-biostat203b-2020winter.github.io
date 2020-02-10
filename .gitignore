@@ -44,3 +44,7 @@ scripts/
 # hw solutions
 hw?sol.Rmd
 hw?sol.html
+
+tidy_files/
+ggplot2_files/
+dplyr_files/
