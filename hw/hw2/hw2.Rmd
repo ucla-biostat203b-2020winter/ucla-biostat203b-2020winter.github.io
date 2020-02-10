@@ -14,7 +14,7 @@ Use tidyverse (ggpot2, dplyr) to explore the [MIMIC-III](https://mimic.physionet
 
 Demographic information of the patients admitted into hospital is available in `ADMISSION.csv`. See <https://mimic.physionet.org/mimictables/admissions/> for details of each field in this file. Summarize following variables using appropriate graphs:   
 
-  - admission year  
+- admission year  
 - admission month  
 - admission week day  
 - admission hour  
