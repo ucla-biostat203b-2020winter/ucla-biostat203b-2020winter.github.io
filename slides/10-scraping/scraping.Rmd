@@ -379,7 +379,7 @@ library(twitteR) #load package
 ```
 
 - Generate and copy the Twitter App Keys
-```{r}
+```{r include=FALSE}
 consumer_key <- 'P952Y45yrM1Xu9ez3r00AUH57'
 consumer_secret <- 'KVmvwfL3dmc0TsY81fo3CPwCMTRldS5CzceM2JhyO3xSjZpwEH'
 access_token <- '783517197012504576-B5Q1D0whnX2KzpHnJJwUHErU8ttGtGQ'
