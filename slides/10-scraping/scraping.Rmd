@@ -13,6 +13,9 @@ subtitle: Biostat 203B
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.align = 'center', cache = TRUE)
 ```
+```{r}
+sessionInfo()
+```
 
 Load tidyverse and other packages for this lecture:
 ```{r}
@@ -31,7 +34,7 @@ There is a wealth of data on internet. How to scrape them and analyze them?
 
 ## Example: Scraping from webpage
 
-- We follow instructions in a [Blog by SAURAV KAUSHIK](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/) to find the most popular feature films of 2018.
+- We follow instructions in a [Blog by SAURAV KAUSHIK](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/) to find the most popular feature films of 2019.
 
 - Install the [SelectorGadget](https://selectorgadget.com/) extension for Chrome.
 
@@ -45,7 +48,7 @@ There is a wealth of data on internet. How to scrape them and analyze them?
     (webpage <- read_html(url))
     ```
 
-- We want to scrape following 11 features from this page:
+- Suppose we want to scrape following 11 features from this page:
     - Rank
     - Title
     - Description
@@ -124,7 +127,7 @@ There is a wealth of data on internet. How to scrape them and analyze them?
 
 ### Genre
 
--
+- Collect the (first) genre of each movie:
     ```{r}
     # Using CSS selectors to scrap the Movie genre section
     genre_data_html <- html_nodes(webpage, '.genre')
@@ -183,9 +186,7 @@ There is a wealth of data on internet. How to scrape them and analyze them?
     # Converting the directors data to text
     directors_data <- html_text(directors_data_html)
     # Let's have a look at the directors data
-    head(directors_data)
-    # Data-Preprocessing: converting directors data into factors
-    (directors_data <- as.factor(directors_data))
+    directors_data
     ```
 
 ### Actor
@@ -198,8 +199,6 @@ There is a wealth of data on internet. How to scrape them and analyze them?
     actors_data <- html_text(actors_data_html)
     # Let's have a look at the actors data
     head(actors_data)
-    # Data-Preprocessing: converting actors data into factors
-    (actors_data <- as.factor(actors_data))
     ```
 
 ### Metascore
@@ -218,9 +217,9 @@ There is a wealth of data on internet. How to scrape them and analyze them?
     metascore_data
     # Lets check the length of metascore data
     length(metascore_data)
-    # Visual inspection finds 69, 74, 87 don't have metascore
+    # Visual inspection finds 24, 85, 100 don't have metascore
     ms <- rep(NA, 100)
-    ms[-c(85, 93, 96)] <- metascore_data
+    ms[-c(24, 85, 100)] <- metascore_data
     (metascore_data <- ms)
     ```
     
@@ -232,7 +231,7 @@ There is a wealth of data on internet. How to scrape them and analyze them?
     gross_data_html <- html_nodes(webpage,'.ghost~ .text-muted+ span')
     # Converting the gross revenue data to text
     gross_data <- html_text(gross_data_html)
-    # Let's have a look at the votes data
+    # Let's have a look at the gross data
     head(gross_data)
     # Data-Preprocessing: removing '$' and 'M' signs
     gross_data <- str_replace(gross_data, "M", "")
@@ -242,12 +241,29 @@ There is a wealth of data on internet. How to scrape them and analyze them?
     # Let's check the length of gross data
     length(gross_data)
     # Visual inspection finds below movies don't have gross
+    #gs_data <- rep(NA, 100)
+    #gs_data[-c(1, 2, 3, 5, 61, 69, 71, 74, 78, 82, 84:87, 90)] <- gross_data
+    #(gross_data <- gs_data)
+    ```
+    60 (out of 100) movies don't have gross data yet! We need a better way to figure out missing entries.
+    ```{r, include=FALSE}
+    (rank_and_gross <- webpage %>%
+      html_nodes('.ghost~ .text-muted+ span , .text-primary') %>%
+      html_text() %>%
+      str_replace("\\s+", "") %>%
+      str_replace_all("[$M]", ""))
+    ```
+    ```{r, include=FALSE}
+    isrank <- str_detect(rank_and_gross, "\\.$")
+    ismissing <- isrank[1:(length(rank_and_gross) - 1)] & isrank[2:(length(rank_and_gross))]
+    ismissing[length(ismissing)+1] <- isrank[length(isrank)]
+    missingpos <- as.integer(rank_and_gross[ismissing])
     gs_data <- rep(NA, 100)
-    gs_data[-c(6, 12, 29, 40, 61, 69, 71, 74, 78, 82, 84:87, 90)] <- gross_data
+    gs_data[-missingpos] <- gross_data
     (gross_data <- gs_data)
     ```
 
-### Missing entries
+### Missing entries - more reproducible way
 
 - Following code programatically figures out missing entries for metascore.
     ```{r}
@@ -259,8 +275,9 @@ There is a wealth of data on internet. How to scrape them and analyze them?
     (rank_metascore_data <- str_replace(rank_metascore_data, "\\s+", ""))
     # a rank followed by another rank means the metascore for the 1st rank is missing
     (isrank <- str_detect(rank_metascore_data, "\\.$"))
-    (ismissing <- isrank[1:length(rank_metascore_data)-1] & 
-      isrank[2:length(rank_metascore_data)])
+    ismissing <- isrank[1:length(rank_metascore_data)-1] & 
+      isrank[2:length(rank_metascore_data)]
+    ismissing[length(ismissing)+1] <- isrank[length(isrank)]
     (missingpos <- as.integer(rank_metascore_data[ismissing]))
     #(rank_metascore_data <- as.integer(rank_metascore_data))
     ```
@@ -272,29 +289,35 @@ There is a wealth of data on internet. How to scrape them and analyze them?
 - Form a tibble:
     ```{r}
     # Combining all the lists to form a data frame
-    movies <- tibble(Rank = rank_data, Title = title_data,
-                     Description = description_data, Runtime = runtime_data,
-                     Genre = genre_data, Rating = rating_data,
-                     Metascore = metascore_data, Votes = votes_data,
+    movies <- tibble(Rank = rank_data, 
+                     Title = title_data,
+                     Description = description_data, 
+                     Runtime = runtime_data,
+                     Genre = genre_data, 
+                     Rating = rating_data,
+                     Metascore = metascore_data, 
+                     Votes = votes_data,
                      Gross_Earning_in_Mil = gross_data,
-                     Director = directors_data, Actor = actors_data)
+                     Director = directors_data, 
+                     Actor = actors_data)
     movies %>% print(width=Inf)
     ```
     
-- How many top 100 movies are in each genre?
+- How many top 100 movies are in each genre? (Be careful with interpretation.)
     ```{r}
-    ggplot(movies) +
+    movies %>%
+      ggplot() +
       geom_bar(mapping = aes(x = Genre))
     ```
 
 - Which genre is most profitable in terms of average gross earnings?
     ```{r}
-    (earn_by_genre <- movies %>%
+    movies %>%
       group_by(Genre) %>%
-      summarise(avg_earning = mean(Gross_Earning_in_Mil, na.rm=TRUE)))
-    ggplot(data = earn_by_genre) +
-      geom_col(mapping = aes(x = Genre, y = avg_earning)) + 
-      labs(y = "avg earning in millions")
+      summarise(avg_earning = mean(Gross_Earning_in_Mil, na.rm=TRUE)) %>%
+      ggplot() +
+        geom_col(mapping = aes(x = Genre, y = avg_earning)) + 
+        labs(y = "avg earning in millions")
     ```
     ```{r}
     ggplot(data = movies) +
@@ -367,7 +390,7 @@ There is a wealth of data on internet. How to scrape them and analyze them?
 - `quantmod` package contains many utility functions for retrieving and plotting finance data. E.g.,
     ```{r}
     library(quantmod)
-    stock <- getSymbols("AAPL", src = "yahoo", auto.assign = FALSE)
+    stock <- getSymbols("GOOG", src = "yahoo", auto.assign = FALSE, from = "2010-02-11")
     head(stock)
     chartSeries(stock, theme = chartTheme("white"),
                 type = "line", log.scale = FALSE, TA = NULL)
@@ -377,12 +400,20 @@ There is a wealth of data on internet. How to scrape them and analyze them?
 
 - Read blog: <https://towardsdatascience.com/pulling-tweets-into-r-e17d4981cfe2>
 
-- `twitteR` package is useful for pulling tweets text data into R.
+- [`twitteR` package](https://www.rdocumentation.org/packages/twitteR) is useful for pulling tweets text data into R.
 ```{r}
 library(twitteR) #load package
 ```
 
-- Generate and copy the Twitter App Keys
+- Step 1: apply for a [Twitter developer account](https://developer.twitter.com). It takes some time to get approved.
+
+- Step 2: Generate and copy the Twitter App Keys.
+```
+consumer_key <- 'XXXXXXXXXX'
+consumer_secret <- 'XXXXXXXXXX'
+access_token <- 'XXXXXXXXXX'
+access_secret <- 'XXXXXXXXXX'
+```
 ```{r include=FALSE}
 consumer_key <- 'P952Y45yrM1Xu9ez3r00AUH57'
 consumer_secret <- 'KVmvwfL3dmc0TsY81fo3CPwCMTRldS5CzceM2JhyO3xSjZpwEH'
@@ -390,14 +421,17 @@ access_token <- '783517197012504576-B5Q1D0whnX2KzpHnJJwUHErU8ttGtGQ'
 access_secret <- 'oZoUWWZ7JD1aT3BOAc92zC98dYa1nVETbBHnUoquaKjvO'
 ```
 
-- Set up authentication
+- Step 3. Set up authentication
 ```{r}
 setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)
 ```
 
-- Pull tweets
+- Step 4: Pull tweets
 ```{r}
-virus <- searchTwitter('#China + #Coronavirus', n = 1000, since = '2020-01-01', retryOnRateLimit = 1e3)
+virus <- searchTwitter('#China + #Coronavirus', 
+                       n = 1000, 
+                       since = '2020-01-01', 
+                       retryOnRateLimit = 1e3)
 virus_df <- as_tibble(twListToDF(virus))
 virus_df %>% print(width = Inf)
 ```
