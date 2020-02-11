@@ -24,6 +24,8 @@ knitr::opts_chunk$set(cache = FALSE)
 - Better presentations of data and ideas!
     - One of the most critical skills for data scientists.
 
+- Browse the [Gallery](http://shiny.rstudio.com/gallery/) of Shiny apps.
+
 - Josh Katz's [dialect quiz on NYT](https://www.nytimes.com/interactive/2014/upshot/dialect-quiz-map.html).
 
 - [Another good presentation of data](https://research.hackerrank.com/student-developer/2019).
@@ -131,7 +133,7 @@ Shiny app is a standalone app.
     runApp("census-app")
     ```
 
-- [Code](https://github.com/Hua-Zhou/Hua-Zhou.github.io/tree/master/teaching/biostatm280-2019winter/slides/11-shiny/census-app) for the Shiny app `census-app`.
+- [Code](https://github.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io/tree/master/slides/11-shiny/census-app) for the Shiny app `census-app`.
 
 ----
 
@@ -145,14 +147,14 @@ Shiny app is a standalone app.
 
 - This example is from tutorial: <http://shiny.rstudio.com/tutorial/written-tutorial/lesson6/>
 
-- [Code](https://github.com/Hua-Zhou/Hua-Zhou.github.io/tree/master/teaching/biostatm280-2019winter/slides/11-shiny/stockVis) for the Shiny app `stockVis`.
+- [Code](https://github.com/ucla-biostat203b-2020winter/ucla-biostat203b-2020winter.github.io/tree/master/slides/11-shiny/stockVis) for the Shiny app `stockVis`.
 
 ---
 
 - Without using reactive expression:
     ```{r, eval = FALSE}
     output$plot <- renderPlot({
-      data <- getSymbols(input$symb, src = "google",
+      data <- getSymbols(input$symb, src = "yahoo",
                          from = input$dates[1],
                          to = input$dates[2],
                          auto.assign = FALSE)
@@ -162,7 +164,7 @@ Shiny app is a standalone app.
     })
     ```
 Each time `renderPlot` re-runs:  
-1. it re-fetches the data from Google finance with `getSymbols`, and
+1. it re-fetches the data from Yahoo Finance with `getSymbols`, and
 2. it re-draws the chart with the correct axis.
 
 ---- 
@@ -170,7 +172,7 @@ Each time `renderPlot` re-runs:
 - With **reactive expression**:
     ```{r, eval = FALSE}
     dataInput <- reactive({
-      getSymbols(input$symb, src = "google", 
+      getSymbols(input$symb, src = "yahoo", 
                  from = input$dates[1],
                  to = input$dates[2],
                  auto.assign = FALSE)
@@ -182,8 +184,6 @@ Each time `renderPlot` re-runs:
     })
     ```
 
-----
-
 - A reactive expression saves its result the first time you run it.
 
 - The next time the reactive expression is called, it checks if the saved value has become out of date (i.e., whether the widgets it depends on have changed).
@@ -191,8 +191,3 @@ Each time `renderPlot` re-runs:
 - If the value is out of date, the reactive object will recalculate it (and then save the new result).
 
 - If the value is up-to-date, the reactive expression will return the saved value without doing any computation.
-
-## Get ideas for presenting your data
-
-- Browse the [Gallery](http://shiny.rstudio.com/gallery/).
-
