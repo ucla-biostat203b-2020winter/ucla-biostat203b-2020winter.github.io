@@ -111,9 +111,18 @@ There is a wealth of data on internet. How to scrape them and analyze them?
 ### Runtime
 
 -
+```{r}
+# Using CSS selectors to scrap the Movie runtime section
+(runtime_data <- webpage %>%
+  html_nodes('.runtime') %>%
+  html_text() %>%
+  str_replace(" min", "") %>%
+  as.integer())
+```
+
     ```{r}
     # Using CSS selectors to scrap the Movie runtime section
-    runtime_data_html <- html_nodes(webpage, '.text-muted .runtime')
+    runtime_data_html <- html_nodes(webpage, '.runtime')
     # Converting the runtime data to text
     runtime_data <- html_text(runtime_data_html)
     # Let's have a look at the runtime
@@ -246,14 +255,14 @@ There is a wealth of data on internet. How to scrape them and analyze them?
     #(gross_data <- gs_data)
     ```
     60 (out of 100) movies don't have gross data yet! We need a better way to figure out missing entries.
-    ```{r, include=FALSE}
+    ```{r}
     (rank_and_gross <- webpage %>%
       html_nodes('.ghost~ .text-muted+ span , .text-primary') %>%
       html_text() %>%
       str_replace("\\s+", "") %>%
       str_replace_all("[$M]", ""))
     ```
-    ```{r, include=FALSE}
+    ```{r}
     isrank <- str_detect(rank_and_gross, "\\.$")
     ismissing <- isrank[1:(length(rank_and_gross) - 1)] & isrank[2:(length(rank_and_gross))]
     ismissing[length(ismissing)+1] <- isrank[length(isrank)]
