@@ -1299,30 +1299,69 @@ movies %&gt;% print(width=Inf)</code></pre>
 <!--     ```{bash} -->
 <!--     ls images/ -->
 <!--     ``` -->
-<!-- Complete search operators are described at <http://www.googleguide.com/advanced_operators_reference.html>. -->
-<!-- ```{r} -->
-<!-- searchTerm <- "ucla" -->
-<!-- # tbm=isch (images), app (apps), bks (books), nws (news), pts (patents), vid (videos) -->
-<!-- # tbs=isz:m (medium images) -->
-<!-- # <https://stenevang.wordpress.com/2013/02/22/google-advanced-power-search-url-request-parameters/> -->
-<!-- (url <- str_c("https://www.google.com/search?q=", searchTerm, -->
-<!--               "&source=lnms&tbm=isch&sa=X&tbs=isz:m")) -->
-<!-- webpage <- read_html(url) -->
-<!-- (imageurl <- webpage %>% html_nodes("img") %>% html_attr("src")) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- downloadImages <- function(files, brand, outPath="images"){ -->
-<!--   for(i in 1:length(files)){ -->
-<!--     download.file(files[i],  -->
-<!--                   destfile = paste0(outPath, "/", brand, "_", i, ".jpg"),  -->
-<!--                   mode = 'wb') -->
-<!--   } -->
-<!-- } -->
-<!-- downloadImages(imageurl, "ucla") -->
-<!-- ``` -->
-<!-- ```{bash} -->
-<!-- ls images/ -->
-<!-- ``` -->
+<p>Complete search operators are described at <a href="http://www.googleguide.com/advanced_operators_reference.html" class="uri">http://www.googleguide.com/advanced_operators_reference.html</a>.</p>
+<pre class="r"><code>searchTerm &lt;- &quot;ucla&quot;
+# tbm=isch (images), app (apps), bks (books), nws (news), pts (patents), vid (videos)
+# tbs=isz:m (medium images)
+# &lt;https://stenevang.wordpress.com/2013/02/22/google-advanced-power-search-url-request-parameters/&gt;
+(url &lt;- str_c(&quot;https://www.google.com/search?q=&quot;, searchTerm,
+              &quot;&amp;source=lnms&amp;tbm=isch&amp;sa=X&amp;tbs=isz:m&quot;))</code></pre>
+<pre><code>## [1] &quot;https://www.google.com/search?q=ucla&amp;source=lnms&amp;tbm=isch&amp;sa=X&amp;tbs=isz:m&quot;</code></pre>
+<pre class="r"><code>webpage &lt;- read_html(url)
+(imageurl &lt;- webpage %&gt;% html_nodes(&quot;img&quot;) %&gt;% html_attr(&quot;src&quot;))</code></pre>
+<pre><code>##  [1] &quot;/images/branding/searchlogo/1x/googlelogo_desk_heirloom_color_150x55dp.gif&quot;                           
+##  [2] NA                                                                                                     
+##  [3] NA                                                                                                     
+##  [4] NA                                                                                                     
+##  [5] &quot;http://t1.gstatic.com/images?q=tbn:ANd9GcRi4lynSHbXZ4Iw8g2dqSWIHUbwYlVAnCG8JmoJk0m5TDqv7u1A4DZXIXo&quot;   
+##  [6] &quot;http://t2.gstatic.com/images?q=tbn:ANd9GcR6WcG06o-hL1TdUt9koGmqZ3rb6gKXdH-qzeJzFxfxlPbwyl01vgcnmT5A&quot;  
+##  [7] &quot;http://t3.gstatic.com/images?q=tbn:ANd9GcSb0UvxFeU1jMmffJp7HqtlvJWO8YCuTDtLrL4WEXBZyjRjG_ZwJhxknho&quot;   
+##  [8] &quot;http://t0.gstatic.com/images?q=tbn:ANd9GcQky72Pltll9gse5zuuUB5v3usGPHsUWIQHkUxOBcCkaX8FQqGZKIrfPDHO&quot;  
+##  [9] &quot;http://t1.gstatic.com/images?q=tbn:ANd9GcSL2OVtYLGq8WkODsaQvQdhx9L4Bo77jiyw85zxiI2CIfY9QUbXd0MifA&quot;    
+## [10] &quot;http://t2.gstatic.com/images?q=tbn:ANd9GcQgDqKCP2Uj7dmIqDKLCzwnO2Nxe4NKkxqi7yzULvq5yIvx9AM5Let8VSfF&quot;  
+## [11] &quot;http://t3.gstatic.com/images?q=tbn:ANd9GcQY6joNaBY8I1OslMcbnT6jTExmhBUJoUYQXLGdFzVTveOzs25XO6WNlr0&quot;   
+## [12] &quot;http://t0.gstatic.com/images?q=tbn:ANd9GcRlohKXRrTHPQ2qUYe_QbQ_4xL7INWBdJxqcJO6JUe6z1qYt1YuJ9kxW6rH&quot;  
+## [13] &quot;http://t1.gstatic.com/images?q=tbn:ANd9GcTACCo1ZrcHrK8aemBX40uKkyecusTqd2XNBq-8Pb_iadh1RK0BnA3UsEVK&quot;  
+## [14] &quot;http://t2.gstatic.com/images?q=tbn:ANd9GcQd5o6YyCN6E9wW0_htp0X5E1huKFsX-O0zpl_J0xuon6DaaYicZClCVTPV&quot;  
+## [15] &quot;http://t3.gstatic.com/images?q=tbn:ANd9GcSIwWQ2gn7Ae8lSfeTuK5QGLPv4v6O1uxD_RrVuDElsHEXOZQiPvIyEcWY&quot;   
+## [16] &quot;http://t0.gstatic.com/images?q=tbn:ANd9GcTiL2-GBIJzMc0SVtc6lr5-jPgk-UiJB67YlMCRzwFOcJUxLg5X3WPdCtFs&quot;  
+## [17] &quot;http://t1.gstatic.com/images?q=tbn:ANd9GcTbYVc_m_Ny1g4TF3ZcjIlyeD5QmCRS2yVXbk-M9_mDEwCDWZcHbgnNEIw&quot;   
+## [18] &quot;http://t2.gstatic.com/images?q=tbn:ANd9GcRAL3ohwQw-hYoXz2wMITlAA9sOu0IEFURoW2ofFX0lFVHxOgXmNkqnjsLE&quot;  
+## [19] &quot;http://t3.gstatic.com/images?q=tbn:ANd9GcSy9BXU7jML2lyCXeOwLp9SKejkm1-Va1BSkYjpVtu9UbexM7N2XFUwvxY&quot;   
+## [20] &quot;http://t0.gstatic.com/images?q=tbn:ANd9GcTrlSU-lqvX0HxLSrEjgN0qKChaFkwTxom3KIhuurBh3RRJchYq9An_MuUS&quot;  
+## [21] &quot;http://t1.gstatic.com/images?q=tbn:ANd9GcQi3kIBDeclmkBAQCFcaEhb4gymQLbZFtrfRNzQvgtAjfOAZ4FlLb39UQo&quot;   
+## [22] &quot;http://t2.gstatic.com/images?q=tbn:ANd9GcTqhIjDcVUTotgA5pMeGH6U_jbJBrOd3WSklyTQPwNoB-crknsFUt9eXsQo&quot;  
+## [23] &quot;http://t3.gstatic.com/images?q=tbn:ANd9GcTbOfKoRFdGCFacUJZsQ01W-iwwVVUh4y67vFkE4Jh-3IT9g75T26b0WidqAg&quot;
+## [24] &quot;http://t0.gstatic.com/images?q=tbn:ANd9GcSsfJWAolCg59JerAWwBCmuwAIfANga0QgBV9k7o5Ru1BmLk-EyouqRttPD&quot;  
+## [25] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_g_color_18x26dp.gif&quot;                          
+## [26] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_red_o_color_16x26dp.gif&quot;                      
+## [27] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [28] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [29] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [30] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [31] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [32] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [33] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [34] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [35] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_orange_o_color_16x26dp.gif&quot;                   
+## [36] &quot;/images/branding/searchlogo/1x/googlelogo_tier_3_footer_gle_with_chevron_color_100x26dp.gif&quot;          
+## [37] NA                                                                                                     
+## [38] NA                                                                                                     
+## [39] NA</code></pre>
+<p>Following code still not working…</p>
+<pre class="r"><code>downloadImages &lt;- function(files, brand, outPath=&quot;images&quot;){
+  for(i in 1:length(files)){
+    download.file(files[i],
+                  destfile = paste0(outPath, &quot;/&quot;, brand, &quot;_&quot;, i, &quot;.jpg&quot;),
+                  mode = 'wb')
+  }
+}
+downloadImages(imageurl, &quot;ucla&quot;)</code></pre>
+<pre><code>## Warning in download.file(files[i], destfile = paste0(outPath, &quot;/&quot;, brand, : URL
+## '/images/branding/searchlogo/1x/googlelogo_desk_heirloom_color_150x55dp.gif':
+## status was 'URL using bad/illegal format or missing URL'</code></pre>
+<pre><code>## Error in download.file(files[i], destfile = paste0(outPath, &quot;/&quot;, brand, : cannot open URL '/images/branding/searchlogo/1x/googlelogo_desk_heirloom_color_150x55dp.gif'</code></pre>
+<pre class="bash"><code>ls images/</code></pre>
 </div>
 <div id="example-scraping-finance-data" class="section level2">
 <h2>Example: Scraping finance data</h2>
@@ -1364,11 +1403,6 @@ stock &lt;- getSymbols(&quot;GOOG&quot;, src = &quot;yahoo&quot;, auto.assign = 
 <li><p><a href="https://www.rdocumentation.org/packages/twitteR"><code>twitteR</code> package</a> is useful for pulling tweets text data into R.</p></li>
 </ul>
 <pre class="r"><code>library(twitteR) #load package</code></pre>
-<pre><code>## 
-## Attaching package: 'twitteR'</code></pre>
-<pre><code>## The following objects are masked from 'package:dplyr':
-## 
-##     id, location</code></pre>
 <ul>
 <li><p>Step 1: apply for a <a href="https://developer.twitter.com">Twitter developer account</a>. It takes some time to get approved.</p></li>
 <li>Step 2: Generate and copy the Twitter App Keys.</li>
@@ -1394,64 +1428,64 @@ virus_df %&gt;% print(width = Inf)</code></pre>
 <pre><code>## # A tibble: 1,000 x 16
 ##    text                                                                         
 ##    &lt;chr&gt;                                                                        
-##  1 &quot;@CPHO_Canada There's only 7 cases of #coronavirus in #Canada because you're…
-##  2 &quot;RT @Rntk____: #Coronavirus is Spreading \n\nPlease retweet this video for t…
-##  3 &quot;2019-nCoV. Asciende a más de mil los fallecidos en #China por #coronavirus …
-##  4 &quot;Labeling Error to Blame for Hospital’s Release of Coronavirus Patient  TRAD…
-##  5 &quot;Asesor de Seguridad Nacional de Trump, Robert O'Brien: \&quot;El brote del #coro…
-##  6 &quot;RT @GordonGChang: #China has done much to hinder epidemiological study of t…
-##  7 &quot;RT @ChinaDaily: Remote work models, from conference calls to online trainin…
-##  8 &quot;What is coronavirus? The biggest questions about the outbreak, answered. SE…
-##  9 &quot;RT @DarrenPlymouth: “I'm afraid. In front of me is the virus and behind me …
-## 10 &quot;RT @Reality_Index: Some people are going to work back again at some parts o…
-##    favorited favoriteCount replyToSN   created             truncated
-##    &lt;lgl&gt;             &lt;dbl&gt; &lt;chr&gt;       &lt;dttm&gt;              &lt;lgl&gt;    
-##  1 FALSE                 0 CPHO_Canada 2020-02-12 00:10:13 TRUE     
-##  2 FALSE                 0 &lt;NA&gt;        2020-02-12 00:10:06 FALSE    
-##  3 FALSE                 0 &lt;NA&gt;        2020-02-12 00:10:04 FALSE    
-##  4 FALSE                 0 &lt;NA&gt;        2020-02-12 00:10:02 TRUE     
-##  5 FALSE                 0 &lt;NA&gt;        2020-02-12 00:10:01 TRUE     
-##  6 FALSE                 0 &lt;NA&gt;        2020-02-12 00:09:57 FALSE    
-##  7 FALSE                 0 &lt;NA&gt;        2020-02-12 00:09:56 FALSE    
-##  8 FALSE                 0 &lt;NA&gt;        2020-02-12 00:09:51 TRUE     
-##  9 FALSE                 0 &lt;NA&gt;        2020-02-12 00:09:46 FALSE    
-## 10 FALSE                 0 &lt;NA&gt;        2020-02-12 00:09:45 FALSE    
-##    replyToSID          id                  replyToUID
-##    &lt;chr&gt;               &lt;chr&gt;               &lt;chr&gt;     
-##  1 1226948195797938176 1227384373764182017 2314087860
-##  2 &lt;NA&gt;                1227384345633021952 &lt;NA&gt;      
-##  3 &lt;NA&gt;                1227384337265496066 &lt;NA&gt;      
-##  4 &lt;NA&gt;                1227384331347341314 &lt;NA&gt;      
-##  5 &lt;NA&gt;                1227384324930129922 &lt;NA&gt;      
-##  6 &lt;NA&gt;                1227384308094160897 &lt;NA&gt;      
-##  7 &lt;NA&gt;                1227384304038117376 &lt;NA&gt;      
-##  8 &lt;NA&gt;                1227384283007983616 &lt;NA&gt;      
-##  9 &lt;NA&gt;                1227384263819042816 &lt;NA&gt;      
-## 10 &lt;NA&gt;                1227384256323870720 &lt;NA&gt;      
+##  1 &quot;Coronavirus in New York: What We Know So Far SEE DETAILS AT ==&amp;gt; https://…
+##  2 &quot;RT @PaolaSCruz1990: @DeZurdaTeam @DiazCanelB @marti160patria @SecUJCuba @Fe…
+##  3 &quot;RT @HappeningNow__: I'm in shock      😱😱😱😭😭😭😭\n\n and very sad watching thi…
+##  4 &quot;RT @CirculoGloBal_I: Los Cuervos invaden  #XiNing #China #Xining #Coronavir…
+##  5 &quot;A Chinese drugmaker said it has started mass-producing an experimental drug…
+##  6 &quot;#Coronavirus ya ha cobrado mil 112 vidas y lleva más de 44 mil infectados e…
+##  7 &quot;RT @WarsontheBrink: Shocking Revelations\n\n#Chinese Billionaire \&quot;Guo Weng…
+##  8 &quot;RT @StephenMcDonell: New official #China #coronavirus figures: definitely i…
+##  9 &quot;RT @BeholdIsrael: Israelis &amp;amp; Chinese gathered at Tel Aviv town hall squ…
+## 10 &quot;RT @WarsontheBrink: VIDEO: #China\n\n🚨GRAPHIC:🚨\n\nALLEGED #Coronavirus pat…
+##    favorited favoriteCount replyToSN created             truncated replyToSID
+##    &lt;lgl&gt;             &lt;dbl&gt; &lt;chr&gt;     &lt;dttm&gt;              &lt;lgl&gt;     &lt;chr&gt;     
+##  1 FALSE                 0 &lt;NA&gt;      2020-02-12 03:29:06 TRUE      &lt;NA&gt;      
+##  2 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:54 FALSE     &lt;NA&gt;      
+##  3 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:50 FALSE     &lt;NA&gt;      
+##  4 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:50 FALSE     &lt;NA&gt;      
+##  5 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:45 TRUE      &lt;NA&gt;      
+##  6 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:45 FALSE     &lt;NA&gt;      
+##  7 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:41 FALSE     &lt;NA&gt;      
+##  8 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:35 FALSE     &lt;NA&gt;      
+##  9 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:34 FALSE     &lt;NA&gt;      
+## 10 FALSE                 0 &lt;NA&gt;      2020-02-12 03:28:22 FALSE     &lt;NA&gt;      
+##    id                  replyToUID
+##    &lt;chr&gt;               &lt;chr&gt;     
+##  1 1227434427497828354 &lt;NA&gt;      
+##  2 1227434375522004993 &lt;NA&gt;      
+##  3 1227434360867106817 &lt;NA&gt;      
+##  4 1227434358656708609 &lt;NA&gt;      
+##  5 1227434338410729474 &lt;NA&gt;      
+##  6 1227434337181818880 &lt;NA&gt;      
+##  7 1227434321461620736 &lt;NA&gt;      
+##  8 1227434295540752385 &lt;NA&gt;      
+##  9 1227434291723952133 &lt;NA&gt;      
+## 10 1227434240213733376 &lt;NA&gt;      
 ##    statusSource                                                                 
 ##    &lt;chr&gt;                                                                        
-##  1 &quot;&lt;a href=\&quot;http://twitter.com/download/android\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter fo…
+##  1 &quot;&lt;a href=\&quot;http://www.akidthaine.com\&quot; rel=\&quot;nofollow\&quot;&gt;Clickclickme&lt;/a&gt;&quot;    
 ##  2 &quot;&lt;a href=\&quot;http://twitter.com/download/android\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter fo…
-##  3 &quot;&lt;a href=\&quot;https://www.hootsuite.com\&quot; rel=\&quot;nofollow\&quot;&gt;Hootsuite Inc.&lt;/a&gt;&quot;  
-##  4 &quot;&lt;a href=\&quot;http://www.akidthaine.com\&quot; rel=\&quot;nofollow\&quot;&gt;Clickclickme&lt;/a&gt;&quot;    
-##  5 &quot;&lt;a href=\&quot;https://mobile.twitter.com\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter Web App&lt;/a&gt;&quot;
+##  3 &quot;&lt;a href=\&quot;https://mobile.twitter.com\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter Web App&lt;/a&gt;&quot;
+##  4 &quot;&lt;a href=\&quot;http://twitter.com/download/android\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter fo…
+##  5 &quot;&lt;a href=\&quot;http://twitter.com/download/iphone\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter for…
 ##  6 &quot;&lt;a href=\&quot;http://twitter.com/download/android\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter fo…
-##  7 &quot;&lt;a href=\&quot;http://twitter.com/download/iphone\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter for…
-##  8 &quot;&lt;a href=\&quot;http://www.akidthaine.com\&quot; rel=\&quot;nofollow\&quot;&gt;Clickclickme&lt;/a&gt;&quot;    
-##  9 &quot;&lt;a href=\&quot;http://twitter.com/download/iphone\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter for…
+##  7 &quot;&lt;a href=\&quot;http://sinproject.net/tweecha/\&quot; rel=\&quot;nofollow\&quot;&gt;tweechaPrime&lt;/a…
+##  8 &quot;&lt;a href=\&quot;https://mobile.twitter.com\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter Web App&lt;/a&gt;&quot;
+##  9 &quot;&lt;a href=\&quot;http://twitter.com/download/android\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter fo…
 ## 10 &quot;&lt;a href=\&quot;http://twitter.com/download/android\&quot; rel=\&quot;nofollow\&quot;&gt;Twitter fo…
 ##    screenName      retweetCount isRetweet retweeted longitude latitude
-##    &lt;chr&gt;                  &lt;dbl&gt; &lt;lgl&gt;     &lt;lgl&gt;     &lt;chr&gt;     &lt;chr&gt;   
-##  1 FreemasonWatchn            0 FALSE     FALSE     &lt;NA&gt;      &lt;NA&gt;    
-##  2 conniedlcdejes1          253 TRUE      FALSE     &lt;NA&gt;      &lt;NA&gt;    
-##  3 bohemiaonline              0 FALSE     FALSE     &lt;NA&gt;      &lt;NA&gt;    
-##  4 bitcoinconnect             0 FALSE     FALSE     &lt;NA&gt;      &lt;NA&gt;    
-##  5 hapinto2                   0 FALSE     FALSE     &lt;NA&gt;      &lt;NA&gt;    
-##  6 kgriffinstl              117 TRUE      FALSE     &lt;NA&gt;      &lt;NA&gt;    
-##  7 RitasArtCafe               6 TRUE      FALSE     &lt;NA&gt;      &lt;NA&gt;    
-##  8 bitcoinconnect             0 FALSE     FALSE     &lt;NA&gt;      &lt;NA&gt;    
-##  9 hoosercharles58          920 TRUE      FALSE     &lt;NA&gt;      &lt;NA&gt;    
-## 10 RoxydeCrow                12 TRUE      FALSE     &lt;NA&gt;      &lt;NA&gt;    
+##    &lt;chr&gt;                  &lt;dbl&gt; &lt;lgl&gt;     &lt;lgl&gt;     &lt;lgl&gt;     &lt;lgl&gt;   
+##  1 bitcoinconnect             0 FALSE     FALSE     NA        NA      
+##  2 MonicaR45472290           24 TRUE      FALSE     NA        NA      
+##  3 ka51087963               111 TRUE      FALSE     NA        NA      
+##  4 ikerpaul                  30 TRUE      FALSE     NA        NA      
+##  5 Apex_WW                    0 FALSE     FALSE     NA        NA      
+##  6 KarlitaTmUs                0 FALSE     FALSE     NA        NA      
+##  7 sharmabrr                536 TRUE      FALSE     NA        NA      
+##  8 fezziwig2019              40 TRUE      FALSE     NA        NA      
+##  9 DanielWhorton             65 TRUE      FALSE     NA        NA      
+## 10 jkcracker21               79 TRUE      FALSE     NA        NA      
 ## # … with 990 more rows</code></pre>
 </div>
 <div id="example-import-data-from-google-sheets" class="section level2">

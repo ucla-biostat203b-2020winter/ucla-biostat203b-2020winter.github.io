@@ -367,32 +367,32 @@ There is a wealth of data on internet. How to scrape them and analyze them?
 <!--     ls images/ -->
 <!--     ``` -->
 
-<!-- Complete search operators are described at <http://www.googleguide.com/advanced_operators_reference.html>. -->
-<!-- ```{r} -->
-<!-- searchTerm <- "ucla" -->
-<!-- # tbm=isch (images), app (apps), bks (books), nws (news), pts (patents), vid (videos) -->
-<!-- # tbs=isz:m (medium images) -->
-<!-- # <https://stenevang.wordpress.com/2013/02/22/google-advanced-power-search-url-request-parameters/> -->
-<!-- (url <- str_c("https://www.google.com/search?q=", searchTerm, -->
-<!--               "&source=lnms&tbm=isch&sa=X&tbs=isz:m")) -->
-<!-- webpage <- read_html(url) -->
-<!-- (imageurl <- webpage %>% html_nodes("img") %>% html_attr("src")) -->
-<!-- ``` -->
+Complete search operators are described at <http://www.googleguide.com/advanced_operators_reference.html>.
+```{r}
+searchTerm <- "ucla"
+# tbm=isch (images), app (apps), bks (books), nws (news), pts (patents), vid (videos)
+# tbs=isz:m (medium images)
+# <https://stenevang.wordpress.com/2013/02/22/google-advanced-power-search-url-request-parameters/>
+(url <- str_c("https://www.google.com/search?q=", searchTerm,
+              "&source=lnms&tbm=isch&sa=X&tbs=isz:m"))
+webpage <- read_html(url)
+(imageurl <- webpage %>% html_nodes("img") %>% html_attr("src"))
+```
+Following code still not working...
+```{r, error = TRUE}
+downloadImages <- function(files, brand, outPath="images"){
+  for(i in 1:length(files)){
+    download.file(files[i],
+                  destfile = paste0(outPath, "/", brand, "_", i, ".jpg"),
+                  mode = 'wb')
+  }
+}
+downloadImages(imageurl, "ucla")
+```
 
-<!-- ```{r} -->
-<!-- downloadImages <- function(files, brand, outPath="images"){ -->
-<!--   for(i in 1:length(files)){ -->
-<!--     download.file(files[i],  -->
-<!--                   destfile = paste0(outPath, "/", brand, "_", i, ".jpg"),  -->
-<!--                   mode = 'wb') -->
-<!--   } -->
-<!-- } -->
-<!-- downloadImages(imageurl, "ucla") -->
-<!-- ``` -->
-
-<!-- ```{bash} -->
-<!-- ls images/ -->
-<!-- ``` -->
+```{bash}
+ls images/
+```
 
 ## Example: Scraping finance data
 
