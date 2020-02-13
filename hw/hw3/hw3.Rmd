@@ -14,9 +14,15 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 
 ## Task
 
-Your task is to develop a Shiny app that visualizes the progression of the 2019-20 Global Coronavirus Outbreak. If you are ambitious, you can also bring in visualization of other types of data, e.g., stock market and so on.
+1. Develop a Shiny app that visualizes the progression of the 2019-20 Global Coronavirus Outbreak. 
 
-Below is some data exploration, which may help you get started. Note below code may change frequently.
+2. If you are ambitious, bring in visualization of other types of data, e.g., stock market, tweets, contrast with previous outbreak (e.g., 2003 SARS, 2009 H1N1, 2012 MERS, 2014 Ebola), prediction from your statistical/epidemiological model, and so on. 
+
+3. Publish your Shiny app to <https://www.shinyapps.io> and share the link.
+
+4. (Optinal) Submit your app to the 2020 Shiny Contest (deadline 20 March 2020 at 5pm ET). 
+
+Below is some data exploration, which may help you get started. You do _not_ have to use it. Note below code may change frequently.
 
 <!-- Johns Hopkins CSSE Visualization: <https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6> -->
 
@@ -27,30 +33,43 @@ Below is some data exploration, which may help you get started. Note below code 
 
 ```{r include=FALSE}
 library(tidyverse)
-library(googlesheets4)
 library(lubridate)
 ```
 
-## Import JHU Google Sheets into R
+## Import JHU Google Sheets into R - **EXPIRED on Feb 11**
+
+**Since Feb 11, JHU CSSE stops posting data on Google Sheets.**
 
 Johns Hopkins University (JHU) Center for Systems Science and Engineering (CSSE) kindly compiles, updates, and shares the current data on 2019-nCoV outbreak at Google Sheets: <https://docs.google.com/spreadsheets/d/1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo>.
 
 We can use the tidyverse package [`googlesheets4`](https://googlesheets4.tidyverse.org) to import data from Google Sheets. Because the JHU sheets are public, we don't need authentication by tokens.
-```{r}
+```{r, eval = FALSE}
+library(googlesheets4)
 # no authentication
 sheets_deauth()
 ```
 Import the `confirmed` sheet:
-```{r}
+```{r, eval = FALSE}
 (confirmed <- read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 2))
 ```
 Import the `recovered` sheet:
-```{r}
+```{r, eval = FALSE}
 (recovered <- read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 3))
 ```
 Import the `death` sheet:
-```{r}
+```{r, eval = FALSE}
 (death <- read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 4))
+```
+
+## Import JHU SSE data on GitHub into R
+
+Since Feb 11, JHU SSE is hosting 2019 nCoV data on GitHub repo: <https://github.com/CSSEGISandData/2019-nCoV>.
+
+Let's import the time series data directly from the csv file on GitHub:
+```{r}
+(confirmed <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/time_series/time_series_2019-ncov-Confirmed.csv"))
+(recovered <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/time_series/time_series_2019-ncov-Deaths.csv"))
+(death <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/time_series/time_series_2019-ncov-Recovered.csv"))
 ```
 
 ## Tidy data
@@ -61,7 +80,7 @@ confirmed_long <- confirmed %>%
   pivot_longer(-(`Province/State`:Long), 
                names_to = "time", 
                values_to = "confirmed") %>%
-  mutate(time = mdy_hm(time))
+  mutate(time = (mdy_hm(time))) # convert string to date-time
 confirmed_long
 ```
 ```{r}
@@ -87,6 +106,12 @@ ncov_tbl <- confirmed_long %>%
   left_join(death_long)
 ncov_tbl %>% print(width = Inf)
 ```
+
+## Other data sources
+
+Other sources of data:  
+- Tencent (in Chinese): <https://news.qq.com/zt2020/page/feiyan.htm>  
+- R package `nCov2019`; install by `remotes::install_github("GuangchuangYu/nCov2019")`  
 
 ## Mapping China provinces
 
@@ -127,13 +152,13 @@ map <- rgdal::readOGR("gadm36_CHN_shp/gadm36_CHN_1.shp")
 plot(map)
 ```
 
-### Use maptools and GIS data from China
+### Use GIS data from China
 
 Donwload China GIS data from [here](https://uploads.cosx.org/2009/07/chinaprovinceborderdata_tar_gz.zip), unzip, and put in the working directory.
 ```{bash}
 ls -l bou2_4p.*
 ```
-Read in the shape file into simple feature (SF) format:
+Read in the shape file into simple feature (SF) format. Replace the `NA` in `NAME` by Macau.
 ```{r}
 library(sf)
 chn_map <- st_read("./bou2_4p.shp", as_tibble = TRUE) %>%
@@ -142,20 +167,23 @@ chn_map <- st_read("./bou2_4p.shp", as_tibble = TRUE) %>%
          BOU2_4M_ID = as.integer(BOU2_4M_ID)) %>%
   mutate(NAME = str_replace_na(NAME, replacement = "澳门特别行政区"))
 class(chn_map)
-```
-`ggplot2` can plot SF data using `geom_sf` function:
-```{r}
-chn_map %>%
-  ggplot() + 
-  geom_sf(color = "black", fill = "white") + 
-  theme_bw() # better for maps
-chn_map %>% print(width = Inf)
+chn_map
 ```
 There are about 34 provinces in China, why there are 925 areas?
 ```{r}
 chn_map %>% 
   count(NAME) %>% 
   print(n = Inf)
+```
+
+
+`ggplot2` can plot SF data using `geom_sf` function:
+```{r}
+chn_map %>%
+  ggplot() + 
+  geom_sf(mapping = aes(geometry = geometry), color = "black", fill = "white") + 
+  #geom_sf_label(mapping = aes(label = NAME)) + 
+  theme_bw() # better for maps 
 ```
 These are the provinces available from the JHU sheets.
 ```{r}
@@ -164,7 +192,7 @@ ncov_tbl %>%
   distinct(`Province/State`, `Country/Region`) %>%
   print(n = Inf)
 ```
-We create a function to translate Chinese province name to English.
+In order to join the tibbles `ncov_tbl` and `chn_map`, we need to use the province name as key. Let's create a function to translate Chinese province name to English.
 ```{r}
 translate <- function(x) {
   sapply(x, function(chn_name) {
@@ -249,27 +277,113 @@ Create a new variable `NAME_ENG`:
 ```{r}
 chn_prov <- chn_map %>% 
   count(NAME) %>%
-  mutate(NAME_ENG = translate(NAME))
+  mutate(NAME_ENG = translate(NAME)) # translate function is vectorized
 chn_prov %>% print(n = Inf)
 ```
 
 ## Plotting 2019-nCoV incidence
 
-Confirmed cases:
+Try to join the virus data `ncov_tbl` and map data `chn_prov`.
 ```{r}
-plotdate <- "2020-01-25"
+# for exploration
+plotdate <- "2020-02-13"
 ncov_tbl %>%
   filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
   mutate(date = date(time)) %>%
-  group_by(`Province/State`, date) %>%  
-  arrange(time) %>%
-  summarise(last(confirmed)) %>%
   filter(date == plotdate) %>%
+  group_by(`Province/State`) %>%  
+  top_n(1, time) %>%
+  right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) # join map and virus data
+```
+
+Plot confirmed cases on a specific date:
+```{r}
+library(wesanderson)
+
+plotdate <- "2020-02-13"
+count <- "confirmed"
+
+ncov_tbl %>%
+  filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
+  filter(date(time) == plotdate) %>%
+  group_by(`Province/State`) %>%  
+  top_n(1, time) %>% # take the latest count on that date
   right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
   ggplot() + 
-  geom_sf(mapping = aes(fill = `last(confirmed)`, geometry = geometry)) +
+  geom_sf(mapping = aes(fill = !!sym(count), geometry = geometry)) +
+  # scale_fill_gradient(low = "white",
+  #                     high = "red",
+  #                     trans = "log10",
+  #                     limits = c(1, 50000),
+  #                     breaks = c(1, 10, 100, 1000, 10000),
+  #                     name = "") +
+  scale_fill_gradientn(colors = wes_palette("Zissou1", 100, type = "continuous"),
+                       trans = "log10") + # can we find a better palette
+  #scale_fill_brewer(palette = "Dark2") + 
   theme_bw() +
-  labs(title = "Confirmed Cases", subtitle = plotdate)
+  labs(title = str_c(count, " cases"), subtitle = plotdate)
+```
+
+To plot the line graph of confirmed cases over time:
+```{r}
+# TODO
+```
+
+## Animation
+
+Resources about making animations in R:  
+- [gganimate](https://gganimate.com/index.html) package.  
+- Section 8.3 of [Geomcomputation with R](https://geocompr.robinlovelace.net/adv-map.html#animated-maps). 
+
+```{r}
+ncov_tbl %>%
+  filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
+#  group_by(`Province/State`) %>%  
+  right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
+  print()
+```
+
+Plot the date at all time points (this takes long, a couple minutes):
+```{r}
+library(gganimate)
+library(transformr)
+
+(p <- ncov_tbl %>%
+  filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
+  right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
+  ggplot() + 
+  geom_sf(mapping = aes(fill = !!sym(count), geometry = geometry)) + 
+  # scale_fill_gradient(low = "white",
+  #                     high = "red",
+  #                     trans = "log10",
+  #                     limits = c(1, 100000),
+  #                     breaks = c(1, 10, 100, 1000, 10000),
+  #                     name = "") +
+  scale_fill_gradientn(colours = wes_palette("Zissou1", 100, type = "continuous"),
+                       trans = "log10") + 
+  theme_bw() +
+  labs(title = "Confirmed Cases"))
+```
+Make animation and save as gif (this takes long, a couple minutes)
+```{r}
+(anim <- p + 
+  transition_time(time) + 
+  labs(title = "Confirmed Cases", subtitle = "Date: {frame_time}"))
+anim_save("confirmed_anim.gif")
+```
+
+## Impact on economy
+
+```{r}
+library(quantmod)
+stock <- getSymbols("^HSI", # S&P 500 (^GSPC), Dow Jones (^DJI), NASDAQ (^IXIC), Russell 2000 (^RUT), FTSE 100 (^FTSE), Nikkei 225 (^N225), HANG SENG INDEX (^HSI)
+                    src = "yahoo", 
+                    auto.assign = FALSE, 
+                    from = min(ncov_tbl$time),
+                    to = max(ncov_tbl$time)) %>% as_tibble(rownames = NA)
+stock
+chartSeries(stock, theme = chartTheme("white"),
+           type = "line", log.scale = FALSE, TA = NULL)
 ```
 
 ## Mapping countries
