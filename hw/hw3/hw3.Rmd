@@ -390,6 +390,7 @@ Make animation and save as gif (this takes long, a couple minutes)
 (anim <- p + 
   transition_time(Date) + 
   labs(title = "Confirmed Cases", subtitle = "Date: {frame_time}"))
+animate(anim, renderer = gifski_renderer())
 anim_save("confirmed_anim.gif")
 ```
 <p align="center">
