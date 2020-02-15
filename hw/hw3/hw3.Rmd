@@ -81,32 +81,35 @@ I want to tidy data into the long format. `pivot_longer` is the modern version o
 ```{r}
 confirmed_long <- confirmed %>%
   pivot_longer(-(`Province/State`:Long), 
-               names_to = "time", 
+               names_to = "Date", 
                values_to = "confirmed") %>%
-  mutate(time = (mdy_hm(time))) # convert string to date-time
+  mutate(Date = (mdy(Date))) # convert string to date-time
 confirmed_long
 ```
 ```{r}
 recovered_long <- recovered %>%
   pivot_longer(-(`Province/State`:Long), 
-               names_to = "time", 
+               names_to = "Date", 
                values_to = "recovered") %>%
-  mutate(time = mdy_hm(time))
+  mutate(Date = mdy(Date))
 recovered_long
 ```
 ```{r}
 death_long <- death %>%
   pivot_longer(-(`Province/State`:Long), 
-               names_to = "time", 
+               names_to = "Date", 
                values_to = "death") %>%
-  mutate(time = mdy_hm(time))
+  mutate(Date = mdy(Date))
 death_long
 ```
 
 ```{r}
 ncov_tbl <- confirmed_long %>%
   left_join(recovered_long) %>%
-  left_join(death_long)
+  left_join(death_long) %>%
+  pivot_longer(confirmed:death, 
+               names_to = "Case", 
+               values_to = "Count")
 ncov_tbl %>% print(width = Inf)
 ```
 
@@ -291,13 +294,13 @@ chn_prov %>% print(n = Inf)
 Try to join the virus data `ncov_tbl` and map data `chn_prov`.
 ```{r}
 # for exploration
-plotdate <- "2020-02-13"
+plotdate <- "2020-02-14"
+case <- "confirmed"
 ncov_tbl %>%
   filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
-  mutate(date = date(time)) %>%
-  filter(date == plotdate) %>%
+  filter(Date == plotdate, Case == case) %>%
   group_by(`Province/State`) %>%  
-  top_n(1, time) %>%
+  top_n(1, Date) %>%
   right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) # join map and virus data
 ```
 
@@ -305,17 +308,17 @@ Plot confirmed cases on a specific date:
 ```{r}
 library(wesanderson)
 
-plotdate <- "2020-02-13"
-count <- "confirmed"
+plotdate <- "2020-02-14"
+case <- "confirmed"
 
 ncov_tbl %>%
   filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
-  filter(date(time) == plotdate) %>%
+  filter(Date == plotdate, Case == case) %>%
   group_by(`Province/State`) %>%  
-  top_n(1, time) %>% # take the latest count on that date
+  top_n(1, Date) %>% # take the latest count on that date
   right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
   ggplot() +
-  geom_sf(mapping = aes(fill = !!sym(count), geometry = geometry)) +
+  geom_sf(mapping = aes(fill = Count, geometry = geometry)) +
   # scale_fill_gradient(low = "white",
   #                     high = "red",
   #                     trans = "log10",
@@ -323,15 +326,25 @@ ncov_tbl %>%
   #                     breaks = c(1, 10, 100, 1000, 10000),
   #                     name = "") +
   scale_fill_gradientn(colors = wes_palette("Zissou1", 100, type = "continuous"),
-                       trans = "log10") + # can we find a better palette
+                       trans = "log10") + # can we find a better palette?
   # #scale_fill_brewer(palette = "Dark2") + 
   theme_bw() +
-  labs(title = str_c(count, " cases"), subtitle = plotdate)
+  labs(title = str_c(case, " cases"), subtitle = plotdate)
 ```
 
 To plot the line graph of confirmed cases over time:
 ```{r}
-# TODO
+ncov_tbl %>%
+  filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
+  group_by(Date, Case) %>%  
+  summarise(total_count = sum(Count)) %>%
+  # print()
+  ggplot() +
+  geom_line(mapping = aes(x = Date, y = total_count, color = Case)) +
+  scale_color_manual(values = c("blue", "black", "green")) + 
+  scale_y_log10() +
+  labs(y = "Count") + 
+  theme_bw()
 ```
 
 ## Animation
@@ -343,6 +356,7 @@ Resources about making animations in R:
 ```{r}
 ncov_tbl %>%
   filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
+  filter(Case == case) %>%
   right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
   print()
 ```
@@ -352,11 +366,14 @@ Plot the date at all time points (this takes long, a couple minutes):
 library(gganimate)
 library(transformr)
 
+case = "confirmed"
+
 (p <- ncov_tbl %>%  
   filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
+  filter(Case == case) %>%
   right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
   ggplot() + 
-  geom_sf(mapping = aes(fill = !!sym(count), geometry = geometry)) + 
+  geom_sf(mapping = aes(fill = Count, geometry = geometry)) + 
   # scale_fill_gradient(low = "white",
   #                     high = "red",
   #                     trans = "log10",
@@ -366,12 +383,12 @@ library(transformr)
   scale_fill_gradientn(colours = wes_palette("Zissou1", 100, type = "continuous"),
                        trans = "log10") + 
   theme_bw() +
-  labs(title = "Confirmed Cases"))
+  labs(title = str_c(case, " cases")))
 ```
 Make animation and save as gif (this takes long, a couple minutes)
 ```{r}
 (anim <- p + 
-  transition_time(time) + 
+  transition_time(Date) + 
   labs(title = "Confirmed Cases", subtitle = "Date: {frame_time}"))
 anim_save("confirmed_anim.gif")
 ```
@@ -386,10 +403,13 @@ library(quantmod)
 stock <- getSymbols("^HSI", # S&P 500 (^GSPC), Dow Jones (^DJI), NASDAQ (^IXIC), Russell 2000 (^RUT), FTSE 100 (^FTSE), Nikkei 225 (^N225), HANG SENG INDEX (^HSI)
                     src = "yahoo", 
                     auto.assign = FALSE, 
-                    from = min(ncov_tbl$time),
-                    to = max(ncov_tbl$time)) %>% 
+                    from = min(ncov_tbl$Date),
+                    to = max(ncov_tbl$Date)) %>% 
   as_tibble(rownames = "Date") %>%
-  mutate(Date = date(Date))
+  mutate(Date = date(Date)) %>%
+  ggplot() + 
+  geom_line(mapping = aes(x = Date, y = HSI.Adjusted)) +
+  theme_bw()
 stock
 # chartSeries(stock, theme = chartTheme("white"),
 #            type = "line", log.scale = FALSE, TA = NULL)
