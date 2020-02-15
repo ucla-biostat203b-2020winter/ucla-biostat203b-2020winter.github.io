@@ -50,15 +50,18 @@ sheets_deauth()
 ```
 Import the `confirmed` sheet:
 ```{r, eval = FALSE}
-(confirmed <- read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 2))
+(confirmed <- 
+   read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 2))
 ```
 Import the `recovered` sheet:
 ```{r, eval = FALSE}
-(recovered <- read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 3))
+(recovered <- 
+   read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 3))
 ```
 Import the `death` sheet:
 ```{r, eval = FALSE}
-(death <- read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 4))
+(death <- 
+   read_sheet("1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo", sheet = 4))
 ```
 
 ## Import JHU SSE data on GitHub into R
@@ -111,7 +114,8 @@ ncov_tbl %>% print(width = Inf)
 
 Other sources of data:  
 - Tencent (in Chinese): <https://news.qq.com/zt2020/page/feiyan.htm>  
-- R package `nCov2019`; install by `remotes::install_github("GuangchuangYu/nCov2019")`  
+- R package `nCov2019`; install by `remotes::install_github("GuangchuangYu/nCov2019")`   
+- Shiny app [`coronavirus`](https://github.com/JohnCoene/coronavirus)   
 
 ## Mapping China provinces
 
@@ -165,9 +169,8 @@ chn_map <- st_read("./bou2_4p.shp", as_tibble = TRUE) %>%
   mutate(NAME = iconv(NAME, from = "GBK"),
          BOU2_4M_ = as.integer(BOU2_4M_),
          BOU2_4M_ID = as.integer(BOU2_4M_ID)) %>%
-  mutate(NAME = str_replace_na(NAME, replacement = "澳门特别行政区"))
-class(chn_map)
-chn_map
+  mutate(NAME = str_replace_na(NAME, replacement = "澳门特别行政区")) %>%
+  print()
 ```
 There are about 34 provinces in China, why there are 925 areas?
 ```{r}
@@ -309,7 +312,7 @@ ncov_tbl %>%
   group_by(`Province/State`) %>%  
   top_n(1, time) %>% # take the latest count on that date
   right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
-  ggplot() + 
+  ggplot() +
   geom_sf(mapping = aes(fill = !!sym(count), geometry = geometry)) +
   # scale_fill_gradient(low = "white",
   #                     high = "red",
@@ -319,7 +322,7 @@ ncov_tbl %>%
   #                     name = "") +
   scale_fill_gradientn(colors = wes_palette("Zissou1", 100, type = "continuous"),
                        trans = "log10") + # can we find a better palette
-  #scale_fill_brewer(palette = "Dark2") + 
+  # #scale_fill_brewer(palette = "Dark2") + 
   theme_bw() +
   labs(title = str_c(count, " cases"), subtitle = plotdate)
 ```
@@ -338,7 +341,6 @@ Resources about making animations in R:
 ```{r}
 ncov_tbl %>%
   filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
-#  group_by(`Province/State`) %>%  
   right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
   print()
 ```
@@ -348,7 +350,7 @@ Plot the date at all time points (this takes long, a couple minutes):
 library(gganimate)
 library(transformr)
 
-(p <- ncov_tbl %>%
+(p <- ncov_tbl %>%  
   filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
   right_join(chn_prov, by = c("Province/State" = "NAME_ENG")) %>%
   ggplot() + 
@@ -371,6 +373,9 @@ Make animation and save as gif (this takes long, a couple minutes)
   labs(title = "Confirmed Cases", subtitle = "Date: {frame_time}"))
 anim_save("confirmed_anim.gif")
 ```
+<p align="center">
+  <img src="./confirmed_anim.gif">
+</p>
 
 ## Impact on economy
 
@@ -380,10 +385,12 @@ stock <- getSymbols("^HSI", # S&P 500 (^GSPC), Dow Jones (^DJI), NASDAQ (^IXIC),
                     src = "yahoo", 
                     auto.assign = FALSE, 
                     from = min(ncov_tbl$time),
-                    to = max(ncov_tbl$time)) %>% as_tibble(rownames = NA)
+                    to = max(ncov_tbl$time)) %>% 
+  as_tibble(rownames = "Date") %>%
+  mutate(Date = date(Date))
 stock
-chartSeries(stock, theme = chartTheme("white"),
-           type = "line", log.scale = FALSE, TA = NULL)
+# chartSeries(stock, theme = chartTheme("white"),
+#            type = "line", log.scale = FALSE, TA = NULL)
 ```
 
 ## Mapping countries
