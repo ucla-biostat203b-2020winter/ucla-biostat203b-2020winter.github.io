@@ -18,6 +18,11 @@ knitr::opts_chunk$set(echo = TRUE)
 <img src="./data-scientist-datacamp.jpg" width="400">
 </p>
 
+Post: <https://towardsdatascience.com/find-your-first-job-as-a-data-scientist-81e4401fe5bf>
+<p align="center">
+<img src="./first_ds_job.png" width="400">
+</p>
+
 # A typical data science project:
 
 <p align="center">
