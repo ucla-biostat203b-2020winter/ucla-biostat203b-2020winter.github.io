@@ -48,3 +48,6 @@ hw?sol.html
 tidy_files/
 ggplot2_files/
 dplyr_files/
+
+# SQLite databases
+.sqlite

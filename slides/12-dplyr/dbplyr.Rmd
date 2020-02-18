@@ -18,11 +18,11 @@ knitr::opts_chunk$set(fig.width = 5, fig.height = 3.5, fig.align = 'center',
 
 ## Introduction
 
-In this lecture we follow a [tutorial](http://www2.stat.duke.edu/~cr173/Sta523_Fa17/bigish_data.html) by Dr. Colin Rundel to handle a bigish data set. We will learn:
+In this lecture we will learn:
 
-- Import data from a bigish csv file.
+- Import data from bigish csv files (MIMIC-III).
 
-- Tidy data. 
+- Tidy data (TODO). 
 
 - Deposit data into an SQLite database.
 
@@ -35,202 +35,132 @@ In this lecture we follow a [tutorial](http://www2.stat.duke.edu/~cr173/Sta523_F
 ```{r}
 sessionInfo()
 ```
+```{r}
+library(tidyverse)
+```
 
 ## CSV file
 
-The `/home/m280data/nyc_parking/NYParkingViolations.csv` file on teaching server contains information about parking tickets in NYC. You can create a symbolic link to the data file by Bash command
+The `/home/203bdata/mimic-iii` folder on the teaching server contains the MIMIC-III data. On my Mac, it's at `/Users/huazhou/Google Drive/mimic/mimic-iii`.
 ```{bash, eval = (Sys.info()[["sysname"]] == "Linux")}
-ln -sf /home/m280data/nyc_parking/NYParkingViolations.csv NYParkingViolations.csv
+# On teaching server
+ls -l /home/203bdata/mimic-iii
+```
+```{bash, eval = (Sys.info()[["sysname"]] == "Darwin")}
+# On my MacBook
+ls -l /Users/huazhou/Google\ Drive/mimic/mimic-iii
+```
+```{r}
+datafolder <- ifelse(Sys.info()[["sysname"]] == "Linux",
+                    "/home/203bdata/mimic-iii",
+                    "/Users/huazhou/Google\ Drive/mimic/mimic-iii")
+list.files(datafolder, full.names = TRUE, patter = "*.csv")
 ```
 
-The CSV file is about 1.7GB
-```{bash}
-ls -l NYParkingViolations.csv
-```
+## Read csv file: `read.csv()` vs `read_csv()` (tidyverse) vs data.table
 
-How many rows?
-```{bash}
-wc -l < NYParkingViolations.csv
-```
+First let's compare different approaches for reading CSV files.
 
-First few lines:
-```{bash}
-head -5 NYParkingViolations.csv
-```
-
-## Read csv file
-
-- `read.csv()` function in base R takes nearly 3-4 minutes to read in the 1.7GB csv file:
+- `read.csv()` function in base R takes about 1 minute to read in the 500MB csv file `DATETIMEEVENTS.csv`:
     ```{r}
-    system.time(read.csv("NYParkingViolations.csv"))
+    csvfile <- str_c(datafolder, "/DATETIMEEVENTS.csv")
+    system.time(read.csv(csvfile))
     ```
 
-- data.table is an R package for reading large data sets:
+- `data.table` is an R package for reading large data sets. It's much faster to read the same file (about 8 seconds). The result is of type `data.table` and `data.frame`.
     ```{r}
     library(data.table)
-    system.time({nyc = fread("NYParkingViolations.csv")})
-    class(nyc)
-    nyc = as.data.frame(nyc)
-    class(nyc)    
+    system.time({chartevents <- fread(csvfile)})
+    class(chartevents)
+    chartevents
     ```
 
-- `read_csv()` function in tidyverse is 4-5 times faster than base R:
+- `read_csv()` function in tidyverse takes about 6-7 seconds:
     ```{r}
-    library("tidyverse")
-    system.time({nyc = read_csv("NYParkingViolations.csv")})
-    nyc
+    system.time({chartevents <- read_csv(csvfile)})
+    class(chartevents)
+    chartevents %>% print(width = Inf)
     ```
+## Read all CSVs and deposit to a SQLite database
 
-## Fix column names
-
-```{r}
-names(nyc) <- str_replace_all(names(nyc), " ", "_")
-nyc
-```
-
-## Simplifying
-
-We make a smaller data set with selected variables:
-```{r}
-# magrittr for %<>%
-library("magrittr")
-(nyc %<>% 
-  select(Registration_State:Issuing_Agency, 
-         Violation_Location, Violation_Precinct, Violation_Time,
-         Number:Intersecting_Street, Vehicle_Color))
-```
-
-## Fix dates
-
-Hadley Wickham's lubridate package facilitates handling date and time. Read [Chapter 16](http://r4ds.had.co.nz/dates-and-times.html) of _R for Data Science_ for more information.
-
-Make variable `Issue_Date` of date-time type:
-```{r}
-library("lubridate")
-class(nyc$Issue_Date)
-nyc %<>% mutate(Issue_Date = mdy(Issue_Date))
-class(nyc$Issue_Date)
-nyc
-```
-
-Only keep data in years 2013-4.
-```{r}
-range(nyc$Issue_Date)
-nyc$Issue_Date %>% year() %>% table()
-filter(nyc, Issue_Date >= mdy("1/1/2013"), Issue_Date <= mdy("12/31/2014"))
-```
-
-## Putting it all together
-
-```{r}
-system.time({
-  nyc <- read_csv("NYParkingViolations.csv") %>%
-    setNames(str_replace_all(names(.)," ", "_")) %>%
-    select(Registration_State:Issuing_Agency, 
-         Violation_Location, Violation_Precinct, Violation_Time,
-         Number:Intersecting_Street, Vehicle_Color) %>%
-    mutate(Issue_Date = mdy(Issue_Date)) %>% 
-    mutate(Issue_Day = day(Issue_Date),
-           Issue_Month = month(Issue_Date),
-           Issue_Year = year(Issue_Date),
-           Issue_WDay = wday(Issue_Date, label=TRUE)) %>%
-    filter(Issue_Year %in% 2013:2014)  
-})
-nyc
-```
-
-## Ticket frequency
-
-```{r}
-nyc %>% 
-  group_by(Issue_Date) %>% 
-  summarize(n = n()) %>%
-  ggplot(aes(x = Issue_Date, y = n)) + 
-    geom_line() + 
-    xlim(mdy("7/1/2013"), mdy("6/30/2014"))
-```
-
-## Create an SQLite database
-
-Import the `nyc` data set into the SQLite database:
+Create a SQLite database file called `mimiciii.sqlite`.
 ```{r}
 library("DBI")
 library("RSQLite")
-library("tidyverse")
+con = dbConnect(RSQLite::SQLite(), "mimiciii.sqlite")
+str(con)
 ```
 
-```{r, eval=FALSE}
-if (Sys.info()[["sysname"]] == "Linux") {
-  db <- dbConnect(RSQLite::SQLite(), 
-                  dbname = "/home/m280data/nyc_parking/NYParkingViolations.sqlite")
-} else if (Sys.info()[["sysname"]] == "Darwin") {
-  db <- dbConnect(RSQLite::SQLite(), 
-                  dbname = "./NYParkingViolations.sqlite")
-}
-dbWriteTable(db, "nyc", nyc, overwrite = TRUE)
-dbListTables(db)
-dbDisconnect(db)
-```
-You can create a symbolic link to the database file by Bash command
-```{bash, eval = (Sys.info()[["sysname"]] == "Linux")}
-ln -sf /home/m280data/nyc_parking/NYParkingViolations.sqlite NYParkingViolations.sqlite
-```
 
-Size of the database file
+Because of excellent efficiency of `data.table` packages, we use it to read all CSVs and deposit into `mimiciii.sqlite`. **Do not run this chunk by yourself on teaching server.** This takes a couple minutes.
+```{r, eval = (!file.exists("mimiciii.sqlite") | file.size("mimiciii.sqlite") == 0)}
+datafolder
+csv_names <- list.files(datafolder)
+csv_names <- csv_names[str_detect(csv_names, "csv")]
+csv_names
+system.time({
+for (table_name in csv_names) {
+    csv_name <- str_c(datafolder, "/", table_name)
+    tmp <- fread(csv_name)
+    table_name <- str_remove(table_name, ".csv")
+    dbWriteTable(con, table_name, tmp, overwrite = TRUE)
+}})
+```
+```{r}
+# list tables in database
+dbListTables(con)
+# disconnect from database
+dbDisconnect(con)
+```
+The resultant database file `mimiciii.sqlite` has size 10.4GB.
 ```{bash}
-ls -l NYParkingViolations.sqlite
+ls -l mimiciii.sqlite
 ```
 
 ## Read data from database
 
-Connect to table in database:
+Connect to the database `mimiciii.sqlite` and list the tables:
 ```{r}
-db <- dbConnect(RSQLite::SQLite(), dbname = "./NYParkingViolations.sqlite")
-dbListTables(db)
-nyc_sql <- dplyr::tbl(db, "nyc")
-str(nyc_sql)
-nyc_sql %>% print(width = Inf)
+con <- dbConnect(RSQLite::SQLite(), dbname = "./mimiciii.sqlite")
+dbListTables(con)
 ```
-
+Read the table `CHARTEVENTS`:
+```{r}
+charteevents <- tbl(con, "CHARTEVENTS")
+class(charteevents)
+charteevents %>% print(width = Inf)
+```
 ## Use dplyr with SQLite
 
+Retrieve chart events of `SUBJECT_ID` beetween 23 and 164:
 ```{r}
-addr <- nyc_sql %>%
-  select(Issue_Date, Issuing_Agency, Violation_Precinct, Number, Street) %>%
-  filter(Violation_Precinct >= 1, Violation_Precinct <= 34)
-addr
+chartevents_subset <- charteevents %>%
+  select(ROW_ID, SUBJECT_ID, HADM_ID, ITEMID, ITEMID) %>%
+  filter(SUBJECT_ID >= 23, SUBJECT_ID <= 165)
+chartevents_subset
 ```
 
 ## SQL query
 
 ```{r}
-class(addr)
-show_query(addr)
-```
-
-## Mutate and summarise
-
-```{r}
-addr %>% mutate(address = paste(Number, Street))
-```
-```{r}
-addr %>% summarize(mean = mean(Violation_Precinct, na.rm = TRUE))
+class(chartevents_subset)
+show_query(chartevents_subset)
 ```
 
 ## SQL grouping
 
 ```{r}
-addr %>% 
-  group_by(Issuing_Agency, Violation_Precinct) %>% 
-  summarize(n = n())
+charteevents %>%
+  group_by(SUBJECT_ID) %>%
+  summarise(n = n())
 ```
 
 ## SQL query
 
 ```{r}
-addr %>% 
-  group_by(Issuing_Agency, Violation_Precinct) %>% 
-  summarize(n = n()) %>% 
+charteevents %>%
+  group_by(SUBJECT_ID) %>%
+  summarise(n = n()) %>%
   show_query()
 ```
 
@@ -249,28 +179,33 @@ translate_sql(mean(x, na.rm = TRUE))
 
 ## Timings
 
-dplyr using tibble:
+Let's compare the timings of dplyr (in-momory) and dbplyr (on disk database).
+
+- dplyr using tibble:
 ```{r}
+csvfile <- str_c(datafolder, "/DATETIMEEVENTS.csv")
+dtevents_tibble <- read_csv(csvfile)
 system.time(
-  nyc %>%
-    select(Issue_Date, Issuing_Agency, Violation_Precinct, Number, Street) %>%
-    filter(Violation_Precinct >=1, Violation_Precinct <= 34) %>%
-    group_by(Issuing_Agency, Violation_Precinct) %>%
-    summarize(n = n())
+  dtevents_tibble %>%
+  select(ROW_ID, SUBJECT_ID, HADM_ID, ITEMID, ITEMID) %>%
+  # filter(SUBJECT_ID >= 23, SUBJECT_ID <= 165) %>%
+  group_by(SUBJECT_ID) %>%
+  summarize(n = n())
 )
 ```
-dplyr using SQLite:
+- dplyr using SQLite:
 ```{r}
+dtevents_sql <- tbl(con, "DATETIMEEVENTS")
 system.time(
-  nyc_sql %>%
-    select(Issue_Date, Issuing_Agency, Violation_Precinct, Number, Street) %>%
-    filter(Violation_Precinct >=1, Violation_Precinct <= 34) %>%
-    group_by(Issuing_Agency, Violation_Precinct) %>%
-    summarize(n = n())
+  dtevents_sql %>%
+  select(ROW_ID, SUBJECT_ID, HADM_ID, ITEMID, ITEMID) %>%
+  # filter(SUBJECT_ID >= 23, SUBJECT_ID <= 165) %>%
+  group_by(SUBJECT_ID) %>%
+  summarize(n = n())
 )
 ```
 
-`nyc_sql` was 30x times faster than `nyc`, but the former is disk based while the latter is in memory. Why is the discrepancy?
+SQLite (0.08 seconds) was much faster than tibble (0.25 seconds). But SQLitee is disk-based, while the tibble is in memory. Why is the discrepancy?
 
 ## Laziness
 
@@ -287,10 +222,10 @@ dplyr/dbplyr uses lazy evaluation as much as possible, particularly when working
     - and unless explicitly told to, will only query a handful of rows to give a sense of what the result will look like
     
 ```{r}
-nyc_sql %>%
-  select(Issue_Date, Issuing_Agency, Violation_Precinct, Number, Street) %>%
-  filter(Violation_Precinct >=1, Violation_Precinct <= 34) %>%
-  group_by(Issuing_Agency, Violation_Precinct) %>%
+dtevents_sql %>%
+  select(ROW_ID, SUBJECT_ID, HADM_ID, ITEMID, ITEMID) %>%
+  # filter(SUBJECT_ID >= 23, SUBJECT_ID <= 165) %>%
+  group_by(SUBJECT_ID) %>%
   summarize(n = n())
 ```
 
@@ -299,12 +234,12 @@ nyc_sql %>%
 To force a full query and return a complete table it is necessary to use the `collect` function.
 ```{r}
 system.time(
-  nyc_sql %>%
-    select(Issue_Date, Issuing_Agency, Violation_Precinct, Number, Street) %>%
-    filter(Violation_Precinct >=1, Violation_Precinct <= 34) %>%
-    group_by(Issuing_Agency, Violation_Precinct) %>%
-    summarize(n = n()) %>%
-    collect()
+  dtevents_sql %>%
+  select(ROW_ID, SUBJECT_ID, HADM_ID, ITEMID, ITEMID) %>%
+  # filter(SUBJECT_ID >= 23, SUBJECT_ID <= 165) %>%
+  group_by(SUBJECT_ID) %>%
+  summarize(n = n()) %>%
+  collect()
 )
 ```
 
@@ -312,22 +247,22 @@ system.time(
 
 ### Bar plot
 
-Suppose we want the bar plot of number of tickets on each weekday. We encounter error (???) with the usual ggplot2 command:
-```{r, error = TRUE}
-nyc_sql %>%
-  ggplot() + 
-    geom_bar(aes(x = Issue_WDay))
-```
-Apparently current version of ggplot2 (v3.1.0) works for `tbl_dbi/tbl_sql/tbl_lazy` now. 
-
-Older version of ggplot2, e.g., v2.2.1, will output error. This is becasue ggplot2 needed to compute the count per category by going through all the rows. But here `nyc_sql` is just a pointer to the SQLite table. We have to use the **transform in database, plot in R** strategy.
+Suppose we want the bar plot of number of tickets on each weekday.
 ```{r}
-nyc_sql %>%
-  group_by(Issue_WDay) %>%
-  count() %>%
+chartevents %>%
+  count(SUBJECT_ID) %>%
+  ggplot() + 
+  geom_histogram(mapping = aes(x = n))
+```
+Apparently current version of ggplot2 (v3.2.1) works for `tbl_dbi/tbl_sql/tbl_lazy` now. 
+
+Older version of ggplot2, e.g., v2.2.1, will output error. This is becasue ggplot2 needed to compute the count per bin by going through all the rows. But here `charteevents` is just a pointer to the SQLite table. We had to use the **transform in database, plot in R** strategy.
+```{r}
+chartevents %>%
+  count(SUBJECT_ID) %>%
   collect() %>%
   ggplot() + 
-    geom_col(aes(x = Issue_WDay, y = n))
+  geom_histogram(mapping = aes(x = n))
 ```
 
 ### Other plots
@@ -337,5 +272,5 @@ For example of making histogram and raster plot, read tutorial  <https://db.rstu
 ## Close connection to database
 
 ```{r}
-dbDisconnect(db)
+dbDisconnect(con)
 ```
