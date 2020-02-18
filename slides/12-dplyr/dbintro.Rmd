@@ -12,6 +12,18 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Data scientist
+
+<p align="center">
+<img src="./data-scientist-datacamp.jpg" width="400">
+</p>
+
+# A typical data science project:
+
+<p align="center">
+<img src="./data-science.png" height="300">
+</p>
+
 ## Acknowledgement
 
 Much material in this lecture is adpated from <http://www2.stat.duke.edu/~cr173/Sta523_Fa17/sql.html> and <http://www2.stat.duke.edu/~cr173/Sta523_Fa17/bigish_data.html>.
@@ -31,15 +43,15 @@ Much material in this lecture is adpated from <http://www2.stat.duke.edu/~cr173/
 > Key to high performance is effective use of memory hierarchy. True on all architectures.
 
 <p align="center">
-<img src="./macpro-inside.png" height="125">
+<img src="./macpro-inside.png" height="250">
 </p>
 
 <p align="center">
-<img src="./cpu_i7_die.png" height="125">
+<img src="./cpu_i7_die.png" height="250">
 </p>
 
 <p align="center">
-<img src="./memory_hierarchy.png" height="125">
+<img src="./memory_hierarchy.png" height="250">
 </p>
 
 
@@ -116,7 +128,7 @@ We can do much better if we are careful about how we structure our data, specifi
 
 ## SQL
 
-**S**tructured **Q**uery **L**anguage is a special purpose language for interacting with (querying and modifying) these indexed tabular data structures.
+**S**tructured **Q**uery **L**anguage (SQL) is a special purpose language for interacting with (querying and modifying) these indexed tabular data structures.
 
 * ANSI Standard but with some dialect divergence.
 
@@ -127,7 +139,7 @@ We can do much better if we are careful about how we structure our data, specifi
 ## Access databases from R
 
 <p align="center">
-<img src="./open-source-db.png" height="50">
+<img src="./open-source-db.png" height="200">
 </p>
 
 - dplyr package supports a variety of databases. 
@@ -145,12 +157,12 @@ We can do much better if we are careful about how we structure our data, specifi
 
 ## Create a SQLite database
 
-Create a SQLite database `employee.sqlite` (or _in memory_) for learning purpose.
+Create a SQLite database `employee.sqlite` on disk (or _in memory_) for learning purpose.
 ```{r}
 library("DBI")
 library("RSQLite")
 con = dbConnect(RSQLite::SQLite(), "employee.sqlite")
-#con = dbConnect(RSQLite::SQLite(), ":memory:")
+# con = dbConnect(RSQLite::SQLite(), ":memory:")
 str(con)
 ```
 
@@ -222,6 +234,8 @@ dbListTables(con)
 knitr::opts_chunk$set(connection = "con")
 ```
 
+Below we demonstrate some common SQL queries. 
+
 ## SELECT statements
 
 ```{sql}
@@ -252,39 +266,44 @@ SELECT name AS first_name, salary FROM employees ORDER BY salary DESC;
 ## Filter via WHERE
 
 ```{sql}
-SELECT * FROM employees WHERE salary < 40000
+SELECT * FROM employees WHERE salary < 40000;
 ```
 
 ## Group_by via GROUP BY
 
+First record in each group.
 ```{sql}
 SELECT * FROM employees GROUP BY dept;
 ```
 
 ## Head via LIMIT
 
+First 3 records:
 ```{sql}
 SELECT * FROM employees LIMIT 3;
 ```
+Last 3 records:
 ```{sql}
 SELECT * FROM employees ORDER BY name DESC LIMIT 3;
 ```
 
 ## Join two tables (default)
 
-By default SQLite uses a `CROSS JOIN` which is not terribly useful
+By default SQLite uses a `CROSS JOIN` (all row combinations) which is not terribly useful. Note only first 10 rows of results are shown.
 ```{sql}
 SELECT * FROM employees JOIN phone;
 ```
 
 ## Inner join by NATURAL
 
+By default, the common variable `name` is used as key.
 ```{sql}
 SELECT * FROM employees NATURAL JOIN phone;
 ```
 
 ## Inner join - explicit
 
+Explicitly specify key.
 ```{sql}
 SELECT * FROM employees JOIN phone ON employees.name = phone.name;
 ```
