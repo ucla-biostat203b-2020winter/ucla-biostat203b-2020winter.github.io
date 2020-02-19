@@ -70,16 +70,16 @@ First let's compare different approaches for reading CSV files.
 - `data.table` is an R package for reading large data sets. It's much faster to read the same file (about 8 seconds). The result is of type `data.table` and `data.frame`.
     ```{r}
     library(data.table)
-    system.time({chartevents <- fread(csvfile)})
-    class(chartevents)
-    chartevents
+    system.time({dtevents <- fread(csvfile)})
+    class(dtevents)
+    dtevents
     ```
 
 - `read_csv()` function in tidyverse takes about 6-7 seconds:
     ```{r}
-    system.time({chartevents <- read_csv(csvfile)})
-    class(chartevents)
-    chartevents %>% print(width = Inf)
+    system.time({dtevents <- read_csv(csvfile)})
+    class(dtevents)
+    dtevents %>% print(width = Inf)
     ```
 ## Read all CSVs and deposit to a SQLite database
 
@@ -126,15 +126,15 @@ dbListTables(con)
 ```
 Read the table `CHARTEVENTS`:
 ```{r}
-charteevents <- tbl(con, "CHARTEVENTS")
-class(charteevents)
-charteevents %>% print(width = Inf)
+chartevents <- tbl(con, "CHARTEVENTS")
+class(chartevents)
+chartevents %>% print(width = Inf)
 ```
 ## Use dplyr with SQLite
 
 Retrieve chart events of `SUBJECT_ID` beetween 23 and 164:
 ```{r}
-chartevents_subset <- charteevents %>%
+chartevents_subset <- chartevents %>%
   select(ROW_ID, SUBJECT_ID, HADM_ID, ITEMID, ITEMID) %>%
   filter(SUBJECT_ID >= 23, SUBJECT_ID <= 165)
 chartevents_subset
@@ -150,7 +150,7 @@ show_query(chartevents_subset)
 ## SQL grouping
 
 ```{r}
-charteevents %>%
+chartevents %>%
   group_by(SUBJECT_ID) %>%
   summarise(n = n())
 ```
@@ -158,7 +158,7 @@ charteevents %>%
 ## SQL query
 
 ```{r}
-charteevents %>%
+chartevents %>%
   group_by(SUBJECT_ID) %>%
   summarise(n = n()) %>%
   show_query()
@@ -247,7 +247,7 @@ system.time(
 
 ### Bar plot
 
-Suppose we want the bar plot of number of tickets on each weekday.
+Suppose we want the bar plot of number of datetime events on each `SUBJECT_ID`.
 ```{r}
 chartevents %>%
   count(SUBJECT_ID) %>%
@@ -256,7 +256,7 @@ chartevents %>%
 ```
 Apparently current version of ggplot2 (v3.2.1) works for `tbl_dbi/tbl_sql/tbl_lazy` now. 
 
-Older version of ggplot2, e.g., v2.2.1, will output error. This is becasue ggplot2 needed to compute the count per bin by going through all the rows. But here `charteevents` is just a pointer to the SQLite table. We had to use the **transform in database, plot in R** strategy.
+Older version of ggplot2, e.g., v2.2.1, will output error. This is becasue ggplot2 needed to compute the count per bin by going through all the rows. But here `chartevents` is just a pointer to the SQLite table. We had to use the **transform in database, plot in R** strategy.
 ```{r}
 chartevents %>%
   count(SUBJECT_ID) %>%
