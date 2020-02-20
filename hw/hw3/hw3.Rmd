@@ -34,6 +34,7 @@ Below is some data exploration, which may help you get started. You do _not_ hav
 ```{r include=FALSE}
 library(tidyverse)
 library(lubridate)
+library(fs)
 ```
 
 ## Import JHU Google Sheets into R - **EXPIRED on Feb 11**
@@ -332,7 +333,8 @@ ncov_tbl %>%
   labs(title = str_c(case, " cases"), subtitle = plotdate)
 ```
 
-To plot the line graph of confirmed cases over time:
+
+To plot the line graph of confirmed cases over time. You can do an animization of this over time.
 ```{r}
 ncov_tbl %>%
   filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan")) %>%
@@ -340,11 +342,25 @@ ncov_tbl %>%
   summarise(total_count = sum(Count)) %>%
   # print()
   ggplot() +
-  geom_line(mapping = aes(x = Date, y = total_count, color = Case)) +
+  geom_line(mapping = aes(x = Date, y = total_count, color = Case), size = 2) + 
   scale_color_manual(values = c("blue", "black", "green")) + 
-  scale_y_log10() +
+  scale_y_log10() + 
   labs(y = "Count") + 
   theme_bw()
+```
+
+Counts by province on a specific date. Do an animation on date.
+```{r}
+date <- "2020-02-18"
+ncov_tbl %>%
+  filter(`Country/Region` %in% c("Mainland China", "Macau", "Hong Kong", "Taiwan"), 
+         `Date` == date) %>%
+  group_by(`Province/State`) %>%
+  ggplot() +
+  geom_col(mapping = aes(x = `Province/State`, y = `Count`, fill = `Case`)) + 
+  scale_y_log10() +
+  labs(title = date) + 
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
 ## Animation
@@ -362,7 +378,7 @@ ncov_tbl %>%
 ```
 
 Plot the date at all time points (this takes long, a couple minutes):
-```{r}
+```{r, eval = !file.exists("confirmed_anim.gif") | (file_info("confirmed_anim.gif") %>% pull(modification_time) %>% date() < today())}
 library(gganimate)
 library(transformr)
 
@@ -386,7 +402,7 @@ case = "confirmed"
   labs(title = str_c(case, " cases")))
 ```
 Make animation and save as gif (this takes long, a couple minutes)
-```{r}
+```{r, eval = !file_exists("confirmed_anim.gif") | (file_info("confirmed_anim.gif") %>% pull(modification_time) %>% date() < today())}
 (anim <- p + 
   transition_time(Date) + 
   labs(title = "Confirmed Cases", subtitle = "Date: {frame_time}"))
