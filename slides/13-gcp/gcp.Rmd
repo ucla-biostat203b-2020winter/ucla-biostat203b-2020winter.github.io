@@ -282,9 +282,12 @@ su - username
 
 ### Install R packages
 
-- Install R packages using `install.packages()` function in R. 
+- Install R packages using `install.packages()` function in R. Install as superuser will make packages availalbe to all users on this instance. For example,
+```{r, eval = FALSE}
+sudo R -e 'install.packages("tidyverse")'
+```
 
-- Install as superuser will make packages availalbe to all users on this instance.
+- To set the CRAN mirror globally, we write following lines into the `/usr/lib64/R/etc/Rprofile.site` file: `options(repos = c(CRAN = "https://cran.rstudio.com"))`.
 
 - When installing R packages, it often fails because certain Linux libraries are absent. 
 
