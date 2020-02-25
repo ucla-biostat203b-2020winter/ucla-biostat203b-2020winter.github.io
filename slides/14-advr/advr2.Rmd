@@ -212,7 +212,7 @@ My suggestion: avoid all these hassles of **two language problem**, just use Jul
     1. Option 1: Manually run multiple R sessions.
 
     2. Option 2: Make multiple `system("Rscript")` calls. Typically automated
-by a scripting language (Python, Perl, shell script) or within R (HW1 Q3.  
+by a scripting language (Python, Perl, shell script) or within R (HW1 Q34)  
 
     3. Option 3: Use package `parallel`. 
 
@@ -367,7 +367,8 @@ simres3
 
 Learning resources:  
 -
- Book _[R Packages_ ](http://r-pkgs.had.co.nz)by Hadley Wickham  
+-Book _[R Packages_ ](http://r-pkgs.had.co.nz)by Hadley Wickham  
 -
- RStudio tutorial: <https://support.rstudio.com/hc/en-us/articles/200486488-Developing-Packages-with-RStudio>
+
+RStudio tutorial: <https://support.rstudio.com/hc/en-us/articles/200486488-Developing-Packages-with-RStudio>
 
