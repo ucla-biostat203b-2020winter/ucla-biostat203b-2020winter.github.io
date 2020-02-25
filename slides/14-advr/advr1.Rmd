@@ -21,7 +21,7 @@ sessionInfo()
 
 ## _Advanced R_
 
-To gain a deep understanding of how R works, the book [Advanced R](http://adv-r.had.co.nz) by Hadley Wickham is a must read. Read **now** to save numerous hours you might waste in future.
+To gain a deep understanding of how R works, the book [Advanced R](https://adv-r.hadley.nz) by Hadley Wickham is a must read. Read **now** to save numerous hours you might waste in future.
 
 We cover select topics on coding style, benchmarking, profiling, debugging, parallel computing, byte code compiling, Rcpp, and package development.
 
@@ -29,14 +29,16 @@ We cover select topics on coding style, benchmarking, profiling, debugging, para
 
 - [Google's R style](https://google.github.io/styleguide/Rguide.xml).
 
-- [Hadley Wickham's style guide](http://adv-r.had.co.nz/Style.html).
+- [Hadley Wickham's tidyverse style guide](https://style.tidyverse.org).
 
 - Most important is to be consistent in your code style.
 
 ## Benchmark
 
 Sources:  
-- _Advanced R_: <http://adv-r.had.co.nz/Performance.html>  
+
+- _Advanced R_: <http://adv-r.had.co.nz/Performance.html>, <https://adv-r.hadley.nz/perf-measure.html#microbenchmarking>   
+
 - Blog: <http://www.alexejgossmann.com/benchmarking_r/>   
 
 In order to identify performance issue, we need to measure runtime accurately.
@@ -84,14 +86,35 @@ boxplot(mbm)
 autoplot(mbm)
 ```
 
+### `bench`
+
+The `bench` package is another tool for microbenchmarking. The output is a tibble:
+```{r}
+library(bench)
+
+(lb <- bench::mark(
+  sqrt(x),
+  x ^ 0.5,
+  exp(log(x) / 2)
+))
+```
+To visualize the result
+```{r}
+plot(lb)
+```
+It is colored according to GC (garbage collection) levels.
+
 ## Profiling
 
 > Premature optimization is the root of all evil (or at least most of it) in programming.  
 > -Don Knuth
 
 Sources:   
-- <http://adv-r.had.co.nz/Profiling.html>  
+
+- <https://adv-r.hadley.nz/perf-measure.html#profiling>  
+
 - <https://rstudio.github.io/profvis/>  
+
 - <https://support.rstudio.com/hc/en-us/articles/218221837-Profiling-with-RStudio>
 
 ### First example
@@ -229,9 +252,10 @@ Modularize big projects into small functions. Profile functions as early and as 
 ## Debugging
 
 Learning sources:  
+
 - Video: <https://vimeo.com/99375765>  
-- _Advanced R_: <http://adv-r.had.co.nz/Exceptions-Debugging.html>  
-- RStudio tutorial: <https://support.rstudio.com/hc/en-us/articles/205612627-Debugging-with-RStudio>  
+
+- _Advanced R_: <https://adv-r.hadley.nz/debugging.html>   
 
 Demo code: [parlindrome.R](https://raw.githubusercontent.com/Hua-Zhou/Hua-Zhou.github.io/master/teaching/biostatm280-2019winter/slides/15-advr/palindrome.R), [crazy-talk.R](https://github.com/Hua-Zhou/Hua-Zhou.github.io/blob/master/teaching/biostatm280-2019winter/slides/15-advr/crazy-talk.R).
 
