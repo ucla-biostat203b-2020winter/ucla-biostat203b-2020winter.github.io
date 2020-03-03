@@ -144,6 +144,48 @@ $$
 f(X) = \beta_0 + \sum_{m=1}^M \beta_m \sigma(\alpha_{m0} + \alpha_M^T X).
 $$
 
+## Expressivity of neural network
+
+- Playground: <http://playground.tensorflow.org>
+
+- Sources:  
+    - [On the expressive power of deep neural network](https://arxiv.org/abs/1606.05336).  
+    - [On the number of response regions of deep feed forward networks with piece-wise linear activations](https://arxiv.org/abs/1312.6098).  
+
+- Consider the function $F: \mathbb{R}^m \mapsto \mathbb{R}^n$
+$$
+F(\mathbf{v}) = \text{ReLU}(\mathbf{A} \mathbf{v} + \mathbf{b}).
+$$
+Each equation
+$$
+\mathbf{a}_i \mathbf{v} + b_i = 0
+$$
+creates a hyperplane in $\mathbb{R}^m$. ReLU creates a _fold_ along that hyperplane. There are a total of $n$ folds.  
+    - When there are $n=2$ hyperplanes in $\mathbb{R}^2$, 2 folds create 4 pieces.  
+    - When there are $n=3$ hyperplanes in $\mathbb{R}^2$, 3 folds create 7 pieces. 
+    
+- The number of linear pieces of $F$ and regions bounded by the $N$ hyperplanes is
+$$
+r(n, m) = \sum_{i=0}^m \binom{n}{i} = \binom{n}{0} + \cdots + \binom{n}{m}.
+$$
+
+    Proof: Induction using the recursion
+$$
+r(n, m) = r(n-1, m) + r(n-1, m-1).
+$$
+
+- Corollary:  
+    - When there are relatively few neurons $n \ll m$, 
+$$
+r(n,m) \approx 2^n.
+$$
+    - When there are many neurons $n \gg m$, 
+$$
+r(n,m) \approx \frac{n^m}{m!}.
+$$
+
+- Counting number of flat pieces with more hidden layers is much harder.
+
 ## Multi-layer neural network (MLP)
 
 - Aka multi-layer perceptron (MLP).
