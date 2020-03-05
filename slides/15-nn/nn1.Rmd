@@ -29,6 +29,8 @@ From [Wang and Raj (2017)](https://arxiv.org/pdf/1702.07800.pdf):
 ![](./wangraj-table1.png){width=500px}
 </p>
 
+The current AI wave came in 2012 when AlexNet (60 million parameters) cuts the error rate of ImageNet competition (classify 1.2 million natural images) by half.
+
 ## Learning sources
 
 - _Elements of Statistical Learning_ (ESL) Chapter 11: <https://web.stanford.edu/~hastie/ElemStatLearn/>.
@@ -64,13 +66,13 @@ Y_k &=& f_k(X) = g_k(T), \quad k = 1, \ldots, K.
     
     - $T=(T_1, \ldots, T_K)$ are the output features that are directly associated with the outputs $Y$ through output functions $g_k(\cdot)$.
     
-    - $g_k(T) = T$ for regression. $g_k(T) = e^{T_k} / \sum_{k=1}^K e^{T_k}$ for $K$-class classification (**softmax regression**).
+    - $g_k(T) = T_k$ for regression. $g_k(T) = e^{T_k} / \sum_{k=1}^K e^{T_k}$ for $K$-class classification (**softmax regression**).
     
     - Number of **weights** (parameters) is $M(p+1) + K(M+1)$.
     
 - **Activation function** $\sigma$:  
 
-    - $\sigma(v)=$ a step function: human brain models where each unit represents a neuron, and the connections represent synapses; the neurons fired when the total signal passed to that unit exceeded a certain threshold.
+    - $\sigma(v)=$ a **step function**: human brain models where each unit represents a neuron, and the connections represent synapses; the neurons fired when the total signal passed to that unit exceeded a certain threshold.
 
     - **Sigmoid** function:
     $$
@@ -80,7 +82,7 @@ Y_k &=& f_k(X) = g_k(T), \quad k = 1, \ldots, K.
     ![](./esl-fig-11-3.png){width=500px}
     </p>    
     
-    - **Rectifier**. $\sigma(v) = v_+ = max(0, v)$. A unit employing the rectifier is called a **rectified linear unit (ReLU)**. According to Wikipedia: _The rectifier is, as of 2018, the most popular activation function for deep neural networks_.    
+    - **Rectifier**. $\sigma(v) = v_+ = \max(0, v)$. A unit employing the rectifier is called a **rectified linear unit (ReLU)**. According to Wikipedia: _The rectifier is, as of 2018, the most popular activation function for deep neural networks_.    
 
     - **Softplus**. $\sigma(v) = \log (1 + \exp v)$.
 <p align="center">
@@ -91,13 +93,18 @@ Y_k &=& f_k(X) = g_k(T), \quad k = 1, \ldots, K.
 
     - Sum of squares error (SSE):
     $$
-      L = \sum_{k=1}^K \sum_{i=1}^n [y_{ik} - f_k(x_i)]^2.
+      L = \sum_{i=1}^n \sum_{k=1}^K [y_{ik} - f_k(x_i)]^2.
     $$
     
     - Cross-entropy (deviance):
     $$
-      L = - \sum_{k=1}^K \sum_{i=1}^n y_{ik} \log f_k(x_i).
+      L = - \sum_{i=1}^n \sum_{k=1}^K y_{ik} \log f_k(x_i).
     $$
+
+<p align="center">
+![](./gd.gif){width=400px}
+</p>
+[image source](https://towardsdatascience.com/https-medium-com-piotr-skalski92-deep-dive-into-deep-networks-math-17660bc376ba)
     
 - Model fitting: **back-propagation** (gradient descent)
 
@@ -158,9 +165,51 @@ $$
 ![](./ufldl-network-3322.png){width=400px}
 </p>
 
+## Expressivity of neural network
+
+- Playground: <http://playground.tensorflow.org>
+
+- Sources:  
+    - [On the expressive power of deep neural network](https://arxiv.org/abs/1606.05336).  
+    - [On the number of response regions of deep feed forward networks with piece-wise linear activations](https://arxiv.org/abs/1312.6098).  
+
+- Consider the function $F: \mathbb{R}^m \mapsto \mathbb{R}^n$
+$$
+F(\mathbf{v}) = \text{ReLU}(\mathbf{A} \mathbf{v} + \mathbf{b}).
+$$
+Each equation
+$$
+\mathbf{a}_i^T \mathbf{v} + b_i = 0
+$$
+creates a hyperplane in $\mathbb{R}^m$. ReLU creates a _fold_ along that hyperplane. There are a total of $n$ folds.  
+    - When there are $n=2$ hyperplanes in $\mathbb{R}^2$, 2 folds create 4 pieces.  
+    - When there are $n=3$ hyperplanes in $\mathbb{R}^2$, 3 folds create 7 pieces. 
+    
+- The number of linear pieces of $\mathbb{R}^m$ sliced by $n$ hyperplanes is
+$$
+r(n, m) = \sum_{i=0}^m \binom{n}{i} = \binom{n}{0} + \cdots + \binom{n}{m}.
+$$
+
+    Proof: Induction using the recursion
+$$
+r(n, m) = r(n-1, m) + r(n-1, m-1).
+$$
+
+- Corollary:  
+    - When there are relatively few neurons $n \ll m$, 
+$$
+r(n,m) \approx 2^n.
+$$
+    - When there are many neurons $n \gg m$, 
+$$
+r(n,m) \approx \frac{n^m}{m!}.
+$$
+
+- Counting the number of flat pieces with more hidden layers is much harder.
+
 ## Universal approximation properties
 
-- Boolean Approximation: an MLP of one hidden layer1 can represent any boolean function exactly.
+- Boolean Approximation: an MLP of one hidden layer can represent any boolean function exactly.
 
 - Continuous Approximation: an MLP of one hidden layer can approximate any bounded continuous function with arbitrary accuracy.
 
@@ -171,6 +220,12 @@ $$
 Neural networks are **not a fully automatic tool**, as they are sometimes advertised; as with all statistical models, subject matter knowledge should and often be used to improve their performance.
 
 - Starting values: usually starting values for weights are chosen to be random values near zero; hence the model starts out nearly linear (for sigmoid), and becomes nonlinear as the weights increase.
+
+    [Hanin and Rolnick](https://arxiv.org/abs/1803.01719) argue that a proper choice of the net and the initial random weights have to meet two requirements:  
+    1. Initial weights have carefully chosen variance $\sigma^2$, which controls the mean of the computed weights. The `He uniform` in Keras makes the choice $\sigma^2 = 2 / \text{fan-in}$, where the fan-in is the maximum number of inputs to neurons.    
+    2. The hidden layers in the neural net have enough neurons (not too narrow). The layer widths control the variance of the weighs.   
+
+- Scaling of inputs: mean 0 and standard deviation 1. With standardized inputs, it is typical to take random uniform weights over the range [−0.7,+0.7].
     
 - Overfitting (too many parameters):
     1. early stopping; 
@@ -185,8 +240,6 @@ Neural networks are **not a fully automatic tool**, as they are sometimes advert
 </p>
 Figure from [Srivastava, Hinton, Krizhevsky, Sutskever, and Salakhutdinov (2014)](https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf).
 
-- Scaling of inputs: mean 0 and standard deviation 1. With standardized inputs, it is typical to take random uniform weights over the range [−0.7,+0.7].
-    
 - How many hidden units and how many hidden layers: guided by domain knowledge and experimentation.
     
 - Multiple minima: try with different starting values.
@@ -198,7 +251,7 @@ Sources: <https://colah.github.io/posts/2014-07-Conv-Nets-Modular/>
 ![](./fully-vs-locally-connected-network.png){width=500px}
 </p>
 
-- **Fully connected networks** don't scale well with dimension of input images. E.g. $96 \times 96$ images have about $10^4$ input units, and assuming you want to learn 100 features, you have about $10^6$ parameters to learn.
+- **Fully connected networks** don't scale well with dimension of input images. E.g. $1000 \times 1000$ images have about $10^6$ input units, and assuming you want to learn 1 million features (hidden units), you have about $10^{12}$ parameters to learn!
 
 - In **locally connected networks**, each hidden unit only connects to a small contiguous region of pixels in the input, e.g., a patch of image or a time span of the input audio.
 
@@ -215,7 +268,7 @@ Sources: <https://colah.github.io/posts/2014-07-Conv-Nets-Modular/>
     </p>
     
 
-- **Pooling**. For a neural network with 100 hidden units, we have $89^2 \times 100 = 792,100$ convolved features. This can be reduced by calculating the mean (or max) vale of a particular feature over a region of the image. These summary statistics are much lower in dimension (compared to using all of the extracted features) and can also improve results (less over-fitting). We call this aggregation operation **pooling**, or sometimes **mean pooling** or **max pooling** (depending on the pooling operation applied).
+- **Pooling**. For a neural network with 100 hidden units, we have $89^2 \times 100 = 792,100$ convolved features. This can be reduced by calculating the mean (or max) value of a particular feature over a region of the image. These summary statistics are much lower in dimension (compared to using all of the extracted features) and can also improve results (less over-fitting). We call this aggregation operation **pooling**, or sometimes **mean pooling** or **max pooling** (depending on the pooling operation applied).
 <p align="center">
 ![](./ufldl-pooling-schematic.gif){width=400px}
 </p>
@@ -228,6 +281,9 @@ Sources: <https://colah.github.io/posts/2014-07-Conv-Nets-Modular/>
 </p>
 
 <p align="center">
+![](./vgg16.png){width=600px}
+
+<p align="center">
 ![](./convnet-car.png){width=700px}
 </p>
 
@@ -237,20 +293,21 @@ Sources: <https://colah.github.io/posts/2014-07-Conv-Nets-Modular/>
 ![](./esl-fig-11-9.png){width=500px}
 </p>
 
-- Input: 256 pixel values from $16 \times 16$ grayscale images. Output: 0, 1, ..., 9 10 class-classification.
+- Input: 256 pixel values from $16 \times 16$ grayscale images. Output: 0, 1, ..., 9, 10 class-classification.
     
 - A modest experiment subset: 320 training digits and 160 testing digits.
     
-- net-1: no hidden layer, equivalent to multinomial logistic regression.  
-net-2: one hidden layer, 12 hidden units fully connected.  
-net-3: two hidden layers locally connected.  
-net-4: two hidden layers, locally connected with weight sharing.  
+- net-1: no hidden layer, equivalent to multinomial logistic regression. Number of parameters is $(16 \times 16 + 1) \times 10 = 2570$.  
+net-2: one hidden layer, 12 hidden units fully connected. Number of parameters is $(16 \times 16 + 1) \times 12 + (13 \times 10) = 3214$.  
+net-3: two hidden layers locally connected. Each unit of the _first hidden layer_ takes input from a $3 \times 3$ patch; neighboring patches overlap by by one row or column. Each unit of the second hidden layer takes input from a $5 \times 5$ patch; neighboring patches are two units apart. Number of parameters is $(3 \times 3 + 1) \times 64 + (5 \times 5 + 1) \times 16 + (16 + 1) \times 10 = 1226$.  
+net-4: two hidden layers, locally connected with weight sharing. $(3 \times 3 + 64) \times 2 +    (5 \times 5 + 1) \times 16 + (16 + 1) * 10 = 1148$ (**???**).   
 net-5: two hidden layers, locally connected, two levels of weight sharing (was the result of many person years of experimentation).   
+
 <p align="center">
 ![](./esl-fig-11-10.png){width=500px}
 </p>    
 
-    - Results:  
+    Results (320 training cases, 160 test cases):   
 
     | network | links | weights | accuracy |
     |---------|-------|---------|----------|
@@ -258,8 +315,8 @@ net-5: two hidden layers, locally connected, two levels of weight sharing (was t
     | net 2   | 3124  | 3214    | 87.0%    |
     | net 3   | 1226  | 1226    | 88.5%    |
     | net 4   | 2266  | 1131    | 94.0%    |
-    | net 5   | 5194  | 1060    | 98.4%    |
-    
+    | net 5   | 5194  | 1060    | 98.4%    |  
+
     Net-5 and similar networks were start-of-the-art in early 1990s.
 
 - On the larger benchmark dataset **MNIST** (60,000 training images, 10,000 testing images), accuracies of following methods were reported:
@@ -278,7 +335,7 @@ Source: <http://cs231n.github.io/convolutional-networks/>
 
 - [Krizhevsky, Sutskever, Hinton (2012)](http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf)
 
-- [ImageNet](http://www.image-net.org) dataset. Classify 1.2 million high-resoultion images into 1000 classes.
+- [ImageNet](http://www.image-net.org) dataset. Classify 1.2 million high-resoultion images ($224 \times 224 \times 3$) into 1000 classes.
 
 - A combination of techniques: GPU, ReLU, DropOut.
 
@@ -287,7 +344,7 @@ Source: <http://cs231n.github.io/convolutional-networks/>
 ![](./colah-KSH-arch.png){width=500px}
 </p>
 
-- Achieved 63% accuracy:
+- Achieved 62.5% accuracy:
 <p align="center">
 ![](./colah-KSH-results.png){width=500px}
 </p>  
@@ -298,16 +355,18 @@ Source: <http://cs231n.github.io/convolutional-networks/>
 
 ## Recurrent neural networks (RNN)
 
-Souces: <http://web.stanford.edu/class/cs224n/>  
-<https://colah.github.io/posts/2015-08-Understanding-LSTMs/>  
-<http://karpathy.github.io/2015/05/21/rnn-effectiveness/>  
-<http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/>  
-
+- Sources: 
+    - <http://web.stanford.edu/class/cs224n/>   
+    - <https://colah.github.io/posts/2015-08-Understanding-LSTMs/>  
+    - <http://karpathy.github.io/2015/05/21/rnn-effectiveness/>  
+    - <http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/>  
+    
 - MLP (multi-layer perceptron) and CNN (convolutional neural network) are examples of **feed forward neural network**, where connections between the units do not form a cycle.  
 
 - MLP and CNN accept a fixed-sized vector as input (e.g. an image) and produce a fixed-sized vector as output (e.g. probabilities of different classes). 
 
 - **Reccurent neural networks (RNN)** instead have loops, which can be un-rolled into a sequence of MLP.
+
 <p align="center">
 <!-- ![](./colah-rnn-rolled.png){width=100px} -->
 ![](./colah-rnn-unrolled.png){width=500px}
@@ -317,10 +376,12 @@ Souces: <http://web.stanford.edu/class/cs224n/>
 
 - Applications of RNN: 
 
-    - [Language modeling and generating text](http://karpathy.github.io/2015/05/21/rnn-effectiveness/). E.g., search prompt, messaging prompt, ...
+    - [Language modeling and generating text](http://karpathy.github.io/2015/05/21/rnn-effectiveness/). E.g., search prompt, messaging/email prompt, ...
+    
     <p align="center">
     ![](./genearted-alggeom-latex.jpg){width=500px}
     </p>
+    
     Above: generated (fake) LaTeX on algebraic geometry; see <http://karpathy.github.io/2015/05/21/rnn-effectiveness/>.
 
     - **NLP/Speech**: transcribe speech to text, machine translation, sentiment analysis, ...
@@ -367,16 +428,17 @@ Souces: <http://web.stanford.edu/class/cs224n/>
     
 ## Generative Adversarial Networks (GANs)
 
-Souces: <https://sites.google.com/view/cvpr2018tutorialongans/>  
-<https://medium.com/ai-society/gans-from-scratch-1-a-deep-introduction-with-code-in-pytorch-and-tensorflow-cb03cdcdba0f>   
-<https://skymind.ai/wiki/generative-adversarial-network-gan>  
-
 > The coolest idea in deep learning in the last 20 years.  
 > - Yann LeCun on GANs.
 
-* Applications:
+- Sources: 
+    - <https://sites.google.com/view/cvpr2018tutorialongans/>   
+    - <https://medium.com/ai-society/gans-from-scratch-1-a-deep-introduction-with-code-in-pytorch-and-tensorflow-cb03cdcdba0f>    
+    - <https://skymind.ai/wiki/generative-adversarial-network-gan>   
 
-    * Image-to-image translation 
+- Applications:
+
+    - Image-to-image translation 
     
     <p align="center">
     ![](./image-to-image-translation.jpg){width=600px}
