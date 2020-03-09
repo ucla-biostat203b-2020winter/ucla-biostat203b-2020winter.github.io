@@ -16,21 +16,27 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this assignment, you are to write a report analyzing the electronic health record (EHR) data MIMIC-III. You report will demostrate your knowledge of working with PostgreSQL database, data visualization, and commonly used analytical methods such as logistic regression and neural network. Your report should include at least following parts:  
 
-1. An informative title. For example, _30-Day Mortality Rate of Newly Admitted CCU Patients_.  
+1. An informative title. For example, _30-Day Mortality Rate of Myocardia Infarction Patients Admitted to CCU_.  
 
-2. Introduction. Describe the MIMIC-III data set and what research hypothesis/goal you are to address in this report.
+2. Introduction. Describe the MIMIC-III data set and what research hypothesis/goal you are to address using this data.
 
 3. Data preparation. Create a study cohort from MIMIC-III corresponding to your research hypothesis/goal. See the examplary code below. Use a CONSORT flow diagram to summarize your steps to create the cohort.
 
-4. Data visualization. Use visualziation to summarize the cohort you created. 
+4. Data visualization. Use visualization to summarize the cohort you created. 
 
-5. Analytics. Use at least two analytical approaches to address your research hypothesis/goal. For example, we can use (1) logistic regression and (2) neural network to build a predictive model for the 30-day mortality rate of patients admitted into CCU and compare their predictive performance. 
+5. Analytics. Use at least two analytical approaches to address your research hypothesis/goal. For example, we can use (1) logistic regression and (2) neural network to build a predictive model for the 30-day mortality rate of patients admitted into CCU and compare their predictive performance. Summarize your results in graphs.
 
 6. Conclusions. 
 
-# Examplary code
+# Learning resources about analyzing EHR data
 
-The GitHub repository <https://github.com/MIT-LCP/mimic-code> contains some code examples for working with the MIMIC-III data. Following example code derives from <https://github.com/MIT-LCP/mimic-code/blob/master/tutorials/dplyr-frontend/intro.md> and can change frequently. 
+- _Secondary Analysis of Electronic Health Records_: <https://link.springer.com/book/10.1007/978-3-319-43742-2> 
+
+- _The Book of OHDSI_: <https://ohdsi.github.io/TheBookOfOhdsi/>. 
+
+- The GitHub repository <https://github.com/MIT-LCP/mimic-code> contains some code examples for working with the MIMIC-III data. Following sample code derives from <https://github.com/MIT-LCP/mimic-code/blob/master/tutorials/dplyr-frontend/intro.md>. 
+
+# Examplary code
 
 ## Connect to PostgresSQL database
 
@@ -117,11 +123,7 @@ tbl(con, "d_icd_diagnoses") %>%
   print() -> mi_codes
 ```
 
-`diagnoses_icd` table stores the diagnosis of each admission. 
-```{r}
-tbl(con, "diagnoses_icd")
-```
-We use `semi_join()` to keep the rows in `diagnoses_icd` that match the ICD-9 codes related to heart attack:
+`diagnoses_icd` table stores the diagnosis of each admission. We use `semi_join()` to keep the rows in `diagnoses_icd` that match the ICD-9 codes related to heart attack:
 ```{r}
 tbl(con, "diagnoses_icd") %>%
   semi_join(mi_codes, by = "icd9_code") %>%
@@ -157,10 +159,6 @@ study_admissions %>%
 ```
 
 We want to add information about the severity of patients’ ailments. The `drgcodes` table contains, for `DRG` codes from the All Payers Registry (APR), severity and mortality indicators. We pull the drug severity information and right-join it to our query table.
-```{r}
-tbl(con, "drgcodes") %>%
-  print(width = Inf)
-```
 ```{r}
 tbl(con, "drgcodes") %>%
   filter(str_detect(drg_type, "APR")) %>%
@@ -347,4 +345,15 @@ for (i in 1:num_of_boxes) {
            lab = box_content[i], 
            shadow.col = "grey")
   }
+```
+
+## Install PostgreSQL and `RpostgreSQL` package on CentOS
+
+This is a note to myself (Dr. Hua Zhou). The postgres in yum is an old version. We want to install the most recent postgres and then build the `RpostgreSQL` package based on it. 
+
+1. Follow instructions in <https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-centos-7> to install PostgreSQL 11 on CentOS 7. 
+
+2. Issue following command to install `RPostgreSQL` in R:
+```{bash, eval = F}
+sudo R -e 'Sys.setenv(PG_INCDIR="/usr/pgsql-11/include/"); Sys.setenv(PG_LIBDIR="/usr/pgsql-11/lib/"); install.packages("RPostgreSQL")'
 ```
