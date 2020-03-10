@@ -333,16 +333,18 @@ net-5: two hidden layers, locally connected, two levels of weight sharing (was t
 
 Source: <http://cs231n.github.io/convolutional-networks/>
 
-- [Krizhevsky, Sutskever, Hinton (2012)](http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf)
+- **AlexNet**: [Krizhevsky, Sutskever, Hinton (2012)](http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf)
 
 - [ImageNet](http://www.image-net.org) dataset. Classify 1.2 million high-resoultion images ($224 \times 224 \times 3$) into 1000 classes.
 
-- A combination of techniques: GPU, ReLU, DropOut.
+- A combination of techniques: GPU, ReLU, DropOut (0.5), SGD + Momentum with 0.9, initial learning rate 0.01 and again reduced by 10 when validation accuracy become flat.
 
 - 5 convolutional layers, pooling interspersed, 3 fully connected layers. 60 million parameters, 650,000 neurons.
 <p align="center">
 ![](./colah-KSH-arch.png){width=500px}
 </p>
+
+- AlexNet was the winner of the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) classification the benchmark in 2012.
 
 - Achieved 62.5% accuracy:
 <p align="center">
@@ -351,6 +353,42 @@ Source: <http://cs231n.github.io/convolutional-networks/>
 96 learnt filters:  
 <p align="center">
 ![](./krizhevsky-weights.jpg){width=500px}
+</p>
+
+### Other popular architectures
+
+Source: [Architecture comparison of AlexNet, VGGNet, ResNet, Inception, DenseNet](https://towardsdatascience.com/architecture-comparison-of-alexnet-vggnet-resnet-inception-densenet-beb8b116866d)
+
+- **VGGNet** was the runner up of the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) classification the benchmark in 2014.
+
+<p align="center">
+![](./vgg16.png){width=400px}
+</p>
+
+<p align="center">
+![](./vgg1619.jpg){height=400px}
+</p>
+
+<p align="center">
+![](./vgg16params.jpg){width=400px}
+</p>
+
+- **ResNet** secured 1st Position in ILSVRC and COCO 2015 competition with just error rate of 3.6% of error rate. (Better than Human Performance !!!) Batch Normalization after every conv layer. It also uses Xavier initialization with SGD + Momentum. The learning rate is 0.1 and is divided by 10 as validation error becomes constant. Moreover, batch-size is 256 and weight decay is 1e-5. The important part is there is no dropout is used in ResNet.
+
+<p align="center">
+![](./resnet.jpg){width=400px}
+</p>
+
+- **Inception**. Inception-v3 with 144 crops and 4 models ensembled, the top-5 error rate of 3.58% is obtained, and finally obtained 1st Runner Up (image classification) in ILSVRC 2015.
+
+<p align="center">
+![](./inception.png){width=600px}
+</p>
+
+- **DenseNet**.
+
+<p align="center">
+![](./densenet.png){width=500px}
 </p>
 
 ## Recurrent neural networks (RNN)
