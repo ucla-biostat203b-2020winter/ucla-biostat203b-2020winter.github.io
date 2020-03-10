@@ -1,7 +1,7 @@
 ---
 title: "MNIST - MLP"
 author: "Dr. Hua Zhou @ UCLA"
-date: "3/3/2020"
+date: "3/10/2020"
 subtitle: Biostat 203B
 output: 
   html_document:
@@ -118,3 +118,44 @@ Generate predictions on new data:
 ```{r}
 model %>% predict_classes(x_test) %>% head()
 ```
+
+### Exercise
+
+Suppose we want to fit a multinomial-logit model and use it as a baseline method to neural networks. How to do that? Of course we can use `mlogit` or other packages. Instead we can fit the same model using keras, since multinomial-logit is just an MLP with (1) one input layer with linear activation and (2) one output layer with softmax link function.
+```{r}
+# set up model
+library(keras)
+mlogit <- keras_model_sequential() 
+mlogit %>% 
+  layer_dense(units = 256, activation = 'linear', input_shape = c(784)) %>% 
+#  layer_dropout(rate = 0.4) %>% 
+  layer_dense(units = 10, activation = 'softmax')
+summary(mlogit)
+```
+```{r}
+# compile model
+mlogit %>% compile(
+  loss = 'categorical_crossentropy',
+  optimizer = optimizer_rmsprop(),
+  metrics = c('accuracy')
+)
+```
+```{r}
+# fit model
+mlogit_history <- mlogit %>% fit(
+  x_train, y_train, 
+  epochs = 20, batch_size = 128, 
+  validation_split = 0.2
+)
+```
+
+```{r}
+# Evaluate model performance on the test data:
+mlogit %>% evaluate(x_test, y_test)
+```
+Generate predictions on new data:
+```{r}
+mlogit %>% predict_classes(x_test) %>% head()
+```
+
+Expriment: Change the `linear` activation to `relu` in the multinomial-logit model and see the change in classification accuracy.

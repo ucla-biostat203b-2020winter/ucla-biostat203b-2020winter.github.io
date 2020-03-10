@@ -1,7 +1,7 @@
 ---
 title: "Neural Networks and Deep Learning - Part II (Practice)"
 author: "Dr. Hua Zhou @ UCLA"
-date: "3/3/2020"
+date: "3/10/2020"
 subtitle: Biostat 203B
 output: 
   html_document:
