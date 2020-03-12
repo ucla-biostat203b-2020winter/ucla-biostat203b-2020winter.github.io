@@ -127,9 +127,9 @@ Suppose we want to fit a multinomial-logit model and use it as a baseline method
 library(keras)
 mlogit <- keras_model_sequential() 
 mlogit %>% 
-  layer_dense(units = 256, activation = 'linear', input_shape = c(784)) %>% 
+#  layer_dense(units = 256, activation = 'linear', input_shape = c(784)) %>% 
 #  layer_dropout(rate = 0.4) %>% 
-  layer_dense(units = 10, activation = 'softmax')
+  layer_dense(units = 10, activation = 'softmax', input_shape = c(784))
 summary(mlogit)
 ```
 ```{r}
