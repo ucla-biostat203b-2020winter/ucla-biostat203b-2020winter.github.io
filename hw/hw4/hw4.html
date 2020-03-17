@@ -362,7 +362,7 @@ summary {
 
 
 <h1 class="title toc-ignore">Biostat 203B Homework 4</h1>
-<h3 class="subtitle">Due Mar 20 @ 11:59PM</h3>
+<h3 class="subtitle">Due <del>Mar 20</del> Mar 22 @ 11:59PM</h3>
 
 </div>
 
@@ -410,12 +410,12 @@ summary {
 <pre class="r"><code>library(DBI)
 library(RPostgreSQL)
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
 <pre><code>## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
 ## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
 ## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
 ## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(lubridate)</code></pre>
@@ -500,32 +500,32 @@ dbExecute(con, paste(&quot;SET search_path TO &quot;, schema, sep=&quot; &quot;)
 ## [151] &quot;chartevents_141&quot;    &quot;chartevents_142&quot;    &quot;chartevents_143&quot;   
 ## [154] &quot;chartevents_144&quot;    &quot;chartevents_145&quot;    &quot;chartevents_146&quot;   
 ## [157] &quot;chartevents_147&quot;    &quot;chartevents_148&quot;    &quot;chartevents_149&quot;   
-## [160] &quot;chartevents_150&quot;    &quot;chartevents_151&quot;    &quot;chartevents_152&quot;   
-## [163] &quot;chartevents_153&quot;    &quot;chartevents_154&quot;    &quot;chartevents_155&quot;   
-## [166] &quot;chartevents_156&quot;    &quot;chartevents_157&quot;    &quot;chartevents_158&quot;   
-## [169] &quot;chartevents_159&quot;    &quot;chartevents_160&quot;    &quot;chartevents_161&quot;   
-## [172] &quot;chartevents_162&quot;    &quot;chartevents_163&quot;    &quot;chartevents_164&quot;   
-## [175] &quot;chartevents_165&quot;    &quot;chartevents_166&quot;    &quot;chartevents_167&quot;   
-## [178] &quot;chartevents_168&quot;    &quot;chartevents_169&quot;    &quot;chartevents_170&quot;   
-## [181] &quot;chartevents_171&quot;    &quot;chartevents_172&quot;    &quot;chartevents_173&quot;   
-## [184] &quot;chartevents_174&quot;    &quot;chartevents_175&quot;    &quot;chartevents_176&quot;   
-## [187] &quot;chartevents_177&quot;    &quot;chartevents_178&quot;    &quot;chartevents_179&quot;   
-## [190] &quot;chartevents_180&quot;    &quot;chartevents_181&quot;    &quot;chartevents_182&quot;   
-## [193] &quot;chartevents_183&quot;    &quot;chartevents_184&quot;    &quot;chartevents_185&quot;   
-## [196] &quot;chartevents_186&quot;    &quot;chartevents_187&quot;    &quot;chartevents_188&quot;   
-## [199] &quot;chartevents_189&quot;    &quot;chartevents_190&quot;    &quot;chartevents_191&quot;   
-## [202] &quot;chartevents_192&quot;    &quot;chartevents_193&quot;    &quot;chartevents_194&quot;   
-## [205] &quot;chartevents_195&quot;    &quot;chartevents_196&quot;    &quot;chartevents_197&quot;   
-## [208] &quot;chartevents_198&quot;    &quot;chartevents_199&quot;    &quot;chartevents_200&quot;   
-## [211] &quot;chartevents_201&quot;    &quot;chartevents_202&quot;    &quot;chartevents_203&quot;   
-## [214] &quot;chartevents_204&quot;    &quot;chartevents_205&quot;    &quot;chartevents_206&quot;   
-## [217] &quot;chartevents_207&quot;    &quot;cptevents&quot;          &quot;datetimeevents&quot;    
-## [220] &quot;diagnoses_icd&quot;      &quot;drgcodes&quot;           &quot;d_cpt&quot;             
-## [223] &quot;d_icd_diagnoses&quot;    &quot;d_icd_procedures&quot;   &quot;d_items&quot;           
-## [226] &quot;d_labitems&quot;         &quot;icustays&quot;           &quot;inputevents_cv&quot;    
-## [229] &quot;prescriptions&quot;      &quot;procedureevents_mv&quot; &quot;procedures_icd&quot;    
-## [232] &quot;services&quot;           &quot;transfers&quot;          &quot;dbplyr_201&quot;        
-## [235] &quot;dbplyr_287&quot;</code></pre>
+## [160] &quot;icd&quot;                &quot;chartevents_150&quot;    &quot;chartevents_151&quot;   
+## [163] &quot;chartevents_152&quot;    &quot;chartevents_153&quot;    &quot;chartevents_154&quot;   
+## [166] &quot;chartevents_155&quot;    &quot;chartevents_156&quot;    &quot;chartevents_157&quot;   
+## [169] &quot;chartevents_158&quot;    &quot;chartevents_159&quot;    &quot;chartevents_160&quot;   
+## [172] &quot;chartevents_161&quot;    &quot;chartevents_162&quot;    &quot;chartevents_163&quot;   
+## [175] &quot;chartevents_164&quot;    &quot;chartevents_165&quot;    &quot;chartevents_166&quot;   
+## [178] &quot;chartevents_167&quot;    &quot;chartevents_168&quot;    &quot;chartevents_169&quot;   
+## [181] &quot;chartevents_170&quot;    &quot;chartevents_171&quot;    &quot;chartevents_172&quot;   
+## [184] &quot;chartevents_173&quot;    &quot;chartevents_174&quot;    &quot;chartevents_175&quot;   
+## [187] &quot;chartevents_176&quot;    &quot;chartevents_177&quot;    &quot;chartevents_178&quot;   
+## [190] &quot;chartevents_179&quot;    &quot;chartevents_180&quot;    &quot;chartevents_181&quot;   
+## [193] &quot;chartevents_182&quot;    &quot;chartevents_183&quot;    &quot;chartevents_184&quot;   
+## [196] &quot;chartevents_185&quot;    &quot;chartevents_186&quot;    &quot;chartevents_187&quot;   
+## [199] &quot;chartevents_188&quot;    &quot;chartevents_189&quot;    &quot;chartevents_190&quot;   
+## [202] &quot;chartevents_191&quot;    &quot;chartevents_192&quot;    &quot;chartevents_193&quot;   
+## [205] &quot;chartevents_194&quot;    &quot;chartevents_195&quot;    &quot;chartevents_196&quot;   
+## [208] &quot;chartevents_197&quot;    &quot;chartevents_198&quot;    &quot;chartevents_199&quot;   
+## [211] &quot;chartevents_200&quot;    &quot;chartevents_201&quot;    &quot;chartevents_202&quot;   
+## [214] &quot;chartevents_203&quot;    &quot;chartevents_204&quot;    &quot;chartevents_205&quot;   
+## [217] &quot;chartevents_206&quot;    &quot;chartevents_207&quot;    &quot;cptevents&quot;         
+## [220] &quot;datetimeevents&quot;     &quot;diagnoses_icd&quot;      &quot;drgcodes&quot;          
+## [223] &quot;d_cpt&quot;              &quot;d_icd_diagnoses&quot;    &quot;d_icd_procedures&quot;  
+## [226] &quot;d_items&quot;            &quot;d_labitems&quot;         &quot;icustays&quot;          
+## [229] &quot;inputevents_cv&quot;     &quot;prescriptions&quot;      &quot;procedureevents_mv&quot;
+## [232] &quot;procedures_icd&quot;     &quot;services&quot;           &quot;transfers&quot;         
+## [235] &quot;dbplyr_449&quot;         &quot;dbplyr_224&quot;         &quot;dbplyr_343&quot;</code></pre>
 <p>An example SQL query:</p>
 <pre class="r"><code>sql_query &lt;- &quot;SELECT i.subject_id, i.hadm_id, i.los
               FROM icustays i;&quot;
@@ -587,7 +587,7 @@ patients %&gt;% print(width = Inf)</code></pre>
 <pre><code>## List of 2
 ##  $ src:List of 2
 ##   ..$ con  :Formal class 'PostgreSQLConnection' [package &quot;RPostgreSQL&quot;] with 1 slot
-##   .. .. ..@ Id: int [1:2] 728 0
+##   .. .. ..@ Id: int [1:2] 26388 0
 ##   ..$ disco: NULL
 ##   ..- attr(*, &quot;class&quot;)= chr [1:4] &quot;src_PostgreSQLConnection&quot; &quot;src_dbi&quot; &quot;src_sql&quot; &quot;src&quot;
 ##  $ ops:List of 2
